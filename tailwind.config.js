@@ -3,15 +3,16 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        serif: ['Playfair Display', 'serif'],
+        serif: ['Space Grotesk', 'sans-serif'],
         mono: ['JetBrains Mono', 'monospace'],
       },
       animation: {
-        'ticker': 'ticker 30s linear infinite',
+        'ticker': 'ticker 20s linear infinite',
         'pulse-glow': 'pulse-glow 3s ease-in-out infinite',
         'morph': 'morph 8s ease-in-out infinite',
         'float': 'float 6s ease-in-out infinite',
         'shimmer': 'shimmer 2s linear infinite',
+        'wave': 'wave 3s ease-in-out infinite',
       },
       keyframes: {
         ticker: {
@@ -35,6 +36,10 @@ export default {
         shimmer: {
           '0%': { backgroundPosition: '-200% 0' },
           '100%': { backgroundPosition: '200% 0' },
+        },
+        wave: {
+          '0%, 100%': { transform: 'translateY(0)' },
+          '50%': { transform: 'translateY(-10px)' },
         },
       },
     },
