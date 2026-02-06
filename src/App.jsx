@@ -119,7 +119,7 @@ const MercurySphere = () => {
   );
 };
 
-// SECTION 2: TICKER - The Velocity Tape (REDESIGNED)
+// SECTION 2: TICKER - The Velocity Tape (REDESIGNED - Faster on mobile)
 const Ticker = () => {
   const [isPaused, setIsPaused] = useState(false);
 
@@ -141,10 +141,13 @@ const Ticker = () => {
       onMouseLeave={() => setIsPaused(false)}
     >
       <div className={cn(
-        "flex whitespace-nowrap",
-        !isPaused && "animate-ticker"
-      )} style={{ animationPlayState: isPaused ? 'paused' : 'running' }}>
-        {[...tickerItems, ...tickerItems, ...tickerItems].map((item, index) => (
+        "flex whitespace-nowrap ticker-content",
+        !isPaused && "animate-ticker md:animate-ticker"
+      )} style={{
+        animationPlayState: isPaused ? 'paused' : 'running',
+        animationDuration: window.innerWidth < 768 ? '8s' : '15s'
+      }}>
+        {[...tickerItems, ...tickerItems, ...tickerItems, ...tickerItems].map((item, index) => (
           <div
             key={index}
             className="flex items-center gap-3 px-6 group cursor-pointer"
@@ -203,7 +206,7 @@ const BentoFeatures = () => {
         initial={{ opacity: 0, y: 50 }}
         whileInView={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8 }}
-        className="font-serif text-4xl md:text-6xl font-black text-[#E5E5E5] mb-16 text-center tracking-tight"
+        className="font-serif text-5xl md:text-8xl font-black text-[#E5E5E5] mb-16 text-center tracking-tighter"
       >
         The Alchemical <span className="text-[#FF4D00]">Triad</span>
       </motion.h2>
@@ -305,7 +308,7 @@ const Forge = () => {
           transition={{ duration: 0.8 }}
           className="text-center mb-16"
         >
-          <h2 className="font-serif text-4xl md:text-6xl font-black text-[#E5E5E5] mb-6 tracking-tight">
+          <h2 className="font-serif text-5xl md:text-8xl font-black text-[#E5E5E5] mb-6 tracking-tighter">
             The <span className="text-[#FF4D00]">Forge</span>
           </h2>
           <p className="font-mono text-[#E5E5E5]/60 text-lg max-w-2xl mx-auto">
@@ -407,7 +410,7 @@ const Forge = () => {
   );
 };
 
-// SECTION 5: THE PULSE - Heartbeat of the Protocol (FIXED)
+// SECTION 5: THE PULSE - Heartbeat of the Protocol
 const Pulse = () => {
   const containerRef = useRef(null);
   const [ripples, setRipples] = useState([]);
@@ -469,7 +472,7 @@ const Pulse = () => {
         ))}
       </div>
 
-      {/* Ripples - Fixed positioning */}
+      {/* Ripples */}
       {ripples.map(ripple => (
         <div
           key={ripple.id}
@@ -532,7 +535,7 @@ const Pulse = () => {
   );
 };
 
-// SECTION 6: THE VAULT TIERS - Membership Evolution (FIXED FLARE CARD)
+// SECTION 6: THE VAULT TIERS - Membership Evolution (80% opacity + gradient on Flare)
 const VaultTiers = () => {
   const tiers = [
     {
@@ -558,7 +561,7 @@ const VaultTiers = () => {
       apy: '27%',
       features: ['Maximum Yield', 'Negative Fees', 'Dedicated Manager', 'Protocol Revenue Share', 'Early Access'],
       color: '#FF4D00',
-      bgColor: 'from-orange-600 to-orange-700',
+      bgColor: 'from-orange-500 to-orange-700',
       isFlare: true
     }
   ];
@@ -572,7 +575,7 @@ const VaultTiers = () => {
           transition={{ duration: 0.8 }}
           className="text-center mb-16"
         >
-          <h2 className="font-serif text-4xl md:text-6xl font-black text-[#E5E5E5] mb-6 tracking-tight">
+          <h2 className="font-serif text-5xl md:text-8xl font-black text-[#E5E5E5] mb-6 tracking-tighter">
             Vault <span className="text-[#FF4D00]">Tiers</span>
           </h2>
           <p className="font-mono text-[#E5E5E5]/60 text-lg">
@@ -585,13 +588,14 @@ const VaultTiers = () => {
             <motion.div
               key={tier.name}
               initial={{ opacity: 0, rotateY: -30 }}
-              whileInView={{ opacity: 1, rotateY: 0 }}
+              whileInView={{ opacity: 0.8, rotateY: 0 }}
               transition={{ duration: 0.6, delay: index * 0.2 }}
               whileHover={{ rotateY: 10, rotateX: 5, z: 50 }}
               className={cn(
                 "card-3d relative rounded-2xl p-8 overflow-hidden",
-                tier.isChrome ? "card-chrome" : tier.isFlare ? "bg-gradient-to-b from-orange-600 to-orange-700" : `bg-gradient-to-b ${tier.bgColor}`
+                tier.isChrome ? "card-chrome" : tier.isFlare ? "bg-gradient-to-b from-orange-500 via-orange-600 to-orange-700" : `bg-gradient-to-b ${tier.bgColor}`
               )}
+              style={{ opacity: 0.8 }}
             >
               {/* Tier Header */}
               <div className="relative z-10 mb-8">
@@ -701,7 +705,7 @@ const ContactForm = () => {
           transition={{ duration: 0.8 }}
           className="text-center mb-12"
         >
-          <h2 className="font-serif text-4xl md:text-6xl font-black text-[#E5E5E5] mb-6 tracking-tight">
+          <h2 className="font-serif text-5xl md:text-8xl font-black text-[#E5E5E5] mb-6 tracking-tighter">
             Initialize <span className="text-[#FF4D00]">Contact</span>
           </h2>
           <p className="font-mono text-[#E5E5E5]/60 text-lg">
@@ -908,7 +912,7 @@ const Footer = () => {
   );
 };
 
-// Navigation (FIXED LOGO)
+// Navigation (NO LOGO ICON - text only)
 const Navigation = () => {
   const [scrolled, setScrolled] = useState(false);
 
@@ -933,14 +937,9 @@ const Navigation = () => {
       scrolled ? "bg-[#050505]/90 backdrop-blur-md border-[#E5E5E5]/10" : "bg-transparent"
     )}>
       <div className="container mx-auto px-4 md:px-6 py-4 flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#FF4D00] to-[#ff6a2b] flex items-center justify-center shadow-lg shadow-[#FF4D00]/30">
-            <SafeIcon name="zap" size={24} className="text-white" />
-          </div>
-          <span className="font-serif text-xl font-bold text-[#E5E5E5]">
-            AETHER
-          </span>
-        </div>
+        <span className="font-serif text-xl font-bold text-[#E5E5E5] tracking-tight">
+          AETHER
+        </span>
 
         <div className="hidden md:flex items-center gap-8">
           {['Forge', 'Pulse', 'Vault', 'Connect'].map((item) => (
@@ -966,6 +965,9 @@ const Navigation = () => {
 function App() {
   return (
     <div className="min-h-screen bg-[#050505] text-[#E5E5E5] overflow-x-hidden">
+      {/* Grainy Noise Overlay */}
+      <div className="grainy-noise" />
+
       <Navigation />
 
       {/* SECTION 1: HERO */}
