@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { motion, useScroll, useTransform, useSpring, useMotionValue, AnimatePresence } from 'framer-motion';
-import { clsx, ClassValue } from 'clsx';
+import { clsx } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 
 // Utility for Tailwind class merging
@@ -26,7 +26,6 @@ const SafeIcon = ({ name, size = 24, className, color }) => {
         if (isMounted && module[iconName]) {
           setIconComponent(() => module[iconName]);
         } else if (isMounted) {
-          // Fallback to HelpCircle
           setIconComponent(() => module.HelpCircle || module.Circle);
         }
       } catch (error) {
@@ -75,7 +74,6 @@ const MercurySphere = () => {
         lastTime.current = now;
       }
 
-      // Parallax effect
       if (sphereRef.current) {
         const rect = sphereRef.current.getBoundingClientRect();
         const centerX = rect.left + rect.width / 2;
@@ -95,7 +93,7 @@ const MercurySphere = () => {
   }, [isSplatter]);
 
   return (
-    <div className="relative flex items-center justify-center py-20">
+    <div className="relative flex items-center justify-center py-20 w-full overflow-visible">
       <motion.div
         initial={{ scale: 0, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
@@ -121,7 +119,7 @@ const MercurySphere = () => {
   );
 };
 
-// SECTION 2: TICKER - The Velocity Tape
+// SECTION 2: TICKER - The Velocity Tape (REDESIGNED)
 const Ticker = () => {
   const [isPaused, setIsPaused] = useState(false);
 
@@ -138,7 +136,7 @@ const Ticker = () => {
 
   return (
     <div
-      className="w-full overflow-hidden border-y border-[#E5E5E5]/10 bg-black/50 backdrop-blur-sm py-4"
+      className="w-full overflow-hidden border-y border-[#FF4D00]/20 bg-[#0a0a0a] py-3"
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
     >
@@ -146,25 +144,26 @@ const Ticker = () => {
         "flex whitespace-nowrap",
         !isPaused && "animate-ticker"
       )} style={{ animationPlayState: isPaused ? 'paused' : 'running' }}>
-        {[...tickerItems, ...tickerItems].map((item, index) => (
+        {[...tickerItems, ...tickerItems, ...tickerItems].map((item, index) => (
           <div
             key={index}
-            className="flex items-center gap-4 px-8 chromatic-text cursor-pointer"
-            data-text={`${item.label}: ${item.value} ${item.change}`}
+            className="flex items-center gap-3 px-6 group cursor-pointer"
           >
-            <span className="font-mono text-sm text-[#E5E5E5]/60 tracking-wider">
-              {item.label}
-            </span>
-            <span className="font-mono text-lg text-[#E5E5E5] font-bold">
-              {item.value}
-            </span>
-            <span className={cn(
-              "font-mono text-sm",
-              item.change.startsWith('+') ? "text-green-500" : "text-red-500"
-            )}>
-              {item.change}
-            </span>
-            <span className="text-[#FF4D00]/30 mx-4">◆</span>
+            <div className="flex items-center gap-2 bg-[#FF4D00]/10 border border-[#FF4D00]/20 rounded-lg px-4 py-2 group-hover:bg-[#FF4D00]/20 group-hover:border-[#FF4D00]/40 transition-all">
+              <span className="font-mono text-xs text-[#E5E5E5]/50 tracking-wider uppercase">
+                {item.label}
+              </span>
+              <span className="font-mono text-base text-[#E5E5E5] font-bold">
+                {item.value}
+              </span>
+              <span className={cn(
+                "font-mono text-xs px-2 py-0.5 rounded",
+                item.change.startsWith('+') ? "bg-green-500/20 text-green-400" : "bg-red-500/20 text-red-400"
+              )}>
+                {item.change}
+              </span>
+            </div>
+            <span className="text-[#FF4D00]/40 text-lg">|</span>
           </div>
         ))}
       </div>
@@ -253,41 +252,52 @@ const BentoFeatures = () => {
   );
 };
 
-// SECTION 4: THE FORGE - Interactive Asset Melt
+// SECTION 4: THE FORGE - Interactive Asset Melt (REDESIGNED)
 const Forge = () => {
   const [hoveredAsset, setHoveredAsset] = useState(null);
-  const [trails, setTrails] = useState([]);
-  const containerRef = useRef(null);
+  const [meltProgress, setMeltProgress] = useState({ gold: 0, btc: 0, eth: 0 });
 
   const assets = [
-    { id: 'gold', name: 'AETHER_GOLD', symbol: 'AU', icon: 'circle', color: '#FFD700', apy: '8.4%' },
-    { id: 'btc', name: 'BITCOIN_WRAPPED', symbol: 'WBTC', icon: 'bitcoin', color: '#F7931A', apy: '12.1%' },
-    { id: 'eth', name: 'ETHEREUM_LIQUID', symbol: 'STETH', icon: 'diamond', color: '#627EEA', apy: '15.7%' },
+    {
+      id: 'gold',
+      name: 'AETHER_GOLD',
+      symbol: 'AU',
+      icon: 'circle',
+      color: '#FFD700',
+      apy: '8.4%',
+      desc: 'Physical gold tokenized and liquified for instant transfers'
+    },
+    {
+      id: 'btc',
+      name: 'BITCOIN_WRAPPED',
+      symbol: 'WBTC',
+      icon: 'bitcoin',
+      color: '#F7931A',
+      apy: '12.1%',
+      desc: 'Bitcoin unleashed from its blockchain constraints'
+    },
+    {
+      id: 'eth',
+      name: 'ETHEREUM_LIQUID',
+      symbol: 'STETH',
+      icon: 'diamond',
+      color: '#627EEA',
+      apy: '15.7%',
+      desc: 'Staked ETH that flows like water through DeFi'
+    },
   ];
 
   const handleMouseMove = (e, assetId) => {
-    if (hoveredAsset === assetId && containerRef.current) {
-      const rect = containerRef.current.getBoundingClientRect();
-      const x = e.clientX - rect.left;
+    if (hoveredAsset === assetId) {
+      const rect = e.currentTarget.getBoundingClientRect();
       const y = e.clientY - rect.top;
-
-      const newTrail = {
-        id: Date.now() + Math.random(),
-        x,
-        y,
-        color: assets.find(a => a.id === assetId).color
-      };
-
-      setTrails(prev => [...prev.slice(-10), newTrail]);
-
-      setTimeout(() => {
-        setTrails(prev => prev.filter(t => t.id !== newTrail.id));
-      }, 1000);
+      const progress = Math.min((y / rect.height) * 100, 100);
+      setMeltProgress(prev => ({ ...prev, [assetId]: progress }));
     }
   };
 
   return (
-    <div className="py-20 px-4 md:px-6" ref={containerRef}>
+    <div className="py-20 px-4 md:px-6 bg-gradient-to-b from-[#050505] via-[#0a0a0a] to-[#050505]">
       <div className="container mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 50 }}
@@ -303,75 +313,91 @@ const Forge = () => {
           </p>
         </motion.div>
 
-        <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+        <div className="grid md:grid-cols-3 gap-6 max-w-6xl mx-auto">
           {assets.map((asset, index) => (
             <motion.div
               key={asset.id}
-              initial={{ opacity: 0, scale: 0.9 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
+              initial={{ opacity: 0, y: 50 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: index * 0.15 }}
               onMouseEnter={() => setHoveredAsset(asset.id)}
-              onMouseLeave={() => setHoveredAsset(null)}
+              onMouseLeave={() => {
+                setHoveredAsset(null);
+                setMeltProgress(prev => ({ ...prev, [asset.id]: 0 }));
+              }}
               onMouseMove={(e) => handleMouseMove(e, asset.id)}
               className="relative group cursor-pointer"
             >
-              <div className="relative bg-gradient-to-b from-[#1a1a1a] to-[#0a0a0a] rounded-2xl p-8 border border-[#E5E5E5]/10 hover:border-[#E5E5E5]/30 transition-all overflow-hidden">
-                {/* Melt trails */}
-                {trails.filter(t => hoveredAsset === asset.id).map(trail => (
-                  <div
-                    key={trail.id}
-                    className="melt-trail absolute w-1 rounded-full"
-                    style={{
-                      left: trail.x,
-                      top: trail.y,
-                      background: `linear-gradient(to bottom, ${trail.color}, transparent)`
-                    }}
-                  />
-                ))}
+              <div className="relative bg-[#0f0f0f] rounded-2xl overflow-hidden border border-[#E5E5E5]/10 hover:border-[#E5E5E5]/30 transition-all duration-500">
+                {/* Melting liquid effect */}
+                <div
+                  className="absolute bottom-0 left-0 right-0 transition-all duration-300 ease-out opacity-60"
+                  style={{
+                    height: `${meltProgress[asset.id]}%`,
+                    background: `linear-gradient(to top, ${asset.color}40, ${asset.color}20, transparent)`,
+                    filter: 'blur(20px)'
+                  }}
+                />
 
-                <div className="relative z-10 text-center">
-                  <motion.div
-                    className="w-24 h-24 mx-auto mb-6 rounded-full flex items-center justify-center"
-                    style={{ backgroundColor: `${asset.color}20` }}
-                    animate={hoveredAsset === asset.id ? {
-                      scale: [1, 1.1, 1],
-                      rotate: [0, 5, -5, 0]
-                    } : {}}
-                    transition={{ duration: 0.5 }}
-                  >
-                    <SafeIcon
-                      name={asset.icon}
-                      size={48}
-                      color={asset.color}
-                      className={cn(
-                        "transition-all duration-300",
-                        hoveredAsset === asset.id && "blur-[2px]"
-                      )}
-                    />
-                  </motion.div>
+                {/* Glowing border effect */}
+                <div
+                  className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                  style={{
+                    boxShadow: `inset 0 0 30px ${asset.color}30, 0 0 30px ${asset.color}20`
+                  }}
+                />
 
-                  <h3 className="font-serif text-2xl font-bold text-[#E5E5E5] mb-2">
+                <div className="relative z-10 p-8">
+                  {/* Asset Icon */}
+                  <div className="flex items-center justify-between mb-6">
+                    <motion.div
+                      className="w-20 h-20 rounded-2xl flex items-center justify-center"
+                      style={{
+                        backgroundColor: `${asset.color}15`,
+                        border: `1px solid ${asset.color}30`
+                      }}
+                      animate={hoveredAsset === asset.id ? {
+                        scale: [1, 1.05, 1],
+                        rotate: [0, 5, -5, 0]
+                      } : {}}
+                      transition={{ duration: 0.5 }}
+                    >
+                      <SafeIcon
+                        name={asset.icon}
+                        size={40}
+                        color={asset.color}
+                        className={cn(
+                          "transition-all duration-300",
+                          hoveredAsset === asset.id && "drop-shadow-lg"
+                        )}
+                      />
+                    </motion.div>
+                    <div className="text-right">
+                      <div className="font-mono text-xs text-[#E5E5E5]/40 tracking-widest uppercase">Symbol</div>
+                      <div className="font-mono text-lg text-[#E5E5E5] font-bold">{asset.symbol}</div>
+                    </div>
+                  </div>
+
+                  {/* Asset Name */}
+                  <h3 className="font-serif text-2xl font-bold text-[#E5E5E5] mb-3 group-hover:text-white transition-colors">
                     {asset.name}
                   </h3>
-                  <p className="font-mono text-sm text-[#E5E5E5]/50 mb-4">
-                    {asset.symbol}
+
+                  <p className="font-mono text-sm text-[#E5E5E5]/50 mb-6 leading-relaxed">
+                    {asset.desc}
                   </p>
 
-                  <div className="inline-flex items-center gap-2 bg-[#FF4D00]/10 rounded-full px-4 py-2">
-                    <SafeIcon name="zap" size={16} className="text-[#FF4D00]" />
-                    <span className="font-mono text-[#FF4D00] font-bold">
-                      {asset.apy} APY
+                  {/* APY Badge */}
+                  <div className="flex items-center justify-between pt-4 border-t border-[#E5E5E5]/10">
+                    <div className="flex items-center gap-2">
+                      <SafeIcon name="zap" size={16} className="text-[#FF4D00]" />
+                      <span className="font-mono text-xs text-[#E5E5E5]/50 uppercase">Yield</span>
+                    </div>
+                    <span className="font-mono text-xl font-bold" style={{ color: asset.color }}>
+                      {asset.apy}
                     </span>
                   </div>
                 </div>
-
-                {/* Liquid effect overlay */}
-                <motion.div
-                  className="absolute inset-0 bg-gradient-to-t from-[#E5E5E5]/5 to-transparent"
-                  initial={{ opacity: 0, y: '100%' }}
-                  animate={hoveredAsset === asset.id ? { opacity: 1, y: 0 } : { opacity: 0, y: '100%' }}
-                  transition={{ duration: 0.4 }}
-                />
               </div>
             </motion.div>
           ))}
@@ -381,13 +407,14 @@ const Forge = () => {
   );
 };
 
-// SECTION 5: THE PULSE - Heartbeat of the Protocol
+// SECTION 5: THE PULSE - Heartbeat of the Protocol (FIXED)
 const Pulse = () => {
   const containerRef = useRef(null);
   const [ripples, setRipples] = useState([]);
   const [distortSection, setDistortSection] = useState(false);
 
   const handleClick = (e) => {
+    if (!containerRef.current) return;
     const rect = containerRef.current.getBoundingClientRect();
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
@@ -442,14 +469,15 @@ const Pulse = () => {
         ))}
       </div>
 
-      {/* Ripples */}
+      {/* Ripples - Fixed positioning */}
       {ripples.map(ripple => (
         <div
           key={ripple.id}
           className="ripple"
           style={{
-            left: ripple.x - 250,
-            top: ripple.y - 250,
+            left: ripple.x,
+            top: ripple.y,
+            transform: 'translate(-50%, -50%)'
           }}
         />
       ))}
@@ -504,7 +532,7 @@ const Pulse = () => {
   );
 };
 
-// SECTION 6: THE VAULT TIERS - Membership Evolution
+// SECTION 6: THE VAULT TIERS - Membership Evolution (FIXED FLARE CARD)
 const VaultTiers = () => {
   const tiers = [
     {
@@ -530,7 +558,8 @@ const VaultTiers = () => {
       apy: '27%',
       features: ['Maximum Yield', 'Negative Fees', 'Dedicated Manager', 'Protocol Revenue Share', 'Early Access'],
       color: '#FF4D00',
-      bgColor: 'from-orange-600 to-orange-700'
+      bgColor: 'from-orange-600 to-orange-700',
+      isFlare: true
     }
   ];
 
@@ -561,20 +590,20 @@ const VaultTiers = () => {
               whileHover={{ rotateY: 10, rotateX: 5, z: 50 }}
               className={cn(
                 "card-3d relative rounded-2xl p-8 overflow-hidden",
-                tier.isChrome ? "card-chrome" : `bg-gradient-to-b ${tier.bgColor}`
+                tier.isChrome ? "card-chrome" : tier.isFlare ? "bg-gradient-to-b from-orange-600 to-orange-700" : `bg-gradient-to-b ${tier.bgColor}`
               )}
             >
               {/* Tier Header */}
               <div className="relative z-10 mb-8">
                 <h3 className={cn(
                   "font-serif text-3xl font-black mb-2",
-                  tier.isChrome ? "text-gray-900" : "text-[#E5E5E5]"
+                  tier.isChrome ? "text-gray-900" : "text-white"
                 )}>
                   {tier.name}
                 </h3>
                 <div className={cn(
                   "font-mono text-sm",
-                  tier.isChrome ? "text-gray-700" : "text-[#E5E5E5]/60"
+                  tier.isChrome ? "text-gray-700" : tier.isFlare ? "text-white/80" : "text-[#E5E5E5]/60"
                 )}>
                   Stake: {tier.stake}
                 </div>
@@ -585,17 +614,19 @@ const VaultTiers = () => {
                 "relative z-10 inline-block px-6 py-3 rounded-full mb-8 border-2",
                 tier.isChrome
                   ? "border-gray-900 bg-gray-900/10"
-                  : "border-[#FF4D00] bg-[#FF4D00]/10"
+                  : tier.isFlare
+                    ? "border-white bg-white/20"
+                    : "border-[#FF4D00] bg-[#FF4D00]/10"
               )}>
                 <span className={cn(
                   "font-mono text-3xl font-bold",
-                  tier.isChrome ? "text-gray-900" : "text-[#FF4D00]"
+                  tier.isChrome ? "text-gray-900" : tier.isFlare ? "text-white" : "text-[#FF4D00]"
                 )}>
                   {tier.apy}
                 </span>
                 <span className={cn(
                   "font-mono text-sm ml-1",
-                  tier.isChrome ? "text-gray-700" : "text-[#FF4D00]/70"
+                  tier.isChrome ? "text-gray-700" : tier.isFlare ? "text-white/80" : "text-[#FF4D00]/70"
                 )}>
                   APY
                 </span>
@@ -606,12 +637,12 @@ const VaultTiers = () => {
                 {tier.features.map((feature, i) => (
                   <li key={i} className={cn(
                     "flex items-center gap-3 font-mono text-sm",
-                    tier.isChrome ? "text-gray-800" : "text-[#E5E5E5]/80"
+                    tier.isChrome ? "text-gray-800" : tier.isFlare ? "text-white/90" : "text-[#E5E5E5]/80"
                   )}>
                     <SafeIcon
                       name="check"
                       size={16}
-                      className={tier.isChrome ? "text-gray-900" : "text-[#FF4D00]"}
+                      className={tier.isChrome ? "text-gray-900" : tier.isFlare ? "text-white" : "text-[#FF4D00]"}
                     />
                     {feature}
                   </li>
@@ -623,7 +654,9 @@ const VaultTiers = () => {
                 "relative z-10 w-full mt-8 py-4 rounded-xl font-mono font-bold transition-all transform hover:scale-105",
                 tier.isChrome
                   ? "bg-gray-900 text-[#E5E5E5] hover:bg-gray-800"
-                  : "bg-[#E5E5E5] text-[#050505] hover:bg-white"
+                  : tier.isFlare
+                    ? "bg-white text-orange-600 hover:bg-gray-100"
+                    : "bg-[#E5E5E5] text-[#050505] hover:bg-white"
               )}>
                 Select {tier.name}
               </button>
@@ -635,6 +668,122 @@ const VaultTiers = () => {
             </motion.div>
           ))}
         </div>
+      </div>
+    </div>
+  );
+};
+
+// CONTACT FORM COMPONENT
+const ContactForm = () => {
+  const [formData, setFormData] = useState({ name: '', email: '', message: '' });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+
+    await new Promise(resolve => setTimeout(resolve, 1500));
+
+    setIsSubmitting(false);
+    setIsSuccess(true);
+    setFormData({ name: '', email: '', message: '' });
+
+    setTimeout(() => setIsSuccess(false), 3000);
+  };
+
+  return (
+    <div className="py-20 px-4 md:px-6 bg-[#050505]">
+      <div className="container mx-auto max-w-4xl">
+        <motion.div
+          initial={{ opacity: 0, y: 50 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+          className="text-center mb-12"
+        >
+          <h2 className="font-serif text-4xl md:text-6xl font-black text-[#E5E5E5] mb-6 tracking-tight">
+            Initialize <span className="text-[#FF4D00]">Contact</span>
+          </h2>
+          <p className="font-mono text-[#E5E5E5]/60 text-lg">
+            Establish connection with the protocol
+          </p>
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+          className="glass-card rounded-2xl p-8 md:p-12"
+        >
+          {isSuccess ? (
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              className="text-center py-12"
+            >
+              <div className="w-20 h-20 rounded-full bg-[#FF4D00]/20 flex items-center justify-center mx-auto mb-6">
+                <SafeIcon name="check" size={40} className="text-[#FF4D00]" />
+              </div>
+              <h3 className="font-serif text-3xl font-bold text-[#E5E5E5] mb-4">Transmission Complete</h3>
+              <p className="font-mono text-[#E5E5E5]/60">Your message has been received by the protocol.</p>
+            </motion.div>
+          ) : (
+            <form onSubmit={handleSubmit} className="space-y-6">
+              <div className="grid md:grid-cols-2 gap-6">
+                <div>
+                  <label className="block font-mono text-xs text-[#E5E5E5]/50 uppercase tracking-wider mb-2">Identity</label>
+                  <input
+                    type="text"
+                    value={formData.name}
+                    onChange={(e) => setFormData({...formData, name: e.target.value})}
+                    required
+                    className="w-full bg-[#0a0a0a] border border-[#E5E5E5]/10 rounded-xl px-4 py-3 font-mono text-[#E5E5E5] placeholder-[#E5E5E5]/30 focus:border-[#FF4D00] focus:outline-none transition-colors"
+                    placeholder="Enter your designation"
+                  />
+                </div>
+                <div>
+                  <label className="block font-mono text-xs text-[#E5E5E5]/50 uppercase tracking-wider mb-2">Channel</label>
+                  <input
+                    type="email"
+                    value={formData.email}
+                    onChange={(e) => setFormData({...formData, email: e.target.value})}
+                    required
+                    className="w-full bg-[#0a0a0a] border border-[#E5E5E5]/10 rounded-xl px-4 py-3 font-mono text-[#E5E5E5] placeholder-[#E5E5E5]/30 focus:border-[#FF4D00] focus:outline-none transition-colors"
+                    placeholder="your@email.com"
+                  />
+                </div>
+              </div>
+              <div>
+                <label className="block font-mono text-xs text-[#E5E5E5]/50 uppercase tracking-wider mb-2">Transmission</label>
+                <textarea
+                  value={formData.message}
+                  onChange={(e) => setFormData({...formData, message: e.target.value})}
+                  required
+                  rows={4}
+                  className="w-full bg-[#0a0a0a] border border-[#E5E5E5]/10 rounded-xl px-4 py-3 font-mono text-[#E5E5E5] placeholder-[#E5E5E5]/30 focus:border-[#FF4D00] focus:outline-none transition-colors resize-none"
+                  placeholder="Enter your message to the protocol..."
+                />
+              </div>
+              <button
+                type="submit"
+                disabled={isSubmitting}
+                className="w-full bg-[#FF4D00] hover:bg-[#ff6a2b] disabled:bg-[#FF4D00]/50 text-[#050505] font-mono font-bold py-4 rounded-xl transition-all transform hover:scale-[1.02] disabled:transform-none disabled:cursor-not-allowed flex items-center justify-center gap-2"
+              >
+                {isSubmitting ? (
+                  <>
+                    <div className="w-5 h-5 border-2 border-[#050505]/30 border-t-[#050505] rounded-full animate-spin" />
+                    Transmitting...
+                  </>
+                ) : (
+                  <>
+                    <SafeIcon name="send" size={20} />
+                    Transmit Message
+                  </>
+                )}
+              </button>
+            </form>
+          )}
+        </motion.div>
       </div>
     </div>
   );
@@ -721,7 +870,7 @@ const Footer = () => {
           "mt-16 font-mono text-sm transition-colors duration-500",
           isFlooded ? "text-[#050505]/60" : "text-[#E5E5E5]/40"
         )}>
-          <div className="flex items-center justify-center gap-8 mb-8">
+          <div className="flex items-center justify-center gap-8 mb-8 flex-wrap">
             <a href="#" className="hover:text-[#FF4D00] transition-colors">Documentation</a>
             <a href="#" className="hover:text-[#FF4D00] transition-colors">GitHub</a>
             <a href="#" className="hover:text-[#FF4D00] transition-colors">Discord</a>
@@ -759,7 +908,7 @@ const Footer = () => {
   );
 };
 
-// Navigation
+// Navigation (FIXED LOGO)
 const Navigation = () => {
   const [scrolled, setScrolled] = useState(false);
 
@@ -785,10 +934,10 @@ const Navigation = () => {
     )}>
       <div className="container mx-auto px-4 md:px-6 py-4 flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#E5E5E5] to-[#525252] flex items-center justify-center">
-            <span className="font-serif font-black text-[#050505] text-lg">A</span>
+          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#FF4D00] to-[#ff6a2b] flex items-center justify-center shadow-lg shadow-[#FF4D00]/30">
+            <SafeIcon name="zap" size={24} className="text-white" />
           </div>
-          <span className="font-serif text-xl font-bold text-[#E5E5E5] hidden md:block">
+          <span className="font-serif text-xl font-bold text-[#E5E5E5]">
             AETHER
           </span>
         </div>
@@ -838,21 +987,6 @@ function App() {
         </motion.div>
 
         <MercurySphere />
-
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1.5 }}
-          className="absolute bottom-8 left-1/2 -translate-x-1/2"
-        >
-          <motion.div
-            animate={{ y: [0, 10, 0] }}
-            transition={{ duration: 2, repeat: Infinity }}
-            className="w-6 h-10 rounded-full border-2 border-[#E5E5E5]/30 flex justify-center pt-2"
-          >
-            <div className="w-1 h-2 bg-[#FF4D00] rounded-full" />
-          </motion.div>
-        </motion.div>
       </section>
 
       {/* SECTION 2: TICKER */}
@@ -878,7 +1012,10 @@ function App() {
         <VaultTiers />
       </section>
 
-      {/* SECTION 7: FOOTER */}
+      {/* SECTION 7: CONTACT FORM */}
+      <ContactForm />
+
+      {/* SECTION 8: FOOTER */}
       <Footer />
     </div>
   );
