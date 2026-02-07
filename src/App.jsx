@@ -207,7 +207,7 @@ const BentoFeatures = () => {
         The Alchemical <span className="text-white">Triad</span>
       </motion.h2>
 
-      <div className="grid md:grid-cols-3 gap-6">
+      <div className="grid md:grid-cols-3 gap-6 max-w-6xl mx-auto">
         {features.map((feature, index) => (
           <motion.div
             key={index}
@@ -252,7 +252,7 @@ const BentoFeatures = () => {
   );
 };
 
-// SECTION 4: THE ALCHEMICAL VAULT - Updated with orange hover, no lift
+// SECTION 4: THE ALCHEMICAL VAULT - Updated with orange hover, no lift, real currency icons
 const AlchemicalVault = () => {
   const assets = [
     {
@@ -277,7 +277,7 @@ const AlchemicalVault = () => {
       fullName: 'Digital Gold',
       price: '$2,145.30',
       change: '+3.1%',
-      icon: 'circle'
+      icon: 'coins'
     },
     {
       symbol: 'USD',
@@ -285,7 +285,7 @@ const AlchemicalVault = () => {
       fullName: 'USDC Stable',
       price: '$1.00',
       change: '+0.01%',
-      icon: 'triangle'
+      icon: 'dollar-sign'
     },
     {
       symbol: 'SOL',
@@ -301,7 +301,7 @@ const AlchemicalVault = () => {
       fullName: 'Avalanche',
       price: '$42.18',
       change: '+15.3%',
-      icon: 'activity'
+      icon: 'triangle'
     },
   ];
 
@@ -373,7 +373,7 @@ const AlchemicalVault = () => {
   );
 };
 
-// Vault Card - Orange hover effect, no lift
+// Vault Card - Orange hover effect, no lift, real currency icons
 const VaultCardOrange = ({ asset }) => {
   const [isHovered, setIsHovered] = useState(false);
 
@@ -383,8 +383,9 @@ const VaultCardOrange = ({ asset }) => {
       transition={{ duration: 0.3 }}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
+      style={{ transform: 'none' }}
     >
-      <div className="glass-card absolute inset-0 rounded-2xl overflow-hidden transition-all duration-500 group-hover:border-[#FF4D00]/50">
+      <div className="glass-card absolute inset-0 rounded-2xl overflow-hidden transition-all duration-500 group-hover:border-[#FF4D00]/50" style={{ transform: 'none' }}>
 
         {/* Top gradient accent line - always orange on hover */}
         <div className="vault-top-line absolute top-0 left-0 right-0 h-1 bg-[#E5E5E5]/20 opacity-60 transition-all duration-500" />
@@ -454,12 +455,12 @@ const VaultCardOrange = ({ asset }) => {
             </div>
           </div>
 
-          <button className="mt-6 w-full py-3.5 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 hover:border-[#FF4D00]/30 transition-all duration-300 font-mono text-xs tracking-widest text-[#E5E5E5]/60 hover:text-white uppercase">
+          <button className="mt-6 w-full py-3.5 rounded-lg bg-white/5 hover:bg-[#FF4D00]/20 border border-white/10 hover:border-[#FF4D00]/50 transition-all duration-300 font-mono text-xs tracking-widest text-[#E5E5E5]/60 hover:text-white uppercase">
             Transmute_{asset.symbol}
           </button>
         </div>
 
-        <div className="absolute bottom-0 right-0 w-24 h-24 overflow-hidden opacity-0 group-hover:opacity-10 transition-opacity duration-500">
+        <div className="absolute bottom-0 right-0 w-24 h-24 overflow-hidden opacity-0 group-hover:opacity-20 transition-opacity duration-500">
           <div className="absolute bottom-0 right-0 w-full h-full bg-gradient-to-tl from-[#FF4D00] to-[#ff6a2b] rounded-tl-full" />
         </div>
 
@@ -469,7 +470,7 @@ const VaultCardOrange = ({ asset }) => {
   );
 };
 
-// SECTION 4: THE FORGE - Interactive Asset Melt (UPDATED - icons spin on card hover)
+// SECTION 5: THE FORGE - Interactive Asset Melt
 const Forge = () => {
   const assets = [
     {
@@ -580,7 +581,7 @@ const Forge = () => {
   );
 };
 
-// SECTION 5: THE PULSE - Heartbeat of the Protocol
+// SECTION 6: THE PULSE - Heartbeat of the Protocol
 const Pulse = () => {
   const containerRef = useRef(null);
   const [ripples, setRipples] = useState([]);
@@ -696,249 +697,6 @@ const Pulse = () => {
             </div>
           </motion.div>
         ))}
-      </div>
-    </div>
-  );
-};
-
-// SECTION 6: THE VAULT TIERS - Membership Evolution (70% opacity)
-const VaultTiers = () => {
-  const tiers = [
-    {
-      name: 'Iron',
-      stake: '1,000 AETH',
-      apy: '12%',
-      features: ['Basic Yield', 'Standard Swaps', 'Community Access'],
-      color: '#525252',
-      bgColor: 'from-gray-800 to-gray-900',
-      isIron: true
-    },
-    {
-      name: 'Chrome',
-      stake: '10,000 AETH',
-      apy: '18%',
-      features: ['Enhanced Yield', 'Zero Fees', 'Priority Support', 'Governance Vote'],
-      color: '#E5E5E5',
-      bgColor: 'from-gray-300 to-gray-400',
-      isChrome: true
-    },
-    {
-      name: 'Flare',
-      stake: '100,000 AETH',
-      apy: '27%',
-      features: ['Maximum Yield', 'Negative Fees', 'Dedicated Manager', 'Protocol Revenue Share', 'Early Access'],
-      color: '#FF4D00',
-      bgColor: 'from-orange-500 to-orange-700',
-      isFlare: true
-    }
-  ];
-
-  return (
-    <div className="py-20 px-4 md:px-6">
-      <div className="container mx-auto">
-        <motion.div
-          initial={{ opacity: 0, y: 50 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          className="text-center mb-16"
-        >
-          <h2 className="font-serif text-5xl md:text-8xl font-black text-white mb-6 tracking-tighter">
-            Vault <span className="text-white">Tiers</span>
-          </h2>
-          <p className="font-mono text-[#E5E5E5]/60 text-lg">
-            Membership Evolution
-          </p>
-        </motion.div>
-
-        <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto" style={{ perspective: '1000px' }}>
-          {tiers.map((tier, index) => (
-            <motion.div
-              key={tier.name}
-              initial={{ opacity: 0, rotateY: -30 }}
-              whileInView={{ opacity: 0.7, rotateY: 0 }}
-              transition={{ duration: 0.6, delay: index * 0.2 }}
-              whileHover={{ rotateY: 10, rotateX: 5, z: 50, opacity: 1 }}
-              className={cn(
-                "card-3d relative rounded-2xl p-8 overflow-hidden",
-                tier.isChrome ? "card-chrome" : tier.isFlare ? "bg-gradient-to-b from-orange-500 via-orange-600 to-orange-700" : `bg-gradient-to-b ${tier.bgColor}`
-              )}
-              style={{ opacity: 0.7 }}
-              data-cursor={tier.isChrome ? "chrome" : tier.isFlare ? "orange" : "dark"}
-            >
-              <div className="relative z-10 mb-8">
-                <h3 className={cn(
-                  "font-serif text-3xl font-black mb-2",
-                  tier.isChrome ? "text-gray-900" : "text-white"
-                )}>
-                  {tier.name}
-                </h3>
-                <div className={cn(
-                  "font-mono text-sm",
-                  tier.isChrome ? "text-gray-700" : tier.isFlare ? "text-white/80" : "text-[#E5E5E5]/60"
-                )}>
-                  Stake: {tier.stake}
-                </div>
-              </div>
-
-              <div className={cn(
-                "relative z-10 inline-block px-6 py-3 rounded-full mb-8 border-2",
-                tier.isChrome
-                  ? "border-gray-900 bg-gray-900/10"
-                  : tier.isFlare
-                    ? "border-white bg-white/20"
-                    : "border-[#FF4D00] bg-[#FF4D00]/10"
-              )}>
-                <span className={cn(
-                  "font-mono text-3xl font-bold",
-                  tier.isChrome ? "text-gray-900" : tier.isFlare ? "text-white" : "text-white"
-                )}>
-                  {tier.apy}
-                </span>
-                <span className={cn(
-                  "font-mono text-sm ml-1",
-                  tier.isChrome ? "text-gray-700" : tier.isFlare ? "text-white/80" : "text-[#FF4D00]/70"
-                )}>
-                  APY
-                </span>
-              </div>
-
-              <ul className="relative z-10 space-y-4">
-                {tier.features.map((feature, i) => (
-                  <li key={i} className={cn(
-                    "flex items-center gap-3 font-mono text-sm",
-                    tier.isChrome ? "text-gray-800" : tier.isFlare ? "text-white/90" : "text-[#E5E5E5]/80"
-                  )}>
-                    <SafeIcon
-                      name="check"
-                      size={16}
-                      className={tier.isChrome ? "text-gray-900" : tier.isFlare ? "text-white" : "text-[#FF4D00]"}
-                    />
-                    {feature}
-                  </li>
-                ))}
-              </ul>
-
-              <button className={cn(
-                "relative z-10 w-full mt-8 py-4 rounded-xl font-mono font-bold transition-all transform hover:scale-105",
-                tier.isChrome
-                  ? "bg-gray-900 text-[#E5E5E5] hover:bg-gray-800"
-                  : tier.isFlare
-                    ? "bg-white text-orange-600 hover:bg-gray-100"
-                    : "bg-[#E5E5E5] text-[#050505] hover:bg-white"
-              )}>
-                Select {tier.name}
-              </button>
-
-              {tier.isChrome && (
-                <div className="absolute inset-0 bg-gradient-to-br from-white/40 via-transparent to-transparent pointer-events-none" />
-              )}
-            </motion.div>
-          ))}
-        </div>
-      </div>
-    </div>
-  );
-};
-
-// NEW SECTION: FAQ - Replacing Contact Form
-const FAQ = () => {
-  const [openIndex, setOpenIndex] = useState(null);
-
-  const faqItems = [
-    {
-      question: "What is AETHER PROTOCOL?",
-      answer: "AETHER PROTOCOL is a next-generation decentralized finance platform that combines liquid chrome alchemy with high-end brutalist design principles. We enable instant asset transmutation, neural-level security, and infinite yield optimization across multiple chains."
-    },
-    {
-      question: "How does Instant Transmutation work?",
-      answer: "Our quantum bonding curve technology allows for atomic swaps between any assets with zero slippage. The protocol maintains deep liquidity pools that enable millisecond-level conversions, backed by AI-powered market making algorithms."
-    },
-    {
-      question: "What are the Vault Tiers and how do I join?",
-      answer: "Vault Tiers (Iron, Chrome, Flare) represent membership levels based on your AETH stake. Each tier unlocks enhanced yield rates, reduced fees, and exclusive governance rights. Simply stake the required AETH amount to automatically upgrade your tier."
-    },
-    {
-      question: "Is my capital safe with Neural Security?",
-      answer: "Absolutely. Our Neural Security system uses predictive AI to monitor all transactions in real-time, detecting and preventing exploits before they occur. Smart contracts are self-healing and automatically patch vulnerabilities without manual intervention."
-    },
-    {
-      question: "How are yields generated in the protocol?",
-      answer: "Yields come from multiple sources: liquidity provision fees, staking rewards, protocol revenue sharing, and cross-chain arbitrage. Our Yield Router V4 automatically allocates capital across 47 protocols to maximize returns while managing risk."
-    },
-    {
-      question: "When will the protocol launch?",
-      answer: "The AETHER PROTOCOL mainnet is scheduled for Q2 2024. Early adopters who join our waitlist will receive exclusive Iron tier benefits and airdrop allocations. Follow our social channels for exact launch dates."
-    }
-  ];
-
-  const toggleItem = (index) => {
-    setOpenIndex(openIndex === index ? null : index);
-  };
-
-  return (
-    <div className="py-20 px-4 md:px-6 bg-[#050505]">
-      <div className="container mx-auto max-w-4xl">
-        <motion.div
-          initial={{ opacity: 0, y: 50 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          className="text-center mb-16"
-        >
-          <h2 className="font-serif text-5xl md:text-8xl font-black text-white mb-6 tracking-tighter">
-            Protocol <span className="text-white">FAQ</span>
-          </h2>
-          <p className="font-mono text-[#E5E5E5]/60 text-lg">
-            Common inquiries about the system
-          </p>
-        </motion.div>
-
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.2 }}
-          className="glass-card rounded-2xl overflow-hidden"
-        >
-          {faqItems.map((item, index) => (
-            <div
-              key={index}
-              className={cn(
-                "faq-item",
-                openIndex === index && "open"
-              )}
-            >
-              <button
-                onClick={() => toggleItem(index)}
-                className="w-full flex items-center justify-between p-6 text-left hover:bg-white/5 transition-colors group"
-              >
-                <span className="font-serif text-lg md:text-xl font-bold text-white pr-8 group-hover:text-[#FF4D00] transition-colors">
-                  {item.question}
-                </span>
-                <div className="faq-icon flex-shrink-0 w-8 h-8 rounded-full border border-[#E5E5E5]/20 flex items-center justify-center group-hover:border-[#FF4D00] transition-colors">
-                  <SafeIcon name="plus" size={16} className="text-[#E5E5E5] group-hover:text-[#FF4D00] transition-colors" />
-                </div>
-              </button>
-              <div className="faq-answer px-6 pb-6">
-                <p className="font-mono text-sm text-[#E5E5E5]/70 leading-relaxed">
-                  {item.answer}
-                </p>
-              </div>
-            </div>
-          ))}
-        </motion.div>
-
-        <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          transition={{ delay: 0.4 }}
-          className="text-center mt-12"
-        >
-          <p className="font-mono text-sm text-[#E5E5E5]/50 mb-4">
-            Still have questions?
-          </p>
-          <button className="bg-[#FF4D00] hover:bg-[#ff6a2b] text-[#050505] px-8 py-4 rounded-xl font-mono font-bold transition-all transform hover:scale-105">
-            Contact Support
-          </button>
-        </motion.div>
       </div>
     </div>
   );
@@ -1083,7 +841,111 @@ const VaultTiers = () => {
   );
 };
 
-// SECTION 8: FOOTER - The Core Integration (darker floating dots)
+// SECTION 8: FAQ
+const FAQ = () => {
+  const [openIndex, setOpenIndex] = useState(null);
+
+  const faqItems = [
+    {
+      question: "What is AETHER PROTOCOL?",
+      answer: "AETHER PROTOCOL is a next-generation decentralized finance platform that combines liquid chrome alchemy with high-end brutalist design principles. We enable instant asset transmutation, neural-level security, and infinite yield optimization across multiple chains."
+    },
+    {
+      question: "How does Instant Transmutation work?",
+      answer: "Our quantum bonding curve technology allows for atomic swaps between any assets with zero slippage. The protocol maintains deep liquidity pools that enable millisecond-level conversions, backed by AI-powered market making algorithms."
+    },
+    {
+      question: "What are the Vault Tiers and how do I join?",
+      answer: "Vault Tiers (Iron, Chrome, Flare) represent membership levels based on your AETH stake. Each tier unlocks enhanced yield rates, reduced fees, and exclusive governance rights. Simply stake the required AETH amount to automatically upgrade your tier."
+    },
+    {
+      question: "Is my capital safe with Neural Security?",
+      answer: "Absolutely. Our Neural Security system uses predictive AI to monitor all transactions in real-time, detecting and preventing exploits before they occur. Smart contracts are self-healing and automatically patch vulnerabilities without manual intervention."
+    },
+    {
+      question: "How are yields generated in the protocol?",
+      answer: "Yields come from multiple sources: liquidity provision fees, staking rewards, protocol revenue sharing, and cross-chain arbitrage. Our Yield Router V4 automatically allocates capital across 47 protocols to maximize returns while managing risk."
+    },
+    {
+      question: "When will the protocol launch?",
+      answer: "The AETHER PROTOCOL mainnet is scheduled for Q2 2024. Early adopters who join our waitlist will receive exclusive Iron tier benefits and airdrop allocations. Follow our social channels for exact launch dates."
+    }
+  ];
+
+  const toggleItem = (index) => {
+    setOpenIndex(openIndex === index ? null : index);
+  };
+
+  return (
+    <div className="py-20 px-4 md:px-6 bg-[#050505]">
+      <div className="container mx-auto max-w-4xl">
+        <motion.div
+          initial={{ opacity: 0, y: 50 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+          className="text-center mb-16"
+        >
+          <h2 className="font-serif text-5xl md:text-8xl font-black text-white mb-6 tracking-tighter">
+            Protocol <span className="text-white">FAQ</span>
+          </h2>
+          <p className="font-mono text-[#E5E5E5]/60 text-lg">
+            Common inquiries about the system
+          </p>
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+          className="glass-card rounded-2xl overflow-hidden"
+        >
+          {faqItems.map((item, index) => (
+            <div
+              key={index}
+              className={cn(
+                "faq-item",
+                openIndex === index && "open"
+              )}
+            >
+              <button
+                onClick={() => toggleItem(index)}
+                className="w-full flex items-center justify-between p-6 text-left hover:bg-white/5 transition-colors group"
+              >
+                <span className="font-serif text-lg md:text-xl font-bold text-white pr-8 group-hover:text-[#FF4D00] transition-colors">
+                  {item.question}
+                </span>
+                <div className="faq-icon flex-shrink-0 w-8 h-8 rounded-full border border-[#E5E5E5]/20 flex items-center justify-center group-hover:border-[#FF4D00] transition-colors">
+                  <SafeIcon name="plus" size={16} className="text-[#E5E5E5] group-hover:text-[#FF4D00] transition-colors" />
+                </div>
+              </button>
+              <div className="faq-answer px-6 pb-6">
+                <p className="font-mono text-sm text-[#E5E5E5]/70 leading-relaxed">
+                  {item.answer}
+                </p>
+              </div>
+            </div>
+          ))}
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          transition={{ delay: 0.4 }}
+          className="text-center mt-12"
+        >
+          <p className="font-mono text-sm text-[#E5E5E5]/50 mb-4">
+            Still have questions?
+          </p>
+          <button className="bg-[#FF4D00] hover:bg-[#ff6a2b] text-[#050505] px-8 py-4 rounded-xl font-mono font-bold transition-all transform hover:scale-105">
+            Contact Support
+          </button>
+        </motion.div>
+      </div>
+    </div>
+  );
+};
+
+// SECTION 9: FOOTER - The Core Integration (darker floating dots)
 const Footer = () => {
   const footerRef = useRef(null);
   const [isFlooded, setIsFlooded] = useState(false);
@@ -1174,7 +1036,7 @@ const Footer = () => {
         </div>
       </motion.div>
 
-      {/* Darker, more visible floating dots */}
+      {/* Darker, more visible floating dots - small but noticeable */}
       {[...Array(20)].map((_, i) => (
         <motion.div
           key={i}
@@ -1188,7 +1050,7 @@ const Footer = () => {
           }}
           animate={{
             y: [0, -30, 0],
-            opacity: [0.4, 0.8, 0.4],
+            opacity: [0.6, 1, 0.6],
           }}
           transition={{
             duration: 3 + Math.random() * 2,
