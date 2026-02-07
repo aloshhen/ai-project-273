@@ -14,9 +14,10 @@ body {
   background-color: #050505;
   color: #E5E5E5;
   overflow-x: hidden;
+  cursor: none;
 }
 
-/* Grainy Noise Background */
+/* Grainy Noise Background - FINER (Edit #1) */
 .grainy-noise {
   position: fixed;
   top: 0;
@@ -25,9 +26,10 @@ body {
   height: 100%;
   pointer-events: none;
   z-index: 9999;
-  opacity: 0.06;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+  opacity: 0.04;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
   background-repeat: repeat;
+  background-size: 200px 200px;
 }
 
 /* Custom Scrollbar */
@@ -44,7 +46,7 @@ body {
   border-radius: 4px;
 }
 
-/* Mercury Sphere Styles */
+/* Mercury Sphere Styles - FLUID ONLY (Edit #4) */
 .mercury-sphere {
   background: radial-gradient(circle at 30% 30%, #f5f5f5 0%, #d4d4d4 20%, #a3a3a3 40%, #737373 60%, #525252 80%, #404040 100%);
   box-shadow:
@@ -53,18 +55,8 @@ body {
     0 0 60px rgba(229,229,229,0.3),
     0 0 120px rgba(229,229,229,0.1);
   filter: blur(0.5px);
-  transition: transform 0.1s ease-out, filter 0.2s ease-out;
-}
-
-.mercury-sphere.splatter {
-  animation: splatter 0.3s ease-out;
-  filter: blur(2px) contrast(1.2);
-}
-
-@keyframes splatter {
-  0% { transform: scale(1) rotate(0deg); border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; }
-  50% { transform: scale(1.1, 0.9) rotate(5deg); border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%; }
-  100% { transform: scale(1) rotate(0deg); border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; }
+  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1), filter 0.4s ease-out;
+  will-change: transform;
 }
 
 /* Glassmorphism */
@@ -96,7 +88,7 @@ body {
   opacity: 1;
 }
 
-/* 3D Card Effects */
+/* 3D Card Effects with Shine - ALL CARDS (Edit #3) */
 .card-3d {
   transform-style: preserve-3d;
   transition: transform 0.6s ease;
@@ -106,14 +98,43 @@ body {
   transform: rotateY(10deg) rotateX(5deg) translateZ(20px);
 }
 
-.card-chrome {
-  background: linear-gradient(135deg, #e5e5e5 0%, #ffffff 25%, #a3a3a3 50%, #ffffff 75%, #e5e5e5 100%);
-  background-size: 200% 200%;
+.card-shine {
   position: relative;
   overflow: hidden;
 }
 
-.card-chrome::before {
+.card-shine::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    105deg,
+    transparent 40%,
+    rgba(255,255,255,0.1) 45%,
+    rgba(255,255,255,0.3) 50%,
+    rgba(255,255,255,0.1) 55%,
+    transparent 60%
+  );
+  transform: translateX(-100%) rotate(0deg);
+  transition: transform 0.8s ease;
+  pointer-events: none;
+  z-index: 10;
+}
+
+.card-shine:hover::before {
+  transform: translateX(100%) rotate(0deg);
+}
+
+/* Chrome card specific */
+.card-chrome {
+  background: linear-gradient(135deg, #e5e5e5 0%, #ffffff 25%, #a3a3a3 50%, #ffffff 75%, #e5e5e5 100%);
+  background-size: 200% 200%;
+}
+
+.card-chrome::after {
   content: '';
   position: absolute;
   top: 0;
@@ -130,7 +151,7 @@ body {
   transition: transform 0.6s ease;
 }
 
-.card-chrome:hover::before {
+.card-chrome:hover::after {
   transform: translateX(100%);
 }
 
@@ -167,10 +188,47 @@ body {
   50% { transform: scaleY(1.1) skewX(2deg); }
 }
 
-/* Mobile Ticker - Faster animation */
+/* Custom Cursor Styles (Edit #7) */
+.custom-cursor {
+  position: fixed;
+  width: 12px;
+  height: 12px;
+  background: #E5E5E5;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 99999;
+  transform: translate(-50%, -50%);
+  transition: width 0.2s ease, height 0.2s ease, background-color 0.2s ease, border 0.2s ease;
+  mix-blend-mode: difference;
+}
+
+.custom-cursor.hover-orange {
+  background: #FF4D00;
+  width: 16px;
+  height: 16px;
+}
+
+.custom-cursor.hover-chrome {
+  background: #E5E5E5;
+  width: 20px;
+  height: 20px;
+  border: 2px solid #050505;
+}
+
+.custom-cursor.hover-dark {
+  background: #050505;
+  border: 2px solid #E5E5E5;
+  width: 16px;
+  height: 16px;
+}
+
+/* Mobile cursor hide */
 @media (max-width: 768px) {
-  .ticker-content {
-    animation: ticker 8s linear infinite !important;
+  body {
+    cursor: auto;
+  }
+  .custom-cursor {
+    display: none;
   }
 }
 
