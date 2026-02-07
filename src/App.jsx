@@ -368,7 +368,7 @@ const Ticker = () => {
   );
 };
 
-// SECTION 3: BENTO - The Alchemical Triad
+// SECTION 3: BENTO - The Alchemical Triad (Icons removed)
 const BentoFeatures = () => {
   const features = [
     {
@@ -418,11 +418,8 @@ const BentoFeatures = () => {
             <div className="blueprint-overlay absolute inset-0 pointer-events-none rounded-2xl" />
 
             <div className="relative z-10 flex-1">
-              <div className="flex items-center justify-between mb-6">
-                <div className="w-16 h-16 rounded-xl bg-[#FF4D00]/10 flex items-center justify-center group-hover:bg-[#FF4D00]/20 transition-colors">
-                  <SafeIcon name={feature.icon} size={32} className="text-[#FF4D00]" />
-                </div>
-                <span className="font-mono text-xs text-[#E5E5E5]/40 tracking-widest">
+              <div className="mb-6">
+                <span className="font-mono text-xs text-[#E5E5E5]/40 tracking-widest block">
                   {feature.subtitle.toUpperCase()}
                 </span>
               </div>
@@ -450,7 +447,7 @@ const BentoFeatures = () => {
   );
 };
 
-// SECTION 4: THE ALCHEMICAL VAULT - Updated without glow effect
+// SECTION 4: THE ALCHEMICAL VAULT - Fixed semicircle overflow
 const AlchemicalVault = ({ onTransmuteClick }) => {
   const assets = [
     {
@@ -572,7 +569,7 @@ const AlchemicalVault = ({ onTransmuteClick }) => {
   );
 };
 
-// Vault Card - NO GLOW effect on hover
+// Vault Card - Fixed semicircle overflow (changed -bottom-4 to bottom-0)
 const VaultCardNoGlow = ({ asset, onTransmuteClick }) => {
   return (
     <motion.div
@@ -580,13 +577,13 @@ const VaultCardNoGlow = ({ asset, onTransmuteClick }) => {
       transition={{ duration: 0.3 }}
       style={{ transform: 'none' }}
     >
-      <div className="glass-card absolute inset-0 rounded-2xl overflow-visible transition-all duration-500" style={{ transform: 'none' }}>
+      <div className="glass-card absolute inset-0 rounded-2xl overflow-hidden transition-all duration-500" style={{ transform: 'none' }}>
 
         {/* Top gradient accent line */}
-        <div className="vault-top-line absolute -top-px left-4 right-4 h-1 bg-[#E5E5E5]/20 opacity-60 transition-all duration-500 rounded-full" />
+        <div className="vault-top-line absolute top-0 left-4 right-4 h-1 bg-[#E5E5E5]/20 opacity-60 transition-all duration-500 rounded-full" />
 
-        {/* Metallic sheen overlay */}
-        <div className="absolute inset-0 bg-gradient-to-br from-white/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-2xl" />
+        {/* Metallic sheen overlay - Added pointer-events-none */}
+        <div className="absolute inset-0 bg-gradient-to-br from-white/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-2xl pointer-events-none" />
 
         <div className="relative h-full flex flex-col p-6">
           <div className="flex items-start justify-between mb-8">
@@ -666,7 +663,8 @@ const VaultCardNoGlow = ({ asset, onTransmuteClick }) => {
           </button>
         </div>
 
-        <div className="absolute -bottom-4 right-0 w-24 h-24 overflow-visible opacity-0 group-hover:opacity-20 transition-opacity duration-500">
+        {/* Fixed semicircle - changed from -bottom-4 to bottom-0 to stay inside card */}
+        <div className="absolute bottom-0 right-0 w-24 h-24 overflow-hidden opacity-0 group-hover:opacity-20 transition-opacity duration-500">
           <div className="absolute bottom-0 right-0 w-full h-full bg-gradient-to-tl from-[#FF4D00] to-[#ff6a2b] rounded-tl-full" />
         </div>
       </div>
@@ -674,7 +672,7 @@ const VaultCardNoGlow = ({ asset, onTransmuteClick }) => {
   );
 };
 
-// SECTION 5: THE FORGE - Interactive Asset Melt with Orange Icons
+// SECTION 5: THE FORGE - Interactive Asset Melt (with pointer-events-none on overlay)
 const Forge = () => {
   const assets = [
     {
@@ -682,7 +680,7 @@ const Forge = () => {
       name: 'ETHEREUM_LIQUID',
       symbol: 'STETH',
       icon: 'diamond',
-      color: '#FF4D00', // Orange instead of blue
+      color: '#FF4D00',
       apy: '15.7%',
       desc: 'Staked ETH that flows like water through DeFi',
       isEth: true
@@ -692,7 +690,7 @@ const Forge = () => {
       name: 'BITCOIN_WRAPPED',
       symbol: 'WBTC',
       icon: 'bitcoin',
-      color: '#F7931A', // Keep BTC orange
+      color: '#F7931A',
       apy: '12.1%',
       desc: 'Bitcoin unleashed from its blockchain constraints',
       isBtc: false
@@ -702,7 +700,7 @@ const Forge = () => {
       name: 'AETHER_GOLD',
       symbol: 'AU',
       icon: 'coins',
-      color: '#FF4D00', // Orange instead of gold
+      color: '#FF4D00',
       apy: '8.4%',
       desc: 'Physical gold tokenized and liquified for instant transfers',
       isGold: true
@@ -737,7 +735,7 @@ const Forge = () => {
               data-cursor="orange"
             >
               <div className="glass-card rounded-2xl overflow-visible relative min-h-[400px] flex flex-col">
-                <div className="blueprint-overlay absolute inset-0 pointer-events-none rounded-2xl" />
+                <div className="blueprint-overlay absolute inset-0 rounded-2xl" />
 
                 <div className="relative z-10 p-8 flex flex-col flex-1">
                   <div className="flex items-center justify-between mb-6">
