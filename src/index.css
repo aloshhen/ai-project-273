@@ -326,15 +326,20 @@ button, a, [role="button"], input, textarea, select, .cursor-pointer {
   animation: icon-subtle 0.6s ease-in-out;
 }
 
-/* Vault card orange hover effect - NO LIFT */
+/* Vault card orange hover effect with glass-card glow - NO LIFT */
 .vault-card-orange {
   transition: all 0.5s ease;
 }
 
 .vault-card-orange:hover {
-  border-color: rgba(255, 77, 0, 0.6);
-  box-shadow: 0 0 40px rgba(255, 77, 0, 0.2), inset 0 0 40px rgba(255, 77, 0, 0.05);
   transform: none !important;
+}
+
+.vault-card-orange:hover .glass-card {
+  border-color: #FF4D00;
+  box-shadow:
+    0 0 30px rgba(255, 77, 0, 0.3),
+    inset 0 0 30px rgba(255, 77, 0, 0.05);
 }
 
 .vault-card-orange:hover .vault-top-line {
