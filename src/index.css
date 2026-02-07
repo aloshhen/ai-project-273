@@ -321,15 +321,53 @@ button, a, [role="button"], input, textarea, select, .cursor-pointer {
   border-color: rgba(255, 77, 0, 0.4);
 }
 
-/* Forge icon melt animation on card hover */
+/* Forge icon spin animation on card hover */
 .forge-card:hover .forge-icon {
-  animation: melt 0.6s ease-in-out;
+  animation: icon-spin 0.6s ease-in-out;
 }
 
-@keyframes melt {
-  0% { transform: scale(1) rotate(0deg); border-radius: 16px; }
-  25% { transform: scale(1.1) rotate(5deg); border-radius: 40% 60% 50% 50%; }
-  50% { transform: scale(0.95) rotate(-5deg); border-radius: 60% 40% 60% 40%; }
-  75% { transform: scale(1.05) rotate(3deg); border-radius: 40% 60% 40% 60%; }
-  100% { transform: scale(1) rotate(0deg); border-radius: 16px; }
+@keyframes icon-spin {
+  0% { transform: rotate(0deg) scale(1); }
+  50% { transform: rotate(180deg) scale(1.1); }
+  100% { transform: rotate(360deg) scale(1); }
+}
+
+/* Vault card orange hover effect */
+.vault-card-orange:hover {
+  border-color: rgba(255, 77, 0, 0.6);
+  box-shadow: 0 0 40px rgba(255, 77, 0, 0.2), inset 0 0 40px rgba(255, 77, 0, 0.05);
+}
+
+.vault-card-orange:hover .vault-top-line {
+  background: linear-gradient(90deg, #FF4D00, #ff6a2b, #FF4D00);
+  opacity: 1;
+}
+
+.vault-card-orange:hover .vault-icon-box {
+  background: rgba(255, 77, 0, 0.15);
+  border-color: rgba(255, 77, 0, 0.4);
+}
+
+.vault-card-orange:hover .vault-icon {
+  color: #FF4D00;
+}
+
+.vault-card-orange:hover .vault-title {
+  color: #FF4D00;
+}
+
+.vault-card-orange:hover .vault-bars {
+  background: linear-gradient(to top, #FF4D00, #ff6a2b);
+  opacity: 0.7;
+}
+
+/* Darker floating dots in footer */
+.floating-dot-dark {
+  background: rgba(5, 5, 5, 0.5);
+  box-shadow: 0 0 8px rgba(5, 5, 5, 0.6);
+}
+
+.floating-dot-orange {
+  background: rgba(255, 77, 0, 0.5);
+  box-shadow: 0 0 8px rgba(255, 77, 0, 0.6);
 }
