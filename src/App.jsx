@@ -1,7 +1,8 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { motion, useScroll, useTransform, useSpring, useMotionValue, AnimatePresence } from 'framer-motion';
+import React, { useState, useEffect, useRef } from 'react';
+import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
 import { clsx } from 'clsx';
 import { twMerge } from 'tailwind-merge';
+import * as LucideIcons from 'lucide-react';
 
 // Utility for Tailwind class merging
 function cn(...inputs) {
@@ -10,41 +11,17 @@ function cn(...inputs) {
 
 // Safe Icon Component - renders Lucide icons dynamically
 const SafeIcon = ({ name, size = 24, className, color }) => {
-  const iconRef = useRef(null);
-  const [IconComponent, setIconComponent] = useState(null);
+  const pascalName = name
+    .split('-')
+    .map(part => part.charAt(0).toUpperCase() + part.slice(1))
+    .join('');
 
-  useEffect(() => {
-    let isMounted = true;
-    const loadIcon = async () => {
-      try {
-        const module = await import('lucide-react');
-        const iconName = name
-          .split('-')
-          .map(part => part.charAt(0).toUpperCase() + part.slice(1))
-          .join('');
-
-        if (isMounted && module[iconName]) {
-          setIconComponent(() => module[iconName]);
-        } else if (isMounted) {
-          setIconComponent(() => module.HelpCircle || module.Circle);
-        }
-      } catch (error) {
-        console.warn(`Icon ${name} not found`);
-      }
-    };
-
-    loadIcon();
-    return () => { isMounted = false; };
-  }, [name]);
-
-  if (!IconComponent) {
-    return <div className={cn("animate-pulse bg-gray-800 rounded", className)} style={{ width: size, height: size }} />;
-  }
+  const IconComponent = LucideIcons[pascalName] || LucideIcons.HelpCircle;
 
   return <IconComponent size={size} className={className} color={color} />;
 };
 
-// Custom Cursor Component (Edit #7)
+// Custom Cursor Component - WHITE DOT ALWAYS
 const CustomCursor = () => {
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const [cursorClass, setCursorClass] = useState('');
@@ -53,14 +30,9 @@ const CustomCursor = () => {
     const handleMouseMove = (e) => {
       setPosition({ x: e.clientX, y: e.clientY });
 
-      // Check element under cursor for color context
       const element = document.elementFromPoint(e.clientX, e.clientY);
       if (element) {
-        const computedStyle = window.getComputedStyle(element);
-        const bgColor = computedStyle.backgroundColor;
-        const color = computedStyle.color;
-
-        // Check for specific hover targets
+        const isButton = element.closest('button') || element.closest('a') || element.closest('[role="button"]');
         const isOrangeElement = element.closest('[data-cursor="orange"]') ||
                                element.classList.contains('text-[#FF4D00]') ||
                                element.classList.contains('bg-[#FF4D00]');
@@ -70,7 +42,9 @@ const CustomCursor = () => {
                              element.classList.contains('bg-[#E5E5E5]') ||
                              element.classList.contains('text-[#050505]');
 
-        if (isOrangeElement) {
+        if (isButton) {
+          setCursorClass('hover-orange');
+        } else if (isOrangeElement) {
           setCursorClass('hover-orange');
         } else if (isChromeElement) {
           setCursorClass('hover-chrome');
@@ -94,7 +68,7 @@ const CustomCursor = () => {
   );
 };
 
-// SECTION 1: HERO - The Singularity (Edit #2 - smoother, Edit #4 - fluid, Edit #5 - 2 rows)
+// SECTION 1: HERO - The Singularity - SPHERE CENTERED WITH TEXT ON TOP
 const MercurySphere = () => {
   const sphereRef = useRef(null);
   const mouseRef = useRef({ x: 0, y: 0 });
@@ -103,7 +77,6 @@ const MercurySphere = () => {
 
   useEffect(() => {
     const handleMouseMove = (e) => {
-      // Smooth follow with lerp
       const rect = sphereRef.current?.getBoundingClientRect();
       if (!rect) return;
 
@@ -117,7 +90,6 @@ const MercurySphere = () => {
     };
 
     const animate = () => {
-      // Smooth interpolation (lerp) for gentle movement
       mouseRef.current.x += (targetRef.current.x - mouseRef.current.x) * 0.08;
       mouseRef.current.y += (targetRef.current.y - mouseRef.current.y) * 0.08;
 
@@ -140,30 +112,29 @@ const MercurySphere = () => {
   }, []);
 
   return (
-    <div className="relative flex items-center justify-center py-20 w-full overflow-visible">
+    <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
       <motion.div
         initial={{ scale: 0, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         transition={{ duration: 1.5, ease: "easeOut" }}
         ref={sphereRef}
-        className="mercury-sphere w-64 h-64 md:w-96 md:h-96 animate-morph"
+        className="mercury-sphere w-80 h-80 md:w-[28rem] md:h-[28rem] lg:w-[36rem] lg:h-[36rem] animate-morph"
       />
-      <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+      <div className="absolute inset-0 flex items-center justify-center">
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: [0.3, 0.6, 0.3] }}
           transition={{ duration: 3, repeat: Infinity }}
-          className="w-80 h-80 md:w-[28rem] md:h-[28rem] rounded-full bg-[#E5E5E5]/10 blur-3xl"
+          className="w-96 h-96 md:w-[32rem] md:h-[32rem] lg:w-[40rem] lg:h-[40rem] rounded-full bg-[#E5E5E5]/10 blur-3xl"
         />
       </div>
     </div>
   );
 };
 
-// SECTION 2: TICKER - The Velocity Tape (Edit #6 - pause without reset)
+// SECTION 2: TICKER - The Velocity Tape - ENSURE IT MOVES
 const Ticker = () => {
   const [isPaused, setIsPaused] = useState(false);
-  const tickerRef = useRef(null);
 
   const tickerItems = [
     { label: "AETHER_STABLE", value: "1.0002", change: "+0.02%" },
@@ -184,18 +155,15 @@ const Ticker = () => {
       data-cursor="orange"
     >
       <div
-        ref={tickerRef}
-        className="flex whitespace-nowrap"
+        className="flex whitespace-nowrap animate-ticker"
         style={{
-          animation: 'ticker 30s linear infinite',
           animationPlayState: isPaused ? 'paused' : 'running'
         }}
       >
-        {/* Duplicate content for seamless loop */}
-        {[...tickerItems, ...tickerItems, ...tickerItems, ...tickerItems].map((item, index) => (
+        {[...tickerItems, ...tickerItems, ...tickerItems, ...tickerItems, ...tickerItems, ...tickerItems].map((item, index) => (
           <div
             key={index}
-            className="flex items-center gap-3 px-6 group cursor-pointer"
+            className="flex items-center gap-3 px-6 group"
           >
             <div className="flex items-center gap-2 bg-[#FF4D00]/10 border border-[#FF4D00]/20 rounded-lg px-4 py-2 group-hover:bg-[#FF4D00]/20 group-hover:border-[#FF4D00]/40 transition-all">
               <span className="font-mono text-xs text-[#E5E5E5]/50 tracking-wider uppercase">
@@ -219,7 +187,239 @@ const Ticker = () => {
   );
 };
 
-// SECTION 3: BENTO - The Alchemical Triad
+// NEW SECTION: THE ALCHEMICAL VAULT - Horizontal scroll gallery
+const AlchemicalVault = () => {
+  const containerRef = useRef(null);
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ['start end', 'end start'],
+  });
+
+  const x = useTransform(scrollYProgress, [0, 1], ['5%', '-45%']);
+
+  const assets = [
+    {
+      symbol: 'ETH',
+      name: 'ETHEREUM',
+      fullName: 'Ethereum 2.0',
+      color: 'from-purple-500 to-blue-600',
+      price: '$3,247.82',
+      change: '+12.4%',
+      icon: 'diamond'
+    },
+    {
+      symbol: 'BTC',
+      name: 'BITCOIN',
+      fullName: 'Bitcoin',
+      color: 'from-orange-400 to-amber-600',
+      price: '$67,432.18',
+      change: '+8.2%',
+      icon: 'circle'
+    },
+    {
+      symbol: 'AU',
+      name: 'GOLD',
+      fullName: 'Digital Gold',
+      color: 'from-yellow-300 to-yellow-600',
+      price: '$2,145.30',
+      change: '+3.1%',
+      icon: 'hexagon'
+    },
+    {
+      symbol: 'USD',
+      name: 'DOLLAR',
+      fullName: 'USDC Stable',
+      color: 'from-green-400 to-emerald-600',
+      price: '$1.00',
+      change: '+0.01%',
+      icon: 'triangle'
+    },
+    {
+      symbol: 'SOL',
+      name: 'SOLANA',
+      fullName: 'Solana',
+      color: 'from-purple-400 to-pink-600',
+      price: '$178.45',
+      change: '+24.7%',
+      icon: 'zap'
+    },
+    {
+      symbol: 'AVAX',
+      name: 'AVALANCHE',
+      fullName: 'Avalanche',
+      color: 'from-red-400 to-red-600',
+      price: '$42.18',
+      change: '+15.3%',
+      icon: 'activity'
+    },
+  ];
+
+  return (
+    <div ref={containerRef} className="py-20 overflow-hidden">
+      {/* Section Header */}
+      <div className="px-8 mb-20 text-center">
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="inline-flex flex-col items-center"
+        >
+          <span className="font-mono text-[10px] tracking-[0.3em] text-gray-500 mb-4">
+            SECTION_02
+          </span>
+          <h2 className="font-serif text-5xl md:text-7xl lg:text-8xl font-bold chrome-text mb-4">
+            THE ALCHEMICAL
+          </h2>
+          <h2 className="font-serif text-5xl md:text-7xl lg:text-8xl font-bold text-[#FF4D00]">
+            VAULT
+          </h2>
+          <div className="mt-6 w-24 h-[1px] bg-gradient-to-r from-transparent via-[#FF4D00] to-transparent" />
+        </motion.div>
+      </div>
+
+      {/* Horizontal Scroll with Parallax */}
+      <div className="relative h-[500px] overflow-hidden">
+        <motion.div
+          className="absolute flex gap-6 px-8 items-center h-full"
+          style={{ x }}
+        >
+          {assets.map((asset, index) => (
+            <ModernCard
+              key={asset.symbol}
+              asset={asset}
+              index={index}
+              scrollProgress={scrollYProgress}
+            />
+          ))}
+        </motion.div>
+      </div>
+
+      {/* Technical Specs */}
+      <div className="px-8 mt-20 max-w-6xl mx-auto">
+        <div className="grid md:grid-cols-3 gap-6">
+          {[
+            { label: 'TOTAL_LOCKED', value: '$2.4B', subtext: 'Across all assets' },
+            { label: 'YIELD_RATE', value: '12.8%', subtext: 'APY average' },
+            { label: 'LIQUIDITY', value: 'INSTANT', subtext: 'Zero slippage' },
+          ].map((stat, index) => (
+            <motion.div
+              key={stat.label}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: index * 0.1 }}
+              className="card-gradient-border p-6 rounded-xl hover:border-[#FF4D00]/30 transition-all duration-500 group"
+            >
+              <div className="font-mono text-[10px] text-gray-500 mb-2 tracking-widest">
+                {stat.label}
+              </div>
+              <div className="font-serif text-4xl font-bold text-white mb-1 group-hover:text-[#FF4D00] transition-colors">
+                {stat.value}
+              </div>
+              <div className="font-mono text-[10px] text-gray-600">
+                {stat.subtext}
+              </div>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// Modern Card Component for Alchemical Vault
+const ModernCard = ({ asset, index, scrollProgress }) => {
+  const rotateY = useTransform(scrollProgress, [0, 1], [-15, 15]);
+  const y = useTransform(scrollProgress, [0, 0.5, 1], [50, 0, 50]);
+
+  return (
+    <motion.div
+      className="relative w-80 h-[420px] flex-shrink-0 group"
+      style={{
+        rotateY,
+        y,
+        transformStyle: 'preserve-3d',
+        perspective: 1000,
+      }}
+    >
+      <div className="absolute inset-0 card-gradient-border rounded-2xl overflow-hidden transition-all duration-500 group-hover:scale-[1.02]">
+        <div className={cn(
+          "absolute inset-0 bg-gradient-to-br opacity-10",
+          asset.color
+        )} />
+
+        <div className="relative h-full flex flex-col justify-between p-6">
+          <div className="flex items-start justify-between">
+            <div>
+              <div className="font-mono text-[10px] text-gray-600 mb-1">
+                ASSET
+              </div>
+              <div className="font-serif text-4xl font-bold text-white">
+                {asset.symbol}
+              </div>
+              <div className="font-mono text-[10px] text-gray-500 mt-1">
+                {asset.fullName}
+              </div>
+            </div>
+
+            <div className={cn(
+              "w-14 h-14 rounded-xl bg-gradient-to-br flex items-center justify-center",
+              asset.color
+            )}>
+              <SafeIcon name={asset.icon} size={24} className="text-white" />
+            </div>
+          </div>
+
+          <div className="space-y-2">
+            <div className="flex items-baseline gap-2">
+              <div className="font-mono text-2xl font-bold text-white">
+                {asset.price}
+              </div>
+              <div className={cn(
+                "font-mono text-sm font-medium",
+                asset.change.startsWith('+') ? 'text-green-400' : 'text-red-400'
+              )}>
+                {asset.change}
+              </div>
+            </div>
+
+            <div className="flex gap-[2px] h-12 items-end">
+              {[...Array(20)].map((_, i) => (
+                <motion.div
+                  key={i}
+                  className={cn(
+                    "flex-1 rounded-t bg-gradient-to-t",
+                    asset.color
+                  )}
+                  style={{
+                    height: `${30 + Math.random() * 70}%`,
+                    opacity: 0.6,
+                  }}
+                  initial={{ scaleY: 0 }}
+                  whileInView={{ scaleY: 1 }}
+                  transition={{ delay: i * 0.05, duration: 0.5 }}
+                />
+              ))}
+            </div>
+          </div>
+
+          <button className="mt-6 w-full py-3 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 hover:border-white/20 transition-all font-mono text-xs tracking-widest text-gray-300 hover:text-white">
+            TRADE_{asset.symbol}
+          </button>
+        </div>
+
+        <div className="absolute top-0 right-0 w-20 h-20 overflow-hidden">
+          <div className={cn(
+            "absolute top-0 right-0 w-full h-full bg-gradient-to-bl opacity-20",
+            asset.color
+          )} />
+        </div>
+      </div>
+    </motion.div>
+  );
+};
+
+// SECTION 3: BENTO - The Alchemical Triad - NO SHINE
 const BentoFeatures = () => {
   const features = [
     {
@@ -263,7 +463,7 @@ const BentoFeatures = () => {
             initial={{ opacity: 0, y: 50 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: index * 0.1 }}
-            className="glass-card rounded-2xl p-8 relative overflow-hidden group min-h-[400px] flex flex-col card-shine"
+            className="glass-card rounded-2xl p-8 relative overflow-hidden group min-h-[400px] flex flex-col"
             data-cursor="orange"
           >
             <div className="blueprint-overlay absolute inset-0 pointer-events-none" />
@@ -301,7 +501,7 @@ const BentoFeatures = () => {
   );
 };
 
-// SECTION 4: THE FORGE - Interactive Asset Melt
+// SECTION 4: THE FORGE - Interactive Asset Melt - NO SHINE
 const Forge = () => {
   const [hoveredAsset, setHoveredAsset] = useState(null);
   const [meltProgress, setMeltProgress] = useState({ gold: 0, btc: 0, eth: 0 });
@@ -375,11 +575,10 @@ const Forge = () => {
                 setMeltProgress(prev => ({ ...prev, [asset.id]: 0 }));
               }}
               onMouseMove={(e) => handleMouseMove(e, asset.id)}
-              className="relative group cursor-pointer card-shine"
+              className="relative group"
               data-cursor="orange"
             >
               <div className="relative bg-[#0f0f0f] rounded-2xl overflow-hidden border border-[#E5E5E5]/10 hover:border-[#E5E5E5]/30 transition-all duration-500">
-                {/* Melting liquid effect */}
                 <div
                   className="absolute bottom-0 left-0 right-0 transition-all duration-300 ease-out opacity-60"
                   style={{
@@ -389,7 +588,6 @@ const Forge = () => {
                   }}
                 />
 
-                {/* Glowing border effect */}
                 <div
                   className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"
                   style={{
@@ -398,7 +596,6 @@ const Forge = () => {
                 />
 
                 <div className="relative z-10 p-8">
-                  {/* Asset Icon */}
                   <div className="flex items-center justify-between mb-6">
                     <motion.div
                       className="w-20 h-20 rounded-2xl flex items-center justify-center"
@@ -428,7 +625,6 @@ const Forge = () => {
                     </div>
                   </div>
 
-                  {/* Asset Name */}
                   <h3 className="font-serif text-2xl font-bold text-[#E5E5E5] mb-3 group-hover:text-white transition-colors">
                     {asset.name}
                   </h3>
@@ -437,7 +633,6 @@ const Forge = () => {
                     {asset.desc}
                   </p>
 
-                  {/* APY Badge */}
                   <div className="flex items-center justify-between pt-4 border-t border-[#E5E5E5]/10">
                     <div className="flex items-center gap-2">
                       <SafeIcon name="zap" size={16} className="text-[#FF4D00]" />
@@ -484,9 +679,8 @@ const Pulse = () => {
     <div
       ref={containerRef}
       onClick={handleClick}
-      className="relative py-32 overflow-hidden cursor-pointer select-none"
+      className="relative py-32 overflow-hidden select-none"
     >
-      {/* Particle Wave */}
       <div className="absolute inset-0 flex items-center justify-center">
         {[...Array(50)].map((_, i) => (
           <motion.div
@@ -519,7 +713,6 @@ const Pulse = () => {
         ))}
       </div>
 
-      {/* Ripples */}
       {ripples.map(ripple => (
         <div
           key={ripple.id}
@@ -532,7 +725,6 @@ const Pulse = () => {
         />
       ))}
 
-      {/* Content */}
       <div className={cn(
         "container mx-auto px-4 md:px-6 relative z-10 text-center",
         distortSection && "text-distort"
@@ -554,7 +746,6 @@ const Pulse = () => {
         </motion.div>
       </div>
 
-      {/* Stats */}
       <div className="container mx-auto px-4 md:px-6 mt-16 grid grid-cols-2 md:grid-cols-4 gap-8 relative z-10">
         {[
           { label: 'BLOCKS_MINED', value: '14,892,401' },
@@ -582,7 +773,7 @@ const Pulse = () => {
   );
 };
 
-// SECTION 6: THE VAULT TIERS - Membership Evolution (Edit #3 - shine on all cards)
+// SECTION 6: THE VAULT TIERS - Membership Evolution - NO SHINE
 const VaultTiers = () => {
   const tiers = [
     {
@@ -640,13 +831,12 @@ const VaultTiers = () => {
               transition={{ duration: 0.6, delay: index * 0.2 }}
               whileHover={{ rotateY: 10, rotateX: 5, z: 50 }}
               className={cn(
-                "card-3d relative rounded-2xl p-8 overflow-hidden card-shine",
+                "card-3d relative rounded-2xl p-8 overflow-hidden",
                 tier.isChrome ? "card-chrome" : tier.isFlare ? "bg-gradient-to-b from-orange-500 via-orange-600 to-orange-700" : `bg-gradient-to-b ${tier.bgColor}`
               )}
               style={{ opacity: 0.9 }}
               data-cursor={tier.isChrome ? "chrome" : tier.isFlare ? "orange" : "dark"}
             >
-              {/* Tier Header */}
               <div className="relative z-10 mb-8">
                 <h3 className={cn(
                   "font-serif text-3xl font-black mb-2",
@@ -662,7 +852,6 @@ const VaultTiers = () => {
                 </div>
               </div>
 
-              {/* APY Badge */}
               <div className={cn(
                 "relative z-10 inline-block px-6 py-3 rounded-full mb-8 border-2",
                 tier.isChrome
@@ -685,7 +874,6 @@ const VaultTiers = () => {
                 </span>
               </div>
 
-              {/* Features */}
               <ul className="relative z-10 space-y-4">
                 {tier.features.map((feature, i) => (
                   <li key={i} className={cn(
@@ -702,7 +890,6 @@ const VaultTiers = () => {
                 ))}
               </ul>
 
-              {/* CTA Button */}
               <button className={cn(
                 "relative z-10 w-full mt-8 py-4 rounded-xl font-mono font-bold transition-all transform hover:scale-105",
                 tier.isChrome
@@ -714,7 +901,6 @@ const VaultTiers = () => {
                 Select {tier.name}
               </button>
 
-              {/* Reflection overlay for Chrome card */}
               {tier.isChrome && (
                 <div className="absolute inset-0 bg-gradient-to-br from-white/40 via-transparent to-transparent pointer-events-none" />
               )}
@@ -872,7 +1058,6 @@ const Footer = () => {
         isFlooded ? "bg-[#FF4D00]" : "bg-[#050505]"
       )}
     >
-      {/* Wave animation overlay */}
       <div className={cn(
         "absolute inset-0 pointer-events-none transition-all duration-1000 ease-out",
         isFlooded ? "opacity-100" : "opacity-0"
@@ -934,7 +1119,6 @@ const Footer = () => {
         </div>
       </motion.div>
 
-      {/* Floating particles */}
       {[...Array(20)].map((_, i) => (
         <motion.div
           key={i}
@@ -991,7 +1175,7 @@ const Navigation = () => {
         </span>
 
         <div className="hidden md:flex items-center gap-8">
-          {['Forge', 'Pulse', 'Vault', 'Connect'].map((item) => (
+          {['Vault', 'Forge', 'Pulse', 'Connect'].map((item) => (
             <button
               key={item}
               onClick={() => scrollToSection(item.toLowerCase())}
@@ -1014,61 +1198,56 @@ const Navigation = () => {
 function App() {
   return (
     <div className="min-h-screen bg-[#050505] text-[#E5E5E5] overflow-x-hidden">
-      {/* Custom Cursor (Edit #7) */}
       <CustomCursor />
-
-      {/* Grainy Noise Overlay (Edit #1 - finer) */}
       <div className="grainy-noise" />
 
       <Navigation />
 
-      {/* SECTION 1: HERO (Edit #5 - 2 rows) */}
-      <section id="hero" className="min-h-screen flex flex-col items-center justify-center pt-20">
+      <section id="hero" className="relative min-h-screen flex flex-col items-center justify-center pt-20 overflow-hidden">
+        <MercurySphere />
+
         <motion.div
           initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1 }}
-          className="text-center px-4"
+          className="relative z-20 text-center px-4"
         >
-          <h1 className="font-serif text-5xl md:text-8xl lg:text-9xl font-black tracking-tighter mb-4">
+          <h1 className="font-serif text-5xl md:text-8xl lg:text-9xl font-black tracking-tighter mb-4 drop-shadow-2xl">
             WEALTH IN <span className="text-[#FF4D00]">CONSTANT</span><br />
             MOTION
           </h1>
-          <p className="font-mono text-[#E5E5E5]/60 text-lg md:text-xl max-w-2xl mx-auto mt-8">
+          <p className="font-mono text-[#E5E5E5]/80 text-lg md:text-xl max-w-2xl mx-auto mt-8 drop-shadow-lg">
             The Singularity. A protocol manifesting liquid chrome alchemy into decentralized finance.
           </p>
         </motion.div>
-
-        <MercurySphere />
       </section>
 
-      {/* SECTION 2: TICKER (Edit #6 - pause without reset) */}
       <Ticker />
 
-      {/* SECTION 3: BENTO */}
+      <section id="vault">
+        <AlchemicalVault />
+      </section>
+
       <section id="bento">
         <BentoFeatures />
       </section>
 
-      {/* SECTION 4: FORGE */}
       <section id="forge">
         <Forge />
       </section>
 
-      {/* SECTION 5: PULSE */}
       <section id="pulse">
         <Pulse />
       </section>
 
-      {/* SECTION 6: VAULT */}
-      <section id="vault">
+      <section id="tiers">
         <VaultTiers />
       </section>
 
-      {/* SECTION 7: CONTACT FORM */}
-      <ContactForm />
+      <section id="connect">
+        <ContactForm />
+      </section>
 
-      {/* SECTION 8: FOOTER */}
       <Footer />
     </div>
   );
