@@ -21,10 +21,10 @@ const SafeIcon = ({ name, size = 24, className, color }) => {
   return <IconComponent size={size} className={className} color={color} />;
 };
 
-// Custom Cursor Component - WHITE DOT ALWAYS
+// Custom Cursor Component - ALWAYS WHITE, SCALES ON BUTTONS
 const CustomCursor = () => {
   const [position, setPosition] = useState({ x: 0, y: 0 });
-  const [cursorClass, setCursorClass] = useState('');
+  const [isScaled, setIsScaled] = useState(false);
 
   useEffect(() => {
     const handleMouseMove = (e) => {
@@ -32,27 +32,11 @@ const CustomCursor = () => {
 
       const element = document.elementFromPoint(e.clientX, e.clientY);
       if (element) {
-        const isButton = element.closest('button') || element.closest('a') || element.closest('[role="button"]');
-        const isOrangeElement = element.closest('[data-cursor="orange"]') ||
-                               element.classList.contains('text-[#FF4D00]') ||
-                               element.classList.contains('bg-[#FF4D00]');
-        const isChromeElement = element.closest('[data-cursor="chrome"]') ||
-                                 element.classList.contains('card-chrome');
-        const isDarkElement = element.closest('[data-cursor="dark"]') ||
-                             element.classList.contains('bg-[#E5E5E5]') ||
-                             element.classList.contains('text-[#050505]');
-
-        if (isButton) {
-          setCursorClass('hover-orange');
-        } else if (isOrangeElement) {
-          setCursorClass('hover-orange');
-        } else if (isChromeElement) {
-          setCursorClass('hover-chrome');
-        } else if (isDarkElement) {
-          setCursorClass('hover-dark');
-        } else {
-          setCursorClass('');
-        }
+        const isButton = element.closest('button') ||
+                        element.closest('a') ||
+                        element.closest('[role="button"]') ||
+                        element.closest('.cursor-pointer');
+        setIsScaled(!!isButton);
       }
     };
 
@@ -62,13 +46,13 @@ const CustomCursor = () => {
 
   return (
     <div
-      className={cn("custom-cursor", cursorClass)}
+      className={cn("custom-cursor", isScaled && "scaled")}
       style={{ left: position.x, top: position.y }}
     />
   );
 };
 
-// SECTION 1: HERO - The Singularity - SPHERE CENTERED WITH TEXT ON TOP
+// SECTION 1: HERO - The Singularity
 const MercurySphere = () => {
   const sphereRef = useRef(null);
   const mouseRef = useRef({ x: 0, y: 0 });
@@ -132,7 +116,7 @@ const MercurySphere = () => {
   );
 };
 
-// SECTION 2: TICKER - The Velocity Tape - ENSURE IT MOVES
+// SECTION 2: TICKER - The Velocity Tape
 const Ticker = () => {
   const [isPaused, setIsPaused] = useState(false);
 
@@ -187,7 +171,7 @@ const Ticker = () => {
   );
 };
 
-// NEW SECTION: THE ALCHEMICAL VAULT - Redesigned cards with right-to-left scroll on desktop
+// SECTION: THE ALCHEMICAL VAULT - Gray cards that reveal color on hover
 const AlchemicalVault = () => {
   const assets = [
     {
@@ -246,12 +230,10 @@ const AlchemicalVault = () => {
     },
   ];
 
-  // Duplicate assets many times for seamless infinite scroll
   const duplicatedAssets = [...assets, ...assets, ...assets, ...assets, ...assets, ...assets, ...assets, ...assets];
 
   return (
     <div className="py-20 overflow-hidden">
-      {/* Section Header */}
       <div className="container mx-auto px-4 md:px-6 mb-16">
         <motion.div
           initial={{ opacity: 0, y: 50 }}
@@ -260,7 +242,7 @@ const AlchemicalVault = () => {
           className="text-center"
         >
           <h2 className="font-serif text-5xl md:text-8xl font-black text-white tracking-tighter">
-            The Alchemical <span className="text-[#FF4D00]">Vault</span>
+            The Alchemical <span className="text-white">Vault</span>
           </h2>
           <p className="font-mono text-[#E5E5E5]/60 text-lg mt-6 max-w-2xl mx-auto">
             Assets in perpetual motion
@@ -268,25 +250,22 @@ const AlchemicalVault = () => {
         </motion.div>
       </div>
 
-      {/* Desktop: Horizontal scroll right-to-left / Mobile: Horizontal scroll */}
       <div className="relative h-[450px] overflow-hidden hidden lg:block">
         <div className="vault-scroll-container absolute flex gap-8 items-center h-full px-4">
           {duplicatedAssets.map((asset, index) => (
-            <VaultCardRedesigned key={`${asset.symbol}-${index}`} asset={asset} />
+            <VaultCardGrayToColor key={`${asset.symbol}-${index}`} asset={asset} />
           ))}
         </div>
       </div>
 
-      {/* Mobile: Horizontal scroll container */}
       <div className="lg:hidden overflow-x-auto pb-4">
         <div className="flex gap-4 px-4" style={{ width: 'max-content' }}>
           {assets.map((asset, index) => (
-            <VaultCardRedesigned key={`mobile-${asset.symbol}-${index}`} asset={asset} />
+            <VaultCardGrayToColor key={`mobile-${asset.symbol}-${index}`} asset={asset} />
           ))}
         </div>
       </div>
 
-      {/* Technical Specs */}
       <div className="container mx-auto px-4 md:px-6 mt-20">
         <div className="grid md:grid-cols-3 gap-6 max-w-6xl mx-auto">
           {[
@@ -319,30 +298,30 @@ const AlchemicalVault = () => {
   );
 };
 
-// Redesigned Vault Card - Dark, premium, metallic aesthetic
-const VaultCardRedesigned = ({ asset }) => {
+// Vault Card - Starts GRAY, reveals color on hover
+const VaultCardGrayToColor = ({ asset }) => {
+  const [isHovered, setIsHovered] = useState(false);
+
   return (
     <motion.div
       className="relative w-72 h-[400px] flex-shrink-0 group"
       whileHover={{ y: -10 }}
       transition={{ duration: 0.3 }}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
     >
-      {/* Dark metallic card */}
-      <div className="absolute inset-0 bg-gradient-to-b from-gray-900 to-black rounded-2xl overflow-hidden border border-gray-800 transition-all duration-500 group-hover:border-[#FF4D00]/50">
+      <div className="absolute inset-0 bg-gradient-to-b from-gray-800 to-gray-900 rounded-2xl overflow-hidden border border-gray-700 transition-all duration-500 group-hover:border-[#FF4D00]/50">
 
-        {/* Top gradient accent line */}
+        {/* Top gradient accent line - gray by default, colored on hover */}
         <div className={cn(
-          "absolute top-0 left-0 right-0 h-1 bg-gradient-to-r opacity-60",
-          asset.color
+          "absolute top-0 left-0 right-0 h-1 transition-all duration-500",
+          isHovered ? `bg-gradient-to-r ${asset.color} opacity-100` : "bg-gray-600 opacity-60"
         )} />
 
         {/* Metallic sheen overlay */}
         <div className="absolute inset-0 bg-gradient-to-br from-white/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
-        {/* Content container */}
         <div className="relative h-full flex flex-col p-6">
-
-          {/* Header with icon and symbol */}
           <div className="flex items-start justify-between mb-8">
             <div>
               <div className="font-mono text-[10px] text-gray-600 mb-1 tracking-widest">
@@ -356,16 +335,22 @@ const VaultCardRedesigned = ({ asset }) => {
               </div>
             </div>
 
-            {/* Icon container - dark with subtle glow */}
+            {/* Icon container - GRAY by default, colored on hover */}
             <div className={cn(
-              "w-14 h-14 rounded-xl bg-gradient-to-br flex items-center justify-center border border-white/10 shadow-lg",
-              asset.color
+              "w-14 h-14 rounded-xl flex items-center justify-center border border-white/10 shadow-lg transition-all duration-500",
+              isHovered ? `bg-gradient-to-br ${asset.color}` : "bg-gray-700"
             )}>
-              <SafeIcon name={asset.icon} size={24} className="text-white drop-shadow-md" />
+              <SafeIcon
+                name={asset.icon}
+                size={24}
+                className={cn(
+                  "transition-colors duration-500",
+                  isHovered ? "text-white" : "text-gray-400"
+                )}
+              />
             </div>
           </div>
 
-          {/* Price section */}
           <div className="mb-6">
             <div className="font-mono text-[10px] text-gray-600 mb-2 tracking-widest">
               CURRENT_PRICE
@@ -383,7 +368,6 @@ const VaultCardRedesigned = ({ asset }) => {
             </div>
           </div>
 
-          {/* Chart visualization */}
           <div className="flex-1 flex flex-col justify-end">
             <div className="font-mono text-[10px] text-gray-600 mb-3 tracking-widest">
               VOLATILITY_INDEX
@@ -395,8 +379,8 @@ const VaultCardRedesigned = ({ asset }) => {
                   <motion.div
                     key={i}
                     className={cn(
-                      "flex-1 rounded-t-sm bg-gradient-to-t opacity-60",
-                      asset.color
+                      "flex-1 rounded-t-sm transition-all duration-500",
+                      isHovered ? `bg-gradient-to-t opacity-60 ${asset.color}` : "bg-gray-600 opacity-40"
                     )}
                     style={{ height: `${height}%` }}
                     initial={{ scaleY: 0 }}
@@ -408,24 +392,25 @@ const VaultCardRedesigned = ({ asset }) => {
             </div>
           </div>
 
-          {/* Action button */}
           <button className="mt-6 w-full py-3.5 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 hover:border-[#FF4D00]/30 transition-all duration-300 font-mono text-xs tracking-widest text-gray-400 hover:text-white uppercase">
             Transmute_{asset.symbol}
           </button>
         </div>
 
-        {/* Corner decoration */}
-        <div className="absolute bottom-0 right-0 w-24 h-24 overflow-hidden">
+        <div className={cn(
+          "absolute bottom-0 right-0 w-24 h-24 overflow-hidden transition-opacity duration-500",
+          isHovered ? "opacity-10" : "opacity-0"
+        )}>
           <div className={cn(
-            "absolute bottom-0 right-0 w-full h-full bg-gradient-to-tl opacity-10 rounded-tl-full",
+            "absolute bottom-0 right-0 w-full h-full bg-gradient-to-tl rounded-tl-full",
             asset.color
           )} />
         </div>
 
-        {/* Hover glow effect */}
         <div className={cn(
-          "absolute inset-0 opacity-0 group-hover:opacity-20 transition-opacity duration-500 bg-gradient-to-t pointer-events-none",
-          asset.color
+          "absolute inset-0 bg-gradient-to-t pointer-events-none transition-opacity duration-500",
+          asset.color,
+          isHovered ? "opacity-20" : "opacity-0"
         )} />
       </div>
     </motion.div>
@@ -466,7 +451,7 @@ const BentoFeatures = () => {
         transition={{ duration: 0.8 }}
         className="font-serif text-5xl md:text-8xl font-black text-white mb-16 text-center tracking-tighter"
       >
-        The Alchemical <span className="text-[#FF4D00]">Triad</span>
+        The Alchemical <span className="text-white">Triad</span>
       </motion.h2>
 
       <div className="grid md:grid-cols-3 gap-6">
@@ -514,7 +499,7 @@ const BentoFeatures = () => {
   );
 };
 
-// SECTION 4: THE FORGE - Interactive Asset Melt with quick icon rotation, NO gradient highlight
+// SECTION 4: THE FORGE - Interactive Asset Melt
 const Forge = () => {
   const [hoveredAsset, setHoveredAsset] = useState(null);
 
@@ -558,7 +543,7 @@ const Forge = () => {
           className="text-center mb-16"
         >
           <h2 className="font-serif text-5xl md:text-8xl font-black text-white mb-6 tracking-tighter">
-            The <span className="text-[#FF4D00]">Forge</span>
+            The <span className="text-white">Forge</span>
           </h2>
           <p className="font-mono text-[#E5E5E5]/60 text-lg max-w-2xl mx-auto">
             Hard assets turned into liquid opportunities
@@ -577,15 +562,11 @@ const Forge = () => {
               className="relative group"
               data-cursor="orange"
             >
-              {/* Glassmorphism card - NO gradient highlight */}
               <div className="glass-card rounded-2xl overflow-hidden relative min-h-[400px] flex flex-col">
                 <div className="blueprint-overlay absolute inset-0 pointer-events-none" />
 
-                {/* NO melt effect gradient - removed as requested */}
-
                 <div className="relative z-10 p-8 flex flex-col flex-1">
                   <div className="flex items-center justify-between mb-6">
-                    {/* Quick rotation on hover - fast animation */}
                     <motion.div
                       className="w-20 h-20 rounded-2xl flex items-center justify-center border border-white/10"
                       style={{
@@ -631,7 +612,6 @@ const Forge = () => {
                   </div>
                 </div>
 
-                {/* Bottom glow line like Bento */}
                 <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-[#FF4D00] to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
               </div>
             </motion.div>
@@ -725,7 +705,7 @@ const Pulse = () => {
           transition={{ duration: 1 }}
         >
           <h2 className="font-serif text-5xl md:text-8xl font-black text-white mb-6 tracking-tighter">
-            The <span className="text-[#FF4D00]">Pulse</span>
+            The <span className="text-white">Pulse</span>
           </h2>
           <p className="font-mono text-[#E5E5E5]/60 text-lg md:text-xl max-w-2xl mx-auto mb-8">
             Heartbeat of the Protocol
@@ -805,7 +785,7 @@ const VaultTiers = () => {
           className="text-center mb-16"
         >
           <h2 className="font-serif text-5xl md:text-8xl font-black text-white mb-6 tracking-tighter">
-            Vault <span className="text-[#FF4D00]">Tiers</span>
+            Vault <span className="text-white">Tiers</span>
           </h2>
           <p className="font-mono text-[#E5E5E5]/60 text-lg">
             Membership Evolution
@@ -902,23 +882,39 @@ const VaultTiers = () => {
   );
 };
 
-// CONTACT FORM COMPONENT
-const ContactForm = () => {
-  const [formData, setFormData] = useState({ name: '', email: '', message: '' });
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isSuccess, setIsSuccess] = useState(false);
+// NEW SECTION: FAQ - Replacing Contact Form
+const FAQ = () => {
+  const [openIndex, setOpenIndex] = useState(null);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setIsSubmitting(true);
+  const faqItems = [
+    {
+      question: "What is AETHER PROTOCOL?",
+      answer: "AETHER PROTOCOL is a next-generation decentralized finance platform that combines liquid chrome alchemy with high-end brutalist design principles. We enable instant asset transmutation, neural-level security, and infinite yield optimization across multiple chains."
+    },
+    {
+      question: "How does Instant Transmutation work?",
+      answer: "Our quantum bonding curve technology allows for atomic swaps between any assets with zero slippage. The protocol maintains deep liquidity pools that enable millisecond-level conversions, backed by AI-powered market making algorithms."
+    },
+    {
+      question: "What are the Vault Tiers and how do I join?",
+      answer: "Vault Tiers (Iron, Chrome, Flare) represent membership levels based on your AETH stake. Each tier unlocks enhanced yield rates, reduced fees, and exclusive governance rights. Simply stake the required AETH amount to automatically upgrade your tier."
+    },
+    {
+      question: "Is my capital safe with Neural Security?",
+      answer: "Absolutely. Our Neural Security system uses predictive AI to monitor all transactions in real-time, detecting and preventing exploits before they occur. Smart contracts are self-healing and automatically patch vulnerabilities without manual intervention."
+    },
+    {
+      question: "How are yields generated in the protocol?",
+      answer: "Yields come from multiple sources: liquidity provision fees, staking rewards, protocol revenue sharing, and cross-chain arbitrage. Our Yield Router V4 automatically allocates capital across 47 protocols to maximize returns while managing risk."
+    },
+    {
+      question: "When will the protocol launch?",
+      answer: "The AETHER PROTOCOL mainnet is scheduled for Q2 2024. Early adopters who join our waitlist will receive exclusive Iron tier benefits and airdrop allocations. Follow our social channels for exact launch dates."
+    }
+  ];
 
-    await new Promise(resolve => setTimeout(resolve, 1500));
-
-    setIsSubmitting(false);
-    setIsSuccess(true);
-    setFormData({ name: '', email: '', message: '' });
-
-    setTimeout(() => setIsSuccess(false), 3000);
+  const toggleItem = (index) => {
+    setOpenIndex(openIndex === index ? null : index);
   };
 
   return (
@@ -928,13 +924,13 @@ const ContactForm = () => {
           initial={{ opacity: 0, y: 50 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
-          className="text-center mb-12"
+          className="text-center mb-16"
         >
           <h2 className="font-serif text-5xl md:text-8xl font-black text-white mb-6 tracking-tighter">
-            Initialize <span className="text-[#FF4D00]">Contact</span>
+            Protocol <span className="text-white">FAQ</span>
           </h2>
           <p className="font-mono text-[#E5E5E5]/60 text-lg">
-            Establish connection with the protocol
+            Common inquiries about the system
           </p>
         </motion.div>
 
@@ -942,76 +938,48 @@ const ContactForm = () => {
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.2 }}
-          className="glass-card rounded-2xl p-8 md:p-12"
+          className="glass-card rounded-2xl overflow-hidden"
         >
-          {isSuccess ? (
-            <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              className="text-center py-12"
+          {faqItems.map((item, index) => (
+            <div
+              key={index}
+              className={cn(
+                "faq-item",
+                openIndex === index && "open"
+              )}
             >
-              <div className="w-20 h-20 rounded-full bg-[#FF4D00]/20 flex items-center justify-center mx-auto mb-6">
-                <SafeIcon name="check" size={40} className="text-[#FF4D00]" />
-              </div>
-              <h3 className="font-serif text-3xl font-bold text-white mb-4">Transmission Complete</h3>
-              <p className="font-mono text-[#E5E5E5]/60">Your message has been received by the protocol.</p>
-            </motion.div>
-          ) : (
-            <form onSubmit={handleSubmit} className="space-y-6">
-              <div className="grid md:grid-cols-2 gap-6">
-                <div>
-                  <label className="block font-mono text-xs text-[#E5E5E5]/50 uppercase tracking-wider mb-2">Identity</label>
-                  <input
-                    type="text"
-                    value={formData.name}
-                    onChange={(e) => setFormData({...formData, name: e.target.value})}
-                    required
-                    className="w-full bg-[#0a0a0a] border border-[#E5E5E5]/10 rounded-xl px-4 py-3 font-mono text-[#E5E5E5] placeholder-[#E5E5E5]/30 focus:border-[#FF4D00] focus:outline-none transition-colors"
-                    placeholder="Enter your designation"
-                  />
-                </div>
-                <div>
-                  <label className="block font-mono text-xs text-[#E5E5E5]/50 uppercase tracking-wider mb-2">Channel</label>
-                  <input
-                    type="email"
-                    value={formData.email}
-                    onChange={(e) => setFormData({...formData, email: e.target.value})}
-                    required
-                    className="w-full bg-[#0a0a0a] border border-[#E5E5E5]/10 rounded-xl px-4 py-3 font-mono text-[#E5E5E5] placeholder-[#E5E5E5]/30 focus:border-[#FF4D00] focus:outline-none transition-colors"
-                    placeholder="your@email.com"
-                  />
-                </div>
-              </div>
-              <div>
-                <label className="block font-mono text-xs text-[#E5E5E5]/50 uppercase tracking-wider mb-2">Transmission</label>
-                <textarea
-                  value={formData.message}
-                  onChange={(e) => setFormData({...formData, message: e.target.value})}
-                  required
-                  rows={4}
-                  className="w-full bg-[#0a0a0a] border border-[#E5E5E5]/10 rounded-xl px-4 py-3 font-mono text-[#E5E5E5] placeholder-[#E5E5E5]/30 focus:border-[#FF4D00] focus:outline-none transition-colors resize-none"
-                  placeholder="Enter your message to the protocol..."
-                />
-              </div>
               <button
-                type="submit"
-                disabled={isSubmitting}
-                className="w-full bg-[#FF4D00] hover:bg-[#ff6a2b] disabled:bg-[#FF4D00]/50 text-[#050505] font-mono font-bold py-4 rounded-xl transition-all transform hover:scale-[1.02] disabled:transform-none disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                onClick={() => toggleItem(index)}
+                className="w-full flex items-center justify-between p-6 text-left hover:bg-white/5 transition-colors group"
               >
-                {isSubmitting ? (
-                  <>
-                    <div className="w-5 h-5 border-2 border-[#050505]/30 border-t-[#050505] rounded-full animate-spin" />
-                    Transmitting...
-                  </>
-                ) : (
-                  <>
-                    <SafeIcon name="send" size={20} />
-                    Transmit Message
-                  </>
-                )}
+                <span className="font-serif text-lg md:text-xl font-bold text-white pr-8 group-hover:text-[#FF4D00] transition-colors">
+                  {item.question}
+                </span>
+                <div className="faq-icon flex-shrink-0 w-8 h-8 rounded-full border border-[#E5E5E5]/20 flex items-center justify-center group-hover:border-[#FF4D00] transition-colors">
+                  <SafeIcon name="plus" size={16} className="text-[#E5E5E5] group-hover:text-[#FF4D00] transition-colors" />
+                </div>
               </button>
-            </form>
-          )}
+              <div className="faq-answer px-6 pb-6">
+                <p className="font-mono text-sm text-[#E5E5E5]/70 leading-relaxed">
+                  {item.answer}
+                </p>
+              </div>
+            </div>
+          ))}
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          transition={{ delay: 0.4 }}
+          className="text-center mt-12"
+        >
+          <p className="font-mono text-sm text-[#E5E5E5]/50 mb-4">
+            Still have questions?
+          </p>
+          <button className="bg-[#FF4D00] hover:bg-[#ff6a2b] text-[#050505] px-8 py-4 rounded-xl font-mono font-bold transition-all transform hover:scale-105">
+            Contact Support
+          </button>
         </motion.div>
       </div>
     </div>
@@ -1076,7 +1044,7 @@ const Footer = () => {
           isFlooded ? "text-[#050505]" : "text-white"
         )}>
           JACK INTO<br />
-          <span className={isFlooded ? "text-white" : "text-[#FF4D00]"}>
+          <span className={isFlooded ? "text-white" : "text-white"}>
             AETHER
           </span>
         </h2>
@@ -1165,7 +1133,7 @@ const Navigation = () => {
         </span>
 
         <div className="hidden md:flex items-center gap-8">
-          {['Vault', 'Forge', 'Pulse', 'Connect'].map((item) => (
+          {['Vault', 'Forge', 'Pulse', 'FAQ'].map((item) => (
             <button
               key={item}
               onClick={() => scrollToSection(item.toLowerCase())}
@@ -1203,7 +1171,7 @@ function App() {
           className="relative z-20 text-center px-4"
         >
           <h1 className="font-serif text-5xl md:text-8xl lg:text-9xl font-black text-white tracking-tighter mb-4 drop-shadow-2xl">
-            WEALTH IN <span className="text-[#FF4D00]">CONSTANT</span><br />
+            WEALTH IN <span className="text-white">CONSTANT</span><br />
             MOTION
           </h1>
           <p className="font-mono text-[#E5E5E5]/80 text-lg md:text-xl max-w-2xl mx-auto mt-8 drop-shadow-lg">
@@ -1234,8 +1202,8 @@ function App() {
         <VaultTiers />
       </section>
 
-      <section id="connect">
-        <ContactForm />
+      <section id="faq">
+        <FAQ />
       </section>
 
       <Footer />
