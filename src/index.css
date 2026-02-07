@@ -310,3 +310,26 @@ button, a, [role="button"], input, textarea, select, .cursor-pointer {
 .faq-item.open .faq-icon {
   transform: rotate(45deg);
 }
+
+/* Ticker item hover effect */
+.ticker-item {
+  transition: all 0.3s ease;
+}
+
+.ticker-item:hover {
+  background: rgba(255, 77, 0, 0.1);
+  border-color: rgba(255, 77, 0, 0.4);
+}
+
+/* Forge icon melt animation on card hover */
+.forge-card:hover .forge-icon {
+  animation: melt 0.6s ease-in-out;
+}
+
+@keyframes melt {
+  0% { transform: scale(1) rotate(0deg); border-radius: 16px; }
+  25% { transform: scale(1.1) rotate(5deg); border-radius: 40% 60% 50% 50%; }
+  50% { transform: scale(0.95) rotate(-5deg); border-radius: 60% 40% 60% 40%; }
+  75% { transform: scale(1.05) rotate(3deg); border-radius: 40% 60% 40% 60%; }
+  100% { transform: scale(1) rotate(0deg); border-radius: 16px; }
+}
