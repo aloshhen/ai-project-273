@@ -187,16 +187,8 @@ const Ticker = () => {
   );
 };
 
-// NEW SECTION: THE ALCHEMICAL VAULT - Horizontal scroll gallery
+// NEW SECTION: THE ALCHEMICAL VAULT - Infinite horizontal scroll gallery
 const AlchemicalVault = () => {
-  const containerRef = useRef(null);
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ['start end', 'end start'],
-  });
-
-  const x = useTransform(scrollYProgress, [0, 1], ['5%', '-45%']);
-
   const assets = [
     {
       symbol: 'ETH',
@@ -254,49 +246,40 @@ const AlchemicalVault = () => {
     },
   ];
 
+  // Duplicate assets 4 times for seamless infinite scroll
+  const duplicatedAssets = [...assets, ...assets, ...assets, ...assets];
+
   return (
-    <div ref={containerRef} className="py-20 overflow-hidden">
-      {/* Section Header */}
-      <div className="px-8 mb-20 text-center">
+    <div className="py-20 overflow-hidden">
+      {/* Section Header - Same style as other headings, white color */}
+      <div className="container mx-auto px-4 md:px-6 mb-16">
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 50 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="inline-flex flex-col items-center"
+          transition={{ duration: 0.8 }}
+          className="text-center"
         >
-          <span className="font-mono text-[10px] tracking-[0.3em] text-gray-500 mb-4">
-            SECTION_02
-          </span>
-          <h2 className="font-serif text-5xl md:text-7xl lg:text-8xl font-bold chrome-text mb-4">
-            THE ALCHEMICAL
+          <h2 className="font-serif text-5xl md:text-8xl font-black text-white tracking-tighter">
+            The Alchemical <span className="text-white">Vault</span>
           </h2>
-          <h2 className="font-serif text-5xl md:text-7xl lg:text-8xl font-bold text-[#FF4D00]">
-            VAULT
-          </h2>
-          <div className="mt-6 w-24 h-[1px] bg-gradient-to-r from-transparent via-[#FF4D00] to-transparent" />
+          <p className="font-mono text-[#E5E5E5]/60 text-lg mt-6 max-w-2xl mx-auto">
+            Assets in perpetual motion
+          </p>
         </motion.div>
       </div>
 
-      {/* Horizontal Scroll with Parallax */}
-      <div className="relative h-[500px] overflow-hidden">
-        <motion.div
-          className="absolute flex gap-6 px-8 items-center h-full"
-          style={{ x }}
-        >
-          {assets.map((asset, index) => (
-            <ModernCard
-              key={asset.symbol}
-              asset={asset}
-              index={index}
-              scrollProgress={scrollYProgress}
-            />
+      {/* Infinite Horizontal Scroll */}
+      <div className="relative h-[420px] overflow-hidden">
+        <div className="infinite-scroll-container absolute flex gap-6 items-center h-full px-4">
+          {duplicatedAssets.map((asset, index) => (
+            <VaultCard key={`${asset.symbol}-${index}`} asset={asset} />
           ))}
-        </motion.div>
+        </div>
       </div>
 
       {/* Technical Specs */}
-      <div className="px-8 mt-20 max-w-6xl mx-auto">
-        <div className="grid md:grid-cols-3 gap-6">
+      <div className="container mx-auto px-4 md:px-6 mt-20">
+        <div className="grid md:grid-cols-3 gap-6 max-w-6xl mx-auto">
           {[
             { label: 'TOTAL_LOCKED', value: '$2.4B', subtext: 'Across all assets' },
             { label: 'YIELD_RATE', value: '12.8%', subtext: 'APY average' },
@@ -327,22 +310,15 @@ const AlchemicalVault = () => {
   );
 };
 
-// Modern Card Component for Alchemical Vault
-const ModernCard = ({ asset, index, scrollProgress }) => {
-  const rotateY = useTransform(scrollProgress, [0, 1], [-15, 15]);
-  const y = useTransform(scrollProgress, [0, 0.5, 1], [50, 0, 50]);
-
+// Vault Card Component for infinite scroll
+const VaultCard = ({ asset }) => {
   return (
     <motion.div
-      className="relative w-80 h-[420px] flex-shrink-0 group"
-      style={{
-        rotateY,
-        y,
-        transformStyle: 'preserve-3d',
-        perspective: 1000,
-      }}
+      className="relative w-80 h-[400px] flex-shrink-0 group"
+      whileHover={{ scale: 1.02 }}
+      transition={{ duration: 0.3 }}
     >
-      <div className="absolute inset-0 card-gradient-border rounded-2xl overflow-hidden transition-all duration-500 group-hover:scale-[1.02]">
+      <div className="absolute inset-0 glass-card rounded-2xl overflow-hidden transition-all duration-500 group-hover:border-[#FF4D00]">
         <div className={cn(
           "absolute inset-0 bg-gradient-to-br opacity-10",
           asset.color
@@ -419,7 +395,7 @@ const ModernCard = ({ asset, index, scrollProgress }) => {
   );
 };
 
-// SECTION 3: BENTO - The Alchemical Triad - NO SHINE
+// SECTION 3: BENTO - The Alchemical Triad
 const BentoFeatures = () => {
   const features = [
     {
@@ -451,9 +427,9 @@ const BentoFeatures = () => {
         initial={{ opacity: 0, y: 50 }}
         whileInView={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8 }}
-        className="font-serif text-5xl md:text-8xl font-black text-[#E5E5E5] mb-16 text-center tracking-tighter"
+        className="font-serif text-5xl md:text-8xl font-black text-white mb-16 text-center tracking-tighter"
       >
-        The Alchemical <span className="text-[#FF4D00]">Triad</span>
+        The Alchemical <span className="text-white">Triad</span>
       </motion.h2>
 
       <div className="grid md:grid-cols-3 gap-6">
@@ -478,7 +454,7 @@ const BentoFeatures = () => {
                 </span>
               </div>
 
-              <h3 className="font-serif text-2xl md:text-3xl font-bold text-[#E5E5E5] mb-4 group-hover:text-[#FF4D00] transition-colors">
+              <h3 className="font-serif text-2xl md:text-3xl font-bold text-white mb-4 group-hover:text-[#FF4D00] transition-colors">
                 {feature.title}
               </h3>
 
@@ -501,7 +477,7 @@ const BentoFeatures = () => {
   );
 };
 
-// SECTION 4: THE FORGE - Interactive Asset Melt - NO SHINE
+// SECTION 4: THE FORGE - Interactive Asset Melt with glassmorphism like Bento
 const Forge = () => {
   const [hoveredAsset, setHoveredAsset] = useState(null);
   const [meltProgress, setMeltProgress] = useState({ gold: 0, btc: 0, eth: 0 });
@@ -554,8 +530,8 @@ const Forge = () => {
           transition={{ duration: 0.8 }}
           className="text-center mb-16"
         >
-          <h2 className="font-serif text-5xl md:text-8xl font-black text-[#E5E5E5] mb-6 tracking-tighter">
-            The <span className="text-[#FF4D00]">Forge</span>
+          <h2 className="font-serif text-5xl md:text-8xl font-black text-white mb-6 tracking-tighter">
+            The <span className="text-white">Forge</span>
           </h2>
           <p className="font-mono text-[#E5E5E5]/60 text-lg max-w-2xl mx-auto">
             Hard assets turned into liquid opportunities
@@ -578,9 +554,13 @@ const Forge = () => {
               className="relative group"
               data-cursor="orange"
             >
-              <div className="relative bg-[#0f0f0f] rounded-2xl overflow-hidden border border-[#E5E5E5]/10 hover:border-[#E5E5E5]/30 transition-all duration-500">
+              {/* Glassmorphism card like Bento with blueprint overlay */}
+              <div className="glass-card rounded-2xl overflow-hidden relative min-h-[400px] flex flex-col">
+                <div className="blueprint-overlay absolute inset-0 pointer-events-none" />
+
+                {/* Melt effect */}
                 <div
-                  className="absolute bottom-0 left-0 right-0 transition-all duration-300 ease-out opacity-60"
+                  className="absolute bottom-0 left-0 right-0 transition-all duration-300 ease-out opacity-60 z-0"
                   style={{
                     height: `${meltProgress[asset.id]}%`,
                     background: `linear-gradient(to top, ${asset.color}40, ${asset.color}20, transparent)`,
@@ -588,14 +568,7 @@ const Forge = () => {
                   }}
                 />
 
-                <div
-                  className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"
-                  style={{
-                    boxShadow: `inset 0 0 30px ${asset.color}30, 0 0 30px ${asset.color}20`
-                  }}
-                />
-
-                <div className="relative z-10 p-8">
+                <div className="relative z-10 p-8 flex flex-col flex-1">
                   <div className="flex items-center justify-between mb-6">
                     <motion.div
                       className="w-20 h-20 rounded-2xl flex items-center justify-center"
@@ -605,9 +578,9 @@ const Forge = () => {
                       }}
                       animate={hoveredAsset === asset.id ? {
                         scale: [1, 1.05, 1],
-                        rotate: [0, 5, -5, 0]
+                        rotate: [0, 360]
                       } : {}}
-                      transition={{ duration: 0.5 }}
+                      transition={{ duration: 2, repeat: hoveredAsset === asset.id ? Infinity : 0, ease: "linear" }}
                     >
                       <SafeIcon
                         name={asset.icon}
@@ -621,15 +594,15 @@ const Forge = () => {
                     </motion.div>
                     <div className="text-right">
                       <div className="font-mono text-xs text-[#E5E5E5]/40 tracking-widest uppercase">Symbol</div>
-                      <div className="font-mono text-lg text-[#E5E5E5] font-bold">{asset.symbol}</div>
+                      <div className="font-mono text-lg text-white font-bold">{asset.symbol}</div>
                     </div>
                   </div>
 
-                  <h3 className="font-serif text-2xl font-bold text-[#E5E5E5] mb-3 group-hover:text-white transition-colors">
+                  <h3 className="font-serif text-2xl font-bold text-white mb-3 group-hover:text-[#FF4D00] transition-colors">
                     {asset.name}
                   </h3>
 
-                  <p className="font-mono text-sm text-[#E5E5E5]/50 mb-6 leading-relaxed">
+                  <p className="font-mono text-sm text-[#E5E5E5]/50 mb-6 leading-relaxed flex-1">
                     {asset.desc}
                   </p>
 
@@ -643,6 +616,9 @@ const Forge = () => {
                     </span>
                   </div>
                 </div>
+
+                {/* Bottom glow line like Bento */}
+                <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-[#FF4D00] to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
               </div>
             </motion.div>
           ))}
@@ -734,8 +710,8 @@ const Pulse = () => {
           whileInView={{ opacity: 1 }}
           transition={{ duration: 1 }}
         >
-          <h2 className="font-serif text-5xl md:text-8xl font-black text-[#E5E5E5] mb-6 tracking-tighter">
-            The <span className="text-[#FF4D00]">Pulse</span>
+          <h2 className="font-serif text-5xl md:text-8xl font-black text-white mb-6 tracking-tighter">
+            The <span className="text-white">Pulse</span>
           </h2>
           <p className="font-mono text-[#E5E5E5]/60 text-lg md:text-xl max-w-2xl mx-auto mb-8">
             Heartbeat of the Protocol
@@ -760,7 +736,7 @@ const Pulse = () => {
             transition={{ duration: 0.5, delay: index * 0.1 }}
             className="text-center"
           >
-            <div className="font-mono text-3xl md:text-4xl font-bold text-[#E5E5E5] mb-2">
+            <div className="font-mono text-3xl md:text-4xl font-bold text-white mb-2">
               {stat.value}
             </div>
             <div className="font-mono text-xs text-[#E5E5E5]/40 tracking-widest">
@@ -773,7 +749,7 @@ const Pulse = () => {
   );
 };
 
-// SECTION 6: THE VAULT TIERS - Membership Evolution - NO SHINE
+// SECTION 6: THE VAULT TIERS - Membership Evolution
 const VaultTiers = () => {
   const tiers = [
     {
@@ -814,8 +790,8 @@ const VaultTiers = () => {
           transition={{ duration: 0.8 }}
           className="text-center mb-16"
         >
-          <h2 className="font-serif text-5xl md:text-8xl font-black text-[#E5E5E5] mb-6 tracking-tighter">
-            Vault <span className="text-[#FF4D00]">Tiers</span>
+          <h2 className="font-serif text-5xl md:text-8xl font-black text-white mb-6 tracking-tighter">
+            Vault <span className="text-white">Tiers</span>
           </h2>
           <p className="font-mono text-[#E5E5E5]/60 text-lg">
             Membership Evolution
@@ -862,7 +838,7 @@ const VaultTiers = () => {
               )}>
                 <span className={cn(
                   "font-mono text-3xl font-bold",
-                  tier.isChrome ? "text-gray-900" : tier.isFlare ? "text-white" : "text-[#FF4D00]"
+                  tier.isChrome ? "text-gray-900" : tier.isFlare ? "text-white" : "text-white"
                 )}>
                   {tier.apy}
                 </span>
@@ -940,8 +916,8 @@ const ContactForm = () => {
           transition={{ duration: 0.8 }}
           className="text-center mb-12"
         >
-          <h2 className="font-serif text-5xl md:text-8xl font-black text-[#E5E5E5] mb-6 tracking-tighter">
-            Initialize <span className="text-[#FF4D00]">Contact</span>
+          <h2 className="font-serif text-5xl md:text-8xl font-black text-white mb-6 tracking-tighter">
+            Initialize <span className="text-white">Contact</span>
           </h2>
           <p className="font-mono text-[#E5E5E5]/60 text-lg">
             Establish connection with the protocol
@@ -963,7 +939,7 @@ const ContactForm = () => {
               <div className="w-20 h-20 rounded-full bg-[#FF4D00]/20 flex items-center justify-center mx-auto mb-6">
                 <SafeIcon name="check" size={40} className="text-[#FF4D00]" />
               </div>
-              <h3 className="font-serif text-3xl font-bold text-[#E5E5E5] mb-4">Transmission Complete</h3>
+              <h3 className="font-serif text-3xl font-bold text-white mb-4">Transmission Complete</h3>
               <p className="font-mono text-[#E5E5E5]/60">Your message has been received by the protocol.</p>
             </motion.div>
           ) : (
@@ -1083,10 +1059,10 @@ const Footer = () => {
       >
         <h2 className={cn(
           "font-serif text-6xl md:text-9xl font-black mb-8 tracking-tighter transition-colors duration-500",
-          isFlooded ? "text-[#050505]" : "text-[#E5E5E5]"
+          isFlooded ? "text-[#050505]" : "text-white"
         )}>
           JACK INTO<br />
-          <span className={isFlooded ? "text-white" : "text-[#FF4D00]"}>
+          <span className={isFlooded ? "text-white" : "text-white"}>
             AETHER
           </span>
         </h2>
@@ -1170,7 +1146,7 @@ const Navigation = () => {
       scrolled ? "bg-[#050505]/90 backdrop-blur-md border-[#E5E5E5]/10" : "bg-transparent"
     )}>
       <div className="container mx-auto px-4 md:px-6 py-4 flex items-center justify-between">
-        <span className="font-serif text-xl font-bold text-[#E5E5E5] tracking-tight">
+        <span className="font-serif text-xl font-bold text-white tracking-tight">
           AETHER
         </span>
 
@@ -1212,8 +1188,8 @@ function App() {
           transition={{ duration: 1 }}
           className="relative z-20 text-center px-4"
         >
-          <h1 className="font-serif text-5xl md:text-8xl lg:text-9xl font-black tracking-tighter mb-4 drop-shadow-2xl">
-            WEALTH IN <span className="text-[#FF4D00]">CONSTANT</span><br />
+          <h1 className="font-serif text-5xl md:text-8xl lg:text-9xl font-black text-white tracking-tighter mb-4 drop-shadow-2xl">
+            WEALTH IN <span className="text-white">CONSTANT</span><br />
             MOTION
           </h1>
           <p className="font-mono text-[#E5E5E5]/80 text-lg md:text-xl max-w-2xl mx-auto mt-8 drop-shadow-lg">
