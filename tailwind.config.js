@@ -16,6 +16,7 @@ export default {
         'wave': 'wave 3s ease-in-out infinite',
         'infinite-scroll': 'infinite-scroll 40s linear infinite',
         'infinite-scroll-reverse': 'infinite-scroll-reverse 35s linear infinite',
+        'melt': 'melt 0.6s ease-in-out',
       },
       keyframes: {
         ticker: {
@@ -51,6 +52,13 @@ export default {
         'infinite-scroll-reverse': {
           '0%': { transform: 'translateX(-50%)' },
           '100%': { transform: 'translateX(0)' },
+        },
+        melt: {
+          '0%': { transform: 'scale(1) rotate(0deg)', borderRadius: '16px' },
+          '25%': { transform: 'scale(1.1) rotate(5deg)', borderRadius: '40% 60% 50% 50%' },
+          '50%': { transform: 'scale(0.95) rotate(-5deg)', borderRadius: '60% 40% 60% 40%' },
+          '75%': { transform: 'scale(1.05) rotate(3deg)', borderRadius: '40% 60% 40% 60%' },
+          '100%': { transform: 'scale(1) rotate(0deg)', borderRadius: '16px' },
         },
       },
     },
