@@ -67,3 +67,5 @@ export const SafeIcon = ({
     />
   );
 };
+
+export default SafeIcon;
