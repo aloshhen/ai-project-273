@@ -7,12 +7,25 @@
 import React from 'react';
 import * as LucideIcons from 'lucide-react';
 
+interface SafeIconProps {
+  /** Icon name in kebab-case (e.g., 'shopping-cart', 'arrow-right', 'help-circle') */
+  name: string;
+  /** Icon size in pixels (default: 24) */
+  size?: number;
+  /** Icon color (default: currentColor) */
+  color?: string;
+  /** Additional CSS classes */
+  className?: string;
+  /** Stroke width (default: 2) */
+  strokeWidth?: number;
+}
+
 /**
  * Converts kebab-case to PascalCase
  * @example kebabToPascal('shopping-cart') => 'ShoppingCart'
  * @example kebabToPascal('arrow-right') => 'ArrowRight'
  */
-const kebabToPascal = (str) => {
+const kebabToPascal = (str: string): string => {
   return str
     .split('-')
     .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
@@ -31,7 +44,7 @@ const kebabToPascal = (str) => {
  * <SafeIcon name="tiktok" size={32} /> // Will work if TikTok exists in lucide-react
  * <SafeIcon name="invalid-icon" /> // Falls back to HelpCircle
  */
-export const SafeIcon = ({
+export const SafeIcon: React.FC<SafeIconProps> = ({
   name,
   size = 24,
   color = 'currentColor',
@@ -42,7 +55,7 @@ export const SafeIcon = ({
   const pascalName = kebabToPascal(name);
 
   // Dynamically get icon component from lucide-react
-  const IconComponent = LucideIcons[pascalName];
+  const IconComponent = (LucideIcons as any)[pascalName];
 
   // Fallback: use HelpCircle if icon not found
   if (!IconComponent) {
