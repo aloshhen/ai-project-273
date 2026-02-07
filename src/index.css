@@ -321,15 +321,9 @@ button, a, [role="button"], input, textarea, select, .cursor-pointer {
   border-color: rgba(255, 77, 0, 0.4);
 }
 
-/* Forge icon spin animation on card hover */
+/* Forge icon subtle rotation on card hover */
 .forge-card:hover .forge-icon {
-  animation: icon-spin 0.6s ease-in-out;
-}
-
-@keyframes icon-spin {
-  0% { transform: rotate(0deg) scale(1); }
-  50% { transform: rotate(180deg) scale(1.1); }
-  100% { transform: rotate(360deg) scale(1); }
+  animation: icon-subtle 0.6s ease-in-out;
 }
 
 /* Vault card orange hover effect - NO LIFT */
@@ -366,13 +360,27 @@ button, a, [role="button"], input, textarea, select, .cursor-pointer {
   opacity: 0.7;
 }
 
-/* Darker floating dots in footer - more visible */
-.floating-dot-dark {
-  background: rgba(5, 5, 5, 0.9);
-  box-shadow: 0 0 12px rgba(0, 0, 0, 0.8), 0 0 20px rgba(255, 77, 0, 0.3);
+/* Subtle floating dots in footer - barely visible */
+.floating-dot-subtle {
+  background: rgba(255, 77, 0, 0.15);
+  box-shadow: 0 0 8px rgba(255, 77, 0, 0.1);
 }
 
-.floating-dot-orange {
-  background: rgba(255, 77, 0, 0.8);
-  box-shadow: 0 0 12px rgba(255, 77, 0, 0.6), 0 0 20px rgba(255, 77, 0, 0.3);
+.floating-dot-dark-subtle {
+  background: rgba(5, 5, 5, 0.3);
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Mobile overflow fix for vault cards */
+.mobile-vault-container {
+  overflow: visible !important;
+}
+
+.mobile-vault-card {
+  overflow: visible !important;
+}
+
+/* Ensure glow doesn't get cut off */
+.glow-safe {
+  overflow: visible !important;
 }
