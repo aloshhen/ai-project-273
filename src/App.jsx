@@ -214,10 +214,10 @@ const BentoFeatures = () => {
             initial={{ opacity: 0, y: 50 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: index * 0.1 }}
-            className="glass-card rounded-2xl p-8 relative overflow-hidden group min-h-[400px] flex flex-col"
+            className="glass-card rounded-2xl p-8 relative overflow-visible group min-h-[400px] flex flex-col"
             data-cursor="orange"
           >
-            <div className="blueprint-overlay absolute inset-0 pointer-events-none" />
+            <div className="blueprint-overlay absolute inset-0 pointer-events-none rounded-2xl" />
 
             <div className="relative z-10 flex-1">
               <div className="flex items-center justify-between mb-6">
@@ -244,7 +244,7 @@ const BentoFeatures = () => {
               </div>
             </div>
 
-            <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-[#FF4D00] to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+            <div className="absolute -bottom-1 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-[#FF4D00] to-transparent opacity-0 group-hover:opacity-100 transition-opacity rounded-b-2xl" />
           </motion.div>
         ))}
       </div>
@@ -252,7 +252,7 @@ const BentoFeatures = () => {
   );
 };
 
-// SECTION 4: THE ALCHEMICAL VAULT - Updated with orange hover, no lift, real currency icons
+// SECTION 4: THE ALCHEMICAL VAULT - Updated with overflow visible for glow
 const AlchemicalVault = () => {
   const assets = [
     {
@@ -308,7 +308,7 @@ const AlchemicalVault = () => {
   const duplicatedAssets = [...assets, ...assets, ...assets, ...assets, ...assets, ...assets, ...assets, ...assets];
 
   return (
-    <div className="py-20 overflow-hidden">
+    <div className="py-20 overflow-visible">
       <div className="container mx-auto px-4 md:px-6 mb-16">
         <motion.div
           initial={{ opacity: 0, y: 50 }}
@@ -325,16 +325,16 @@ const AlchemicalVault = () => {
         </motion.div>
       </div>
 
-      <div className="relative h-[450px] overflow-hidden hidden lg:block">
-        <div className="vault-scroll-container absolute flex gap-8 items-center h-full px-4">
+      <div className="relative h-[450px] overflow-visible hidden lg:block py-4">
+        <div className="vault-scroll-container absolute flex gap-8 items-center h-full px-4 overflow-visible">
           {duplicatedAssets.map((asset, index) => (
             <VaultCardOrange key={`${asset.symbol}-${index}`} asset={asset} />
           ))}
         </div>
       </div>
 
-      <div className="lg:hidden overflow-x-auto pb-4">
-        <div className="flex gap-4 px-4" style={{ width: 'max-content' }}>
+      <div className="lg:hidden overflow-x-auto pb-4 overflow-visible">
+        <div className="flex gap-4 px-4 overflow-visible" style={{ width: 'max-content' }}>
           {assets.map((asset, index) => (
             <VaultCardOrange key={`mobile-${asset.symbol}-${index}`} asset={asset} />
           ))}
@@ -354,7 +354,7 @@ const AlchemicalVault = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: index * 0.1 }}
-              className="card-gradient-border p-6 rounded-xl hover:border-[#FF4D00]/30 transition-all duration-500 group"
+              className="card-gradient-border p-6 rounded-xl hover:border-[#FF4D00]/30 transition-all duration-500 group overflow-visible"
             >
               <div className="font-mono text-[10px] text-gray-500 mb-2 tracking-widest">
                 {stat.label}
@@ -373,25 +373,25 @@ const AlchemicalVault = () => {
   );
 };
 
-// Vault Card - Orange hover effect, no lift, real currency icons
+// Vault Card - Orange hover effect, no lift, real currency icons, overflow visible
 const VaultCardOrange = ({ asset }) => {
   const [isHovered, setIsHovered] = useState(false);
 
   return (
     <motion.div
-      className="relative w-72 h-[400px] flex-shrink-0 group vault-card-orange"
+      className="relative w-72 h-[400px] flex-shrink-0 group vault-card-orange overflow-visible"
       transition={{ duration: 0.3 }}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       style={{ transform: 'none' }}
     >
-      <div className="glass-card absolute inset-0 rounded-2xl overflow-hidden transition-all duration-500 group-hover:border-[#FF4D00]/50" style={{ transform: 'none' }}>
+      <div className="glass-card absolute inset-0 rounded-2xl overflow-visible transition-all duration-500 group-hover:border-[#FF4D00]/50" style={{ transform: 'none' }}>
 
         {/* Top gradient accent line - always orange on hover */}
-        <div className="vault-top-line absolute top-0 left-0 right-0 h-1 bg-[#E5E5E5]/20 opacity-60 transition-all duration-500" />
+        <div className="vault-top-line absolute -top-px left-4 right-4 h-1 bg-[#E5E5E5]/20 opacity-60 transition-all duration-500 rounded-full" />
 
         {/* Metallic sheen overlay */}
-        <div className="absolute inset-0 bg-gradient-to-br from-white/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+        <div className="absolute inset-0 bg-gradient-to-br from-white/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-2xl" />
 
         <div className="relative h-full flex flex-col p-6">
           <div className="flex items-start justify-between mb-8">
@@ -460,17 +460,17 @@ const VaultCardOrange = ({ asset }) => {
           </button>
         </div>
 
-        <div className="absolute bottom-0 right-0 w-24 h-24 overflow-hidden opacity-0 group-hover:opacity-20 transition-opacity duration-500">
+        <div className="absolute -bottom-4 right-0 w-24 h-24 overflow-visible opacity-0 group-hover:opacity-20 transition-opacity duration-500">
           <div className="absolute bottom-0 right-0 w-full h-full bg-gradient-to-tl from-[#FF4D00] to-[#ff6a2b] rounded-tl-full" />
         </div>
 
-        <div className="absolute inset-0 bg-gradient-to-t from-[#FF4D00]/20 to-transparent pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+        <div className="absolute -inset-4 bg-gradient-to-t from-[#FF4D00]/20 to-transparent pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-3xl -z-10" />
       </div>
     </motion.div>
   );
 };
 
-// SECTION 5: THE FORGE - Interactive Asset Melt
+// SECTION 5: THE FORGE - Interactive Asset Melt with subtle icon rotation
 const Forge = () => {
   const assets = [
     {
@@ -529,8 +529,8 @@ const Forge = () => {
               className="relative group forge-card"
               data-cursor="orange"
             >
-              <div className="glass-card rounded-2xl overflow-hidden relative min-h-[400px] flex flex-col">
-                <div className="blueprint-overlay absolute inset-0 pointer-events-none" />
+              <div className="glass-card rounded-2xl overflow-visible relative min-h-[400px] flex flex-col">
+                <div className="blueprint-overlay absolute inset-0 pointer-events-none rounded-2xl" />
 
                 <div className="relative z-10 p-8 flex flex-col flex-1">
                   <div className="flex items-center justify-between mb-6">
@@ -571,7 +571,7 @@ const Forge = () => {
                   </div>
                 </div>
 
-                <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-[#FF4D00] to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                <div className="absolute -bottom-1 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-[#FF4D00] to-transparent opacity-0 group-hover:opacity-100 transition-opacity rounded-b-2xl" />
               </div>
             </motion.div>
           ))}
@@ -702,7 +702,7 @@ const Pulse = () => {
   );
 };
 
-// SECTION 7: THE VAULT TIERS - Membership Evolution (70% opacity)
+// SECTION 7: THE VAULT TIERS - Membership Evolution (always visible, no dark state)
 const VaultTiers = () => {
   const tiers = [
     {
@@ -756,14 +756,13 @@ const VaultTiers = () => {
             <motion.div
               key={tier.name}
               initial={{ opacity: 0, rotateY: -30 }}
-              whileInView={{ opacity: 0.7, rotateY: 0 }}
+              whileInView={{ opacity: 1, rotateY: 0 }}
               transition={{ duration: 0.6, delay: index * 0.2 }}
-              whileHover={{ rotateY: 10, rotateX: 5, z: 50, opacity: 1 }}
+              whileHover={{ rotateY: 10, rotateX: 5, z: 50 }}
               className={cn(
                 "card-3d relative rounded-2xl p-8 overflow-hidden",
                 tier.isChrome ? "card-chrome" : tier.isFlare ? "bg-gradient-to-b from-orange-500 via-orange-600 to-orange-700" : `bg-gradient-to-b ${tier.bgColor}`
               )}
-              style={{ opacity: 0.7 }}
               data-cursor={tier.isChrome ? "chrome" : tier.isFlare ? "orange" : "dark"}
             >
               <div className="relative z-10 mb-8">
@@ -945,7 +944,7 @@ const FAQ = () => {
   );
 };
 
-// SECTION 9: FOOTER - The Core Integration (darker floating dots)
+// SECTION 9: FOOTER - The Core Integration (subtle floating dots)
 const Footer = () => {
   const footerRef = useRef(null);
   const [isFlooded, setIsFlooded] = useState(false);
@@ -1036,24 +1035,24 @@ const Footer = () => {
         </div>
       </motion.div>
 
-      {/* Darker, more visible floating dots - small but noticeable */}
-      {[...Array(20)].map((_, i) => (
+      {/* Subtle floating dots - barely visible, small */}
+      {[...Array(15)].map((_, i) => (
         <motion.div
           key={i}
           className={cn(
-            "absolute w-3 h-3 rounded-full",
-            isFlooded ? "floating-dot-dark" : "floating-dot-orange"
+            "absolute w-2 h-2 rounded-full",
+            isFlooded ? "floating-dot-dark-subtle" : "floating-dot-subtle"
           )}
           style={{
             left: `${Math.random() * 100}%`,
             top: `${Math.random() * 100}%`,
           }}
           animate={{
-            y: [0, -30, 0],
-            opacity: [0.6, 1, 0.6],
+            y: [0, -20, 0],
+            opacity: [0.3, 0.5, 0.3],
           }}
           transition={{
-            duration: 3 + Math.random() * 2,
+            duration: 4 + Math.random() * 2,
             repeat: Infinity,
             delay: Math.random() * 2,
           }}
@@ -1134,7 +1133,7 @@ function App() {
             WEALTH IN <span className="text-white">CONSTANT</span><br />
             MOTION
           </h1>
-          <p className="font-mono text-[#E5E5E5]/80 text-lg md:text-xl max-w-2xl mx-auto mt-8 drop-shadow-lg">
+          <p className="font-mono text-[#E5E5E5]/80 text-base md:text-lg lg:text-xl max-w-2xl mx-auto mt-8 drop-shadow-lg px-4">
             The Singularity. A protocol manifesting liquid chrome alchemy into decentralized finance.
           </p>
         </motion.div>
