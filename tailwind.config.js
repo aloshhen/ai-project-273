@@ -14,6 +14,7 @@ export default {
         'float': 'float 6s ease-in-out infinite',
         'shimmer': 'shimmer 2s linear infinite',
         'wave': 'wave 3s ease-in-out infinite',
+        'infinite-scroll': 'infinite-scroll 40s linear infinite',
       },
       keyframes: {
         ticker: {
@@ -41,6 +42,10 @@ export default {
         wave: {
           '0%, 100%': { transform: 'translateY(0)' },
           '50%': { transform: 'translateY(-10px)' },
+        },
+        'infinite-scroll': {
+          '0%': { transform: 'translateX(0)' },
+          '100%': { transform: 'translateX(-50%)' },
         },
       },
     },
