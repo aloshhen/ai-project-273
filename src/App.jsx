@@ -41,7 +41,7 @@ const EthereumIcon = ({ className }) => (
   </svg>
 );
 
-// Gold SVG Icon Component - Metallic coin style matching Ethereum icon aesthetic
+// Gold SVG Icon Component
 const GoldIcon = ({ className }) => (
   <svg
     viewBox="0 0 32 32"
@@ -95,142 +95,308 @@ const CustomCursor = () => {
   );
 };
 
-// Tier Selection Modal Component
+// ENHANCED Tier Selection Modal Component with Chrome Alchemy Design
 const TierSelectionModal = ({ isOpen, onClose, tier }) => {
   const [amount, setAmount] = useState('');
   const [agreed, setAgreed] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   if (!isOpen || !tier) return null;
 
   const minStake = tier.name === 'Iron' ? 1000 : tier.name === 'Chrome' ? 10000 : 100000;
+  const maxStake = minStake * 100;
+
+  const handleStake = async () => {
+    if (!agreed || !amount || parseFloat(amount) < minStake) return;
+
+    setIsLoading(true);
+    // Simulate blockchain transaction
+    await new Promise(resolve => setTimeout(resolve, 2000));
+    setIsLoading(false);
+    setIsSuccess(true);
+  };
+
+  const handleClose = () => {
+    setIsSuccess(false);
+    setAmount('');
+    setAgreed(false);
+    onClose();
+  };
+
+  const getTierColor = () => {
+    if (tier.name === 'Flare') return 'from-orange-500 via-orange-600 to-orange-700';
+    if (tier.name === 'Chrome') return 'from-gray-300 via-gray-400 to-gray-500';
+    return 'from-gray-700 via-gray-800 to-gray-900';
+  };
+
+  const getTierAccentColor = () => {
+    if (tier.name === 'Flare') return '#FF4D00';
+    if (tier.name === 'Chrome') return '#E5E5E5';
+    return '#525252';
+  };
 
   return (
     <AnimatePresence>
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-        className="fixed inset-0 z-[100] flex items-center justify-center p-4 modal-overlay"
-        onClick={onClose}
-      >
+      {isOpen && (
         <motion.div
-          initial={{ opacity: 0, scale: 0.95, y: 20 }}
-          animate={{ opacity: 1, scale: 1, y: 0 }}
-          exit={{ opacity: 0, scale: 0.95, y: 20 }}
-          transition={{ duration: 0.3 }}
-          className="glass-card rounded-2xl p-8 max-w-md w-full relative border border-[#FF4D00]/30"
-          onClick={(e) => e.stopPropagation()}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          className="fixed inset-0 z-[100] flex items-center justify-center p-4 modal-overlay"
+          onClick={handleClose}
         >
-          <button
-            onClick={onClose}
-            className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-full bg-white/5 hover:bg-[#FF4D00]/20 transition-colors"
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9, y: 40 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.9, y: 40 }}
+            transition={{ duration: 0.4, type: "spring", bounce: 0.3 }}
+            className="relative w-full max-w-lg rounded-2xl overflow-hidden"
+            onClick={(e) => e.stopPropagation()}
           >
-            <SafeIcon name="x" size={18} className="text-[#E5E5E5]" />
-          </button>
+            {/* Chrome border glow effect */}
+            <div className="absolute inset-0 bg-gradient-to-br from-[#FF4D00] via-transparent to-[#E5E5E5] opacity-20 blur-xl" />
 
-          <div className="mb-6">
-            <div className="font-mono text-xs text-[#E5E5E5]/40 mb-2 tracking-widest uppercase">
-              Membership Tier
-            </div>
-            <h3 className="font-serif text-4xl font-bold text-white tracking-tight mb-2">
-              {tier.name}
-            </h3>
             <div className={cn(
-              "inline-flex items-center gap-2 px-4 py-2 rounded-full border",
-              tier.name === 'Flare'
-                ? "border-white/30 bg-white/10"
-                : tier.name === 'Chrome'
-                  ? "border-gray-900/30 bg-gray-900/10"
-                  : "border-[#FF4D00]/30 bg-[#FF4D00]/10"
+              "relative glass-card rounded-2xl p-8 border-2 overflow-hidden",
+              tier.name === 'Chrome' ? "border-[#E5E5E5]/30" : "border-[#FF4D00]/30"
             )}>
-              <span className={cn(
-                "font-mono text-2xl font-bold",
-                tier.name === 'Chrome' ? "text-gray-900" : "text-white"
-              )}>
-                {tier.apy}
-              </span>
-              <span className={cn(
-                "font-mono text-sm",
-                tier.name === 'Chrome' ? "text-gray-700" : "text-[#E5E5E5]/60"
-              )}>
-                APY
-              </span>
-            </div>
-          </div>
+              {/* Animated background gradient */}
+              <div className={cn(
+                "absolute inset-0 bg-gradient-to-br opacity-10",
+                getTierColor()
+              )} />
 
-          <div className="space-y-6">
-            <div className="bg-white/5 rounded-lg p-4">
-              <div className="font-mono text-xs text-[#E5E5E5]/50 mb-3 uppercase tracking-wider">
-                Tier Benefits
-              </div>
-              <ul className="space-y-3">
-                {tier.features.map((feature, i) => (
-                  <li key={i} className="flex items-center gap-3 font-mono text-sm text-[#E5E5E5]/80">
-                    <SafeIcon name="check" size={16} className="text-[#FF4D00]" />
-                    {feature}
-                  </li>
-                ))}
-              </ul>
-            </div>
+              {/* Close button */}
+              <button
+                onClick={handleClose}
+                className="absolute top-4 right-4 w-10 h-10 flex items-center justify-center rounded-full bg-white/5 hover:bg-[#FF4D00]/20 border border-white/10 transition-all z-20 group"
+              >
+                <SafeIcon name="x" size={20} className="text-[#E5E5E5] group-hover:text-[#FF4D00] transition-colors" />
+              </button>
 
-            <div>
-              <label className="font-mono text-xs text-[#E5E5E5]/60 mb-2 block tracking-wider uppercase">
-                Stake Amount (Min: {minStake.toLocaleString()} AETH)
-              </label>
-              <div className="relative">
-                <input
-                  type="number"
-                  value={amount}
-                  onChange={(e) => setAmount(e.target.value)}
-                  placeholder={minStake.toString()}
-                  className="w-full px-4 py-3 bg-white/5 border border-[#E5E5E5]/20 rounded-lg text-white font-mono placeholder-[#E5E5E5]/30 focus:outline-none focus:border-[#FF4D00]/50 transition-colors"
-                />
-                <span className="absolute right-4 top-1/2 -translate-y-1/2 font-mono text-xs text-[#E5E5E5]/40">
-                  AETH
-                </span>
-              </div>
-              <div className="flex justify-between mt-2">
-                <span className="font-mono text-xs text-[#E5E5E5]/30">Balance: 0.00</span>
-                <button
-                  onClick={() => setAmount(minStake.toString())}
-                  className="font-mono text-xs text-[#FF4D00] hover:text-[#ff6a2b] transition-colors"
+              {!isSuccess ? (
+                <div className="relative z-10">
+                  {/* Tier Badge */}
+                  <div className="flex items-center gap-3 mb-6">
+                    <div className={cn(
+                      "w-12 h-12 rounded-xl flex items-center justify-center border-2",
+                      tier.name === 'Chrome' ? "border-[#E5E5E5] bg-gradient-to-br from-gray-200 to-gray-400" :
+                      tier.name === 'Flare' ? "border-[#FF4D00] bg-gradient-to-br from-orange-500 to-orange-700" :
+                      "border-[#525252] bg-gradient-to-br from-gray-700 to-gray-900"
+                    )}>
+                      <SafeIcon
+                        name={tier.name === 'Flare' ? "flame" : tier.name === 'Chrome' ? "hexagon" : "shield"}
+                        size={24}
+                        className={tier.name === 'Chrome' ? "text-gray-900" : "text-white"}
+                      />
+                    </div>
+                    <div>
+                      <div className="font-mono text-xs text-[#E5E5E5]/40 tracking-widest uppercase">
+                        Membership Tier
+                      </div>
+                      <h3 className={cn(
+                        "font-serif text-3xl font-black tracking-tight",
+                        tier.name === 'Chrome' ? "text-[#E5E5E5]" : "text-white"
+                      )}>
+                        {tier.name}
+                      </h3>
+                    </div>
+                  </div>
+
+                  {/* APY Display */}
+                  <div className="flex items-center gap-4 mb-8 p-4 rounded-xl bg-white/5 border border-white/10">
+                    <div className={cn(
+                      "text-4xl font-black font-mono",
+                      tier.name === 'Chrome' ? "text-[#E5E5E5]" : "text-[#FF4D00]"
+                    )}>
+                      {tier.apy}
+                    </div>
+                    <div className="flex-1">
+                      <div className="font-mono text-sm text-[#E5E5E5]/60">Annual Percentage Yield</div>
+                      <div className="font-mono text-xs text-[#E5E5E5]/40">Auto-compounding every block</div>
+                    </div>
+                  </div>
+
+                  {/* Benefits List */}
+                  <div className="mb-8">
+                    <div className="font-mono text-xs text-[#E5E5E5]/40 mb-3 tracking-widest uppercase">
+                      Tier Privileges
+                    </div>
+                    <div className="space-y-3">
+                      {tier.features.map((feature, i) => (
+                        <motion.div
+                          key={i}
+                          initial={{ opacity: 0, x: -20 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          transition={{ delay: i * 0.1 }}
+                          className="flex items-center gap-3 p-3 rounded-lg bg-white/5 border border-white/5"
+                        >
+                          <div className={cn(
+                            "w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0",
+                            tier.name === 'Chrome' ? "bg-[#E5E5E5]/20" : "bg-[#FF4D00]/20"
+                          )}>
+                            <SafeIcon
+                              name="check"
+                              size={14}
+                              className={tier.name === 'Chrome' ? "text-[#E5E5E5]" : "text-[#FF4D00]"}
+                            />
+                          </div>
+                          <span className="font-mono text-sm text-[#E5E5E5]/80">{feature}</span>
+                        </motion.div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Stake Input */}
+                  <div className="mb-6">
+                    <div className="flex justify-between mb-2">
+                      <label className="font-mono text-xs text-[#E5E5E5]/60 tracking-wider uppercase">
+                        Stake Amount
+                      </label>
+                      <span className="font-mono text-xs text-[#E5E5E5]/40">
+                        Min: {minStake.toLocaleString()} AETH
+                      </span>
+                    </div>
+                    <div className="relative">
+                      <input
+                        type="number"
+                        value={amount}
+                        onChange={(e) => setAmount(e.target.value)}
+                        placeholder={minStake.toString()}
+                        min={minStake}
+                        className={cn(
+                          "w-full px-4 py-4 bg-white/5 border-2 rounded-xl text-white font-mono text-lg placeholder-[#E5E5E5]/30 focus:outline-none transition-all",
+                          tier.name === 'Chrome'
+                            ? "border-[#E5E5E5]/20 focus:border-[#E5E5E5]/50"
+                            : "border-[#FF4D00]/20 focus:border-[#FF4D00]/50"
+                        )}
+                      />
+                      <span className="absolute right-4 top-1/2 -translate-y-1/2 font-mono text-sm text-[#E5E5E5]/40">
+                        AETH
+                      </span>
+                    </div>
+                    <div className="flex justify-between mt-2">
+                      <span className="font-mono text-xs text-[#E5E5E5]/30">Balance: 0.00 AETH</span>
+                      <div className="flex gap-2">
+                        <button
+                          onClick={() => setAmount(minStake.toString())}
+                          className="font-mono text-xs text-[#FF4D00] hover:text-[#ff6a2b] transition-colors px-2 py-1 rounded bg-white/5"
+                        >
+                          MIN
+                        </button>
+                        <button
+                          onClick={() => setAmount(maxStake.toString())}
+                          className="font-mono text-xs text-[#FF4D00] hover:text-[#ff6a2b] transition-colors px-2 py-1 rounded bg-white/5"
+                        >
+                          MAX
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Terms Checkbox */}
+                  <div className="flex items-start gap-3 mb-6 p-3 rounded-lg bg-white/5 border border-white/5">
+                    <input
+                      type="checkbox"
+                      id="terms"
+                      checked={agreed}
+                      onChange={(e) => setAgreed(e.target.checked)}
+                      className="mt-1 w-4 h-4 rounded border-[#E5E5E5]/30 bg-transparent text-[#FF4D00] focus:ring-[#FF4D00] focus:ring-offset-0 cursor-pointer"
+                    />
+                    <label htmlFor="terms" className="font-mono text-xs text-[#E5E5E5]/60 leading-relaxed cursor-pointer">
+                      I understand that staking requires a 30-day lockup period and early withdrawal carries a 5% penalty fee. Smart contract risks apply.
+                    </label>
+                  </div>
+
+                  {/* Stake Button */}
+                  <button
+                    onClick={handleStake}
+                    disabled={!agreed || !amount || parseFloat(amount) < minStake || isLoading}
+                    className={cn(
+                      "w-full py-4 rounded-xl font-mono font-bold text-lg transition-all transform relative overflow-hidden group",
+                      agreed && amount && parseFloat(amount) >= minStake && !isLoading
+                        ? tier.name === 'Chrome'
+                          ? "bg-[#E5E5E5] text-[#050505] hover:bg-white hover:scale-[1.02]"
+                          : "bg-[#FF4D00] text-[#050505] hover:bg-[#ff6a2b] hover:scale-[1.02]"
+                        : "bg-white/10 text-[#E5E5E5]/40 cursor-not-allowed"
+                    )}
+                  >
+                    {isLoading ? (
+                      <div className="flex items-center justify-center gap-3">
+                        <div className={cn(
+                          "w-5 h-5 border-2 border-t-transparent rounded-full animate-spin",
+                          tier.name === 'Chrome' ? "border-gray-900" : "border-[#050505]"
+                        )} />
+                        <span>Processing Transaction...</span>
+                      </div>
+                    ) : (
+                      <span className="relative z-10 flex items-center justify-center gap-2">
+                        <SafeIcon name="lock" size={18} />
+                        CONFIRM STAKE
+                      </span>
+                    )}
+
+                    {/* Button shine effect */}
+                    {!isLoading && agreed && amount && parseFloat(amount) >= minStake && (
+                      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
+                    )}
+                  </button>
+
+                  {/* Gas Info */}
+                  <p className="text-center font-mono text-[10px] text-[#E5E5E5]/30 mt-4">
+                    Gas fees will be deducted from your wallet • Network: Aether Mainnet
+                  </p>
+                </div>
+              ) : (
+                /* Success State */
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  className="relative z-10 text-center py-8"
                 >
-                  MIN
-                </button>
-              </div>
-            </div>
+                  <motion.div
+                    initial={{ scale: 0 }}
+                    animate={{ scale: 1 }}
+                    transition={{ type: "spring", bounce: 0.5 }}
+                    className={cn(
+                      "w-24 h-24 rounded-full flex items-center justify-center mx-auto mb-6 border-4",
+                      tier.name === 'Chrome' ? "border-[#E5E5E5] bg-[#E5E5E5]/10" : "border-[#FF4D00] bg-[#FF4D00]/10"
+                    )}
+                  >
+                    <SafeIcon
+                      name="check"
+                      size={48}
+                      className={tier.name === 'Chrome' ? "text-[#E5E5E5]" : "text-[#FF4D00]"}
+                    />
+                  </motion.div>
 
-            <div className="flex items-start gap-3">
-              <input
-                type="checkbox"
-                id="terms"
-                checked={agreed}
-                onChange={(e) => setAgreed(e.target.checked)}
-                className="mt-1 w-4 h-4 rounded border-[#E5E5E5]/30 bg-transparent text-[#FF4D00] focus:ring-[#FF4D00] focus:ring-offset-0"
-              />
-              <label htmlFor="terms" className="font-mono text-xs text-[#E5E5E5]/60 leading-relaxed cursor-pointer">
-                I understand that staking requires a 30-day lockup period and early withdrawal carries a 5% penalty fee.
-              </label>
-            </div>
+                  <h3 className="font-serif text-3xl font-bold text-white mb-2">
+                    Stake Confirmed
+                  </h3>
+                  <p className="font-mono text-sm text-[#E5E5E5]/60 mb-6 max-w-xs mx-auto">
+                    You have successfully joined the {tier.name} tier. Your assets are now generating yield.
+                  </p>
 
-            <button
-              disabled={!agreed || !amount || parseFloat(amount) < minStake}
-              className={cn(
-                "w-full py-4 rounded-lg font-mono font-bold transition-all transform",
-                agreed && amount && parseFloat(amount) >= minStake
-                  ? "bg-[#FF4D00] hover:bg-[#ff6a2b] text-[#050505] hover:scale-[1.02]"
-                  : "bg-white/10 text-[#E5E5E5]/40 cursor-not-allowed"
+                  <div className="bg-white/5 rounded-xl p-4 mb-6 border border-white/10">
+                    <div className="font-mono text-xs text-[#E5E5E5]/40 mb-1">TRANSACTION HASH</div>
+                    <div className="font-mono text-xs text-[#FF4D00] truncate">
+                      0x7f8a9b2c...3d4e5f6a
+                    </div>
+                  </div>
+
+                  <button
+                    onClick={handleClose}
+                    className="bg-white/10 hover:bg-white/20 text-white px-8 py-3 rounded-lg font-mono font-bold transition-all"
+                  >
+                    CLOSE
+                  </button>
+                </motion.div>
               )}
-            >
-              CONFIRM STAKE
-            </button>
-
-            <p className="text-center font-mono text-[10px] text-[#E5E5E5]/30">
-              Gas fees will be deducted from your wallet • Network: Aether Mainnet
-            </p>
-          </div>
+            </div>
+          </motion.div>
         </motion.div>
-      </motion.div>
+      )}
     </AnimatePresence>
   );
 };
@@ -342,7 +508,7 @@ const TransmuteModal = ({ isOpen, onClose, asset }) => {
   );
 };
 
-// App Coming Soon Modal - ICON REMOVED
+// App Coming Soon Modal
 const AppComingSoonModal = ({ isOpen, onClose }) => {
   const [email, setEmail] = useState('');
   const [submitted, setSubmitted] = useState(false);
@@ -547,7 +713,7 @@ const Ticker = () => {
   );
 };
 
-// SECTION 3: BENTO - The Alchemical Triad (Icons removed) - REDUCED HEIGHT BY 15%
+// SECTION 3: BENTO - The Alchemical Triad
 const BentoFeatures = () => {
   const features = [
     {
@@ -626,7 +792,7 @@ const BentoFeatures = () => {
   );
 };
 
-// SECTION 4: THE ALCHEMICAL VAULT - Fixed semicircle overflow and button click area
+// SECTION 4: THE ALCHEMICAL VAULT
 const AlchemicalVault = ({ onTransmuteClick }) => {
   const assets = [
     {
@@ -750,7 +916,7 @@ const AlchemicalVault = ({ onTransmuteClick }) => {
   );
 };
 
-// Vault Card - Fixed semicircle overflow and button click area with pointer-events-none
+// Vault Card Component
 const VaultCardNoGlow = ({ asset, onTransmuteClick }) => {
   return (
     <motion.div
@@ -759,11 +925,10 @@ const VaultCardNoGlow = ({ asset, onTransmuteClick }) => {
       style={{ transform: 'none' }}
     >
       <div className="glass-card absolute inset-0 rounded-2xl overflow-hidden transition-all duration-500" style={{ transform: 'none' }}>
-
         {/* Top gradient accent line */}
         <div className="vault-top-line absolute top-0 left-4 right-4 h-1 bg-[#E5E5E5]/20 opacity-60 transition-all duration-500 rounded-full" />
 
-        {/* Metallic sheen overlay - Added pointer-events-none */}
+        {/* Metallic sheen overlay */}
         <div className="absolute inset-0 bg-gradient-to-br from-white/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-2xl pointer-events-none" />
 
         <div className="relative h-full flex flex-col p-6">
@@ -780,7 +945,7 @@ const VaultCardNoGlow = ({ asset, onTransmuteClick }) => {
               </div>
             </div>
 
-            {/* Icon container with Gold SVG support */}
+            {/* Icon container */}
             <div className="vault-icon-box w-14 h-14 rounded-xl flex items-center justify-center border border-white/10 shadow-lg transition-all duration-500 bg-[#E5E5E5]/5 overflow-hidden">
               {asset.isEthereum ? (
                 <EthereumIcon className="w-8 h-8 text-[#E5E5E5]/60 opacity-60 group-hover:opacity-100 transition-all duration-500 group-hover:text-[#FF4D00]" />
@@ -848,7 +1013,7 @@ const VaultCardNoGlow = ({ asset, onTransmuteClick }) => {
           </button>
         </div>
 
-        {/* Fixed semicircle - Added pointer-events-none to allow button clicks through */}
+        {/* Fixed semicircle */}
         <div className="absolute bottom-0 right-0 w-24 h-24 overflow-hidden opacity-0 group-hover:opacity-20 transition-opacity duration-500 pointer-events-none z-0">
           <div className="absolute bottom-0 right-0 w-full h-full bg-gradient-to-tl from-[#FF4D00] to-[#ff6a2b] rounded-tl-full" />
         </div>
@@ -857,7 +1022,7 @@ const VaultCardNoGlow = ({ asset, onTransmuteClick }) => {
   );
 };
 
-// SECTION 5: THE FORGE - Fixed overflow issue by changing overflow-visible to overflow-hidden
+// SECTION 5: THE FORGE
 const Forge = () => {
   const assets = [
     {
@@ -1080,7 +1245,7 @@ const Pulse = () => {
   );
 };
 
-// SECTION 7: THE VAULT TIERS - Membership Evolution (always visible, no dark state)
+// SECTION 7: THE VAULT TIERS - Membership Evolution
 const VaultTiers = ({ onSelectTier }) => {
   const tiers = [
     {
@@ -1325,7 +1490,7 @@ const FAQ = () => {
   );
 };
 
-// SECTION 9: FOOTER - The Core Integration (subtle floating dots)
+// SECTION 9: FOOTER - The Core Integration
 const Footer = () => {
   const footerRef = useRef(null);
   const [isFlooded, setIsFlooded] = useState(false);
@@ -1416,7 +1581,7 @@ const Footer = () => {
         </div>
       </motion.div>
 
-      {/* Subtle floating dots - barely visible, small */}
+      {/* Subtle floating dots */}
       {[...Array(15)].map((_, i) => (
         <motion.div
           key={i}
