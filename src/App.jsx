@@ -21,6 +21,26 @@ const SafeIcon = ({ name, size = 24, className, color }) => {
   return <IconComponent size={size} className={className} color={color} />;
 };
 
+// Ethereum SVG Icon Component
+const EthereumIcon = ({ className }) => (
+  <svg
+    viewBox="0 0 32 32"
+    className={className}
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      d="M15.925 23.96l-9.819-5.797L16 32l9.832-13.837-9.907 5.797z"
+      fill="currentColor"
+      fillOpacity="0.8"
+    />
+    <path
+      d="M16 0L6.106 17.467l9.894 5.807 9.907-5.807L16 0zm0 25.03L6.114 19.18 16 32l9.886-12.82-9.886 5.85z"
+      fill="currentColor"
+    />
+  </svg>
+);
+
 // Custom Cursor Component - ALWAYS WHITE, SCALES ON BUTTONS
 const CustomCursor = () => {
   const [position, setPosition] = useState({ x: 0, y: 0 });
@@ -452,7 +472,8 @@ const AlchemicalVault = ({ onTransmuteClick }) => {
       fullName: 'Ethereum 2.0',
       price: '$3,247.82',
       change: '+12.4%',
-      icon: 'diamond'
+      icon: 'diamond',
+      isEthereum: true
     },
     {
       symbol: 'BTC',
@@ -595,9 +616,11 @@ const VaultCardNoGlow = ({ asset, onTransmuteClick }) => {
               </div>
             </div>
 
-            {/* Icon container */}
+            {/* Icon container with Ethereum SVG support */}
             <div className="vault-icon-box w-14 h-14 rounded-xl flex items-center justify-center border border-white/10 shadow-lg transition-all duration-500 bg-[#E5E5E5]/5 overflow-hidden">
-              {asset.isSolana ? (
+              {asset.isEthereum ? (
+                <EthereumIcon className="w-8 h-8 text-[#E5E5E5]/60 opacity-60 group-hover:opacity-100 transition-all duration-500 group-hover:text-[#FF4D00]" />
+              ) : asset.isSolana ? (
                 <img
                   src="https://oejgkvftpbinliuopipr.supabase.co/storage/v1/object/public/assets/user_347995964/edit-photo-1770465203-5802.svg?"
                   alt="Solana"
@@ -677,7 +700,7 @@ const Forge = () => {
       title: 'Staked Ethereum',
       description: 'Staked ETH that flows like water through DeFi. Convert any asset to any other in milliseconds with zero slippage through quantum bonding curves.',
       blueprint: 'STETH_V2 // LIQUID_STAKING // YIELD_AGGREGATOR',
-      icon: 'diamond',
+      isEthereum: true
     },
     {
       id: 'btc',
@@ -736,12 +759,16 @@ const Forge = () => {
                 <h3 className="font-serif text-2xl md:text-3xl font-bold text-white group-hover:text-[#FF4D00] transition-colors">
                   {asset.title}
                 </h3>
-                <div className="w-14 h-14 rounded-xl flex items-center justify-center border border-white/10 bg-[#E5E5E5]/5 ml-4 flex-shrink-0">
-                  <SafeIcon
-                    name={asset.icon}
-                    size={24}
-                    className="text-[#E5E5E5]/60 group-hover:text-[#FF4D00] transition-colors"
-                  />
+                <div className="w-14 h-14 rounded-xl flex items-center justify-center border border-white/10 bg-[#E5E5E5]/5 ml-4 flex-shrink-0 overflow-hidden">
+                  {asset.isEthereum ? (
+                    <EthereumIcon className="w-8 h-8 text-[#E5E5E5]/60 group-hover:text-[#FF4D00] transition-colors duration-500" />
+                  ) : (
+                    <SafeIcon
+                      name={asset.icon}
+                      size={24}
+                      className="text-[#E5E5E5]/60 group-hover:text-[#FF4D00] transition-colors"
+                    />
+                  )}
                 </div>
               </div>
 
