@@ -1,8 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { clsx } from 'clsx';
 import { twMerge } from 'tailwind-merge';
-import * as LucideIcons from 'lucide-react';
 
 // Utility for Tailwind class merging
 function cn(...inputs) {
@@ -11,6 +10,7 @@ function cn(...inputs) {
 
 // Safe Icon Component - renders Lucide icons dynamically
 const SafeIcon = ({ name, size = 24, className, color }) => {
+  import * as LucideIcons from 'lucide-react';
   const pascalName = name
     .split('-')
     .map(part => part.charAt(0).toUpperCase() + part.slice(1))
@@ -92,6 +92,146 @@ const CustomCursor = () => {
       className={cn("custom-cursor", isScaled && "scaled")}
       style={{ left: position.x, top: position.y }}
     />
+  );
+};
+
+// Tier Selection Modal Component
+const TierSelectionModal = ({ isOpen, onClose, tier }) => {
+  const [amount, setAmount] = useState('');
+  const [agreed, setAgreed] = useState(false);
+
+  if (!isOpen || !tier) return null;
+
+  const minStake = tier.name === 'Iron' ? 1000 : tier.name === 'Chrome' ? 10000 : 100000;
+
+  return (
+    <AnimatePresence>
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        className="fixed inset-0 z-[100] flex items-center justify-center p-4 modal-overlay"
+        onClick={onClose}
+      >
+        <motion.div
+          initial={{ opacity: 0, scale: 0.95, y: 20 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          exit={{ opacity: 0, scale: 0.95, y: 20 }}
+          transition={{ duration: 0.3 }}
+          className="glass-card rounded-2xl p-8 max-w-md w-full relative border border-[#FF4D00]/30"
+          onClick={(e) => e.stopPropagation()}
+        >
+          <button
+            onClick={onClose}
+            className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-full bg-white/5 hover:bg-[#FF4D00]/20 transition-colors"
+          >
+            <SafeIcon name="x" size={18} className="text-[#E5E5E5]" />
+          </button>
+
+          <div className="mb-6">
+            <div className="font-mono text-xs text-[#E5E5E5]/40 mb-2 tracking-widest uppercase">
+              Membership Tier
+            </div>
+            <h3 className="font-serif text-4xl font-bold text-white tracking-tight mb-2">
+              {tier.name}
+            </h3>
+            <div className={cn(
+              "inline-flex items-center gap-2 px-4 py-2 rounded-full border",
+              tier.name === 'Flare'
+                ? "border-white/30 bg-white/10"
+                : tier.name === 'Chrome'
+                  ? "border-gray-900/30 bg-gray-900/10"
+                  : "border-[#FF4D00]/30 bg-[#FF4D00]/10"
+            )}>
+              <span className={cn(
+                "font-mono text-2xl font-bold",
+                tier.name === 'Chrome' ? "text-gray-900" : "text-white"
+              )}>
+                {tier.apy}
+              </span>
+              <span className={cn(
+                "font-mono text-sm",
+                tier.name === 'Chrome' ? "text-gray-700" : "text-[#E5E5E5]/60"
+              )}>
+                APY
+              </span>
+            </div>
+          </div>
+
+          <div className="space-y-6">
+            <div className="bg-white/5 rounded-lg p-4">
+              <div className="font-mono text-xs text-[#E5E5E5]/50 mb-3 uppercase tracking-wider">
+                Tier Benefits
+              </div>
+              <ul className="space-y-3">
+                {tier.features.map((feature, i) => (
+                  <li key={i} className="flex items-center gap-3 font-mono text-sm text-[#E5E5E5]/80">
+                    <SafeIcon name="check" size={16} className="text-[#FF4D00]" />
+                    {feature}
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <div>
+              <label className="font-mono text-xs text-[#E5E5E5]/60 mb-2 block tracking-wider uppercase">
+                Stake Amount (Min: {minStake.toLocaleString()} AETH)
+              </label>
+              <div className="relative">
+                <input
+                  type="number"
+                  value={amount}
+                  onChange={(e) => setAmount(e.target.value)}
+                  placeholder={minStake.toString()}
+                  className="w-full px-4 py-3 bg-white/5 border border-[#E5E5E5]/20 rounded-lg text-white font-mono placeholder-[#E5E5E5]/30 focus:outline-none focus:border-[#FF4D00]/50 transition-colors"
+                />
+                <span className="absolute right-4 top-1/2 -translate-y-1/2 font-mono text-xs text-[#E5E5E5]/40">
+                  AETH
+                </span>
+              </div>
+              <div className="flex justify-between mt-2">
+                <span className="font-mono text-xs text-[#E5E5E5]/30">Balance: 0.00</span>
+                <button
+                  onClick={() => setAmount(minStake.toString())}
+                  className="font-mono text-xs text-[#FF4D00] hover:text-[#ff6a2b] transition-colors"
+                >
+                  MIN
+                </button>
+              </div>
+            </div>
+
+            <div className="flex items-start gap-3">
+              <input
+                type="checkbox"
+                id="terms"
+                checked={agreed}
+                onChange={(e) => setAgreed(e.target.checked)}
+                className="mt-1 w-4 h-4 rounded border-[#E5E5E5]/30 bg-transparent text-[#FF4D00] focus:ring-[#FF4D00] focus:ring-offset-0"
+              />
+              <label htmlFor="terms" className="font-mono text-xs text-[#E5E5E5]/60 leading-relaxed cursor-pointer">
+                I understand that staking requires a 30-day lockup period and early withdrawal carries a 5% penalty fee.
+              </label>
+            </div>
+
+            <button
+              disabled={!agreed || !amount || parseFloat(amount) < minStake}
+              className={cn(
+                "w-full py-4 rounded-lg font-mono font-bold transition-all transform",
+                agreed && amount && parseFloat(amount) >= minStake
+                  ? "bg-[#FF4D00] hover:bg-[#ff6a2b] text-[#050505] hover:scale-[1.02]"
+                  : "bg-white/10 text-[#E5E5E5]/40 cursor-not-allowed"
+              )}
+            >
+              CONFIRM STAKE
+            </button>
+
+            <p className="text-center font-mono text-[10px] text-[#E5E5E5]/30">
+              Gas fees will be deducted from your wallet • Network: Aether Mainnet
+            </p>
+          </div>
+        </motion.div>
+      </motion.div>
+    </AnimatePresence>
   );
 };
 
@@ -407,7 +547,7 @@ const Ticker = () => {
   );
 };
 
-// SECTION 3: BENTO - The Alchemical Triad (Icons removed)
+// SECTION 3: BENTO - The Alchemical Triad (Icons removed) - REDUCED HEIGHT BY 15%
 const BentoFeatures = () => {
   const features = [
     {
@@ -451,7 +591,7 @@ const BentoFeatures = () => {
             initial={{ opacity: 0, y: 50 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: index * 0.1 }}
-            className="glass-card rounded-2xl p-8 relative overflow-hidden group min-h-[400px] flex flex-col"
+            className="glass-card rounded-2xl p-8 relative overflow-hidden group min-h-[340px] flex flex-col"
             data-cursor="orange"
           >
             <div className="blueprint-overlay absolute inset-0 pointer-events-none rounded-2xl" />
@@ -941,7 +1081,7 @@ const Pulse = () => {
 };
 
 // SECTION 7: THE VAULT TIERS - Membership Evolution (always visible, no dark state)
-const VaultTiers = () => {
+const VaultTiers = ({ onSelectTier }) => {
   const tiers = [
     {
       name: 'Iron',
@@ -1056,14 +1196,17 @@ const VaultTiers = () => {
                 ))}
               </ul>
 
-              <button className={cn(
-                "relative z-10 w-full mt-8 py-4 rounded-xl font-mono font-bold transition-all transform hover:scale-105",
-                tier.isChrome
-                  ? "bg-gray-900 text-[#E5E5E5] hover:bg-gray-800"
-                  : tier.isFlare
-                    ? "bg-white text-orange-600 hover:bg-gray-100"
-                    : "bg-[#E5E5E5] text-[#050505] hover:bg-white"
-              )}>
+              <button
+                onClick={() => onSelectTier(tier)}
+                className={cn(
+                  "relative z-10 w-full mt-8 py-4 rounded-xl font-mono font-bold transition-all transform hover:scale-105",
+                  tier.isChrome
+                    ? "bg-gray-900 text-[#E5E5E5] hover:bg-gray-800"
+                    : tier.isFlare
+                      ? "bg-white text-orange-600 hover:bg-gray-100"
+                      : "bg-[#E5E5E5] text-[#050505] hover:bg-white"
+                )}
+              >
                 Select {tier.name}
               </button>
 
@@ -1375,6 +1518,8 @@ function App() {
   const [transmuteModalOpen, setTransmuteModalOpen] = useState(false);
   const [selectedAsset, setSelectedAsset] = useState(null);
   const [appModalOpen, setAppModalOpen] = useState(false);
+  const [tierModalOpen, setTierModalOpen] = useState(false);
+  const [selectedTier, setSelectedTier] = useState(null);
 
   const handleTransmuteClick = (asset) => {
     setSelectedAsset(asset);
@@ -1392,6 +1537,16 @@ function App() {
 
   const handleCloseAppModal = () => {
     setAppModalOpen(false);
+  };
+
+  const handleSelectTier = (tier) => {
+    setSelectedTier(tier);
+    setTierModalOpen(true);
+  };
+
+  const handleCloseTierModal = () => {
+    setTierModalOpen(false);
+    setSelectedTier(null);
   };
 
   return (
@@ -1439,7 +1594,7 @@ function App() {
       </section>
 
       <section id="tiers">
-        <VaultTiers />
+        <VaultTiers onSelectTier={handleSelectTier} />
       </section>
 
       <section id="faq">
@@ -1457,6 +1612,11 @@ function App() {
       <AppComingSoonModal
         isOpen={appModalOpen}
         onClose={handleCloseAppModal}
+      />
+      <TierSelectionModal
+        isOpen={tierModalOpen}
+        onClose={handleCloseTierModal}
+        tier={selectedTier}
       />
     </div>
   );
