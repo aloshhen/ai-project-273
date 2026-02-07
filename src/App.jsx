@@ -672,115 +672,97 @@ const VaultCardNoGlow = ({ asset, onTransmuteClick }) => {
   );
 };
 
-// SECTION 5: THE FORGE - Interactive Asset Melt (with pointer-events-none on overlay)
+// SECTION 5: THE FORGE - Redesigned to match The Alchemical Triad style
 const Forge = () => {
   const assets = [
     {
       id: 'eth',
-      name: 'ETHEREUM_LIQUID',
-      symbol: 'STETH',
+      subtitle: 'LIQUID ETHER',
+      title: 'Staked Ethereum',
+      description: 'Staked ETH that flows like water through DeFi. Convert any asset to any other in milliseconds with zero slippage through quantum bonding curves.',
+      blueprint: 'STETH_V2 // LIQUID_STAKING // YIELD_AGGREGATOR',
       icon: 'diamond',
-      color: '#FF4D00',
-      apy: '15.7%',
-      desc: 'Staked ETH that flows like water through DeFi',
-      isEth: true
     },
     {
       id: 'btc',
-      name: 'BITCOIN_WRAPPED',
-      symbol: 'WBTC',
+      subtitle: 'WRAPPED BITCOIN',
+      title: 'Bitcoin Unleashed',
+      description: 'Bitcoin freed from its blockchain constraints. AI-powered threat detection monitors every transaction with self-healing smart contracts.',
+      blueprint: 'WBTC_V3 // CROSS_CHAIN // BRIDGE_PROTOCOL',
       icon: 'bitcoin',
-      color: '#F7931A',
-      apy: '12.1%',
-      desc: 'Bitcoin unleashed from its blockchain constraints',
-      isBtc: false
     },
     {
       id: 'gold',
-      name: 'AETHER_GOLD',
-      symbol: 'AU',
+      subtitle: 'TOKENIZED GOLD',
+      title: 'Digital Gold',
+      description: 'Physical gold tokenized and liquified for instant transfers. Dynamic yield optimization across 47 protocols, compounding every block.',
+      blueprint: 'PAXG_V1 // GOLD_BACKED // ASSET_TOKENIZATION',
       icon: 'coins',
-      color: '#FF4D00',
-      apy: '8.4%',
-      desc: 'Physical gold tokenized and liquified for instant transfers',
-      isGold: true
     },
   ];
 
   return (
-    <div className="py-20 px-4 md:px-6 bg-gradient-to-b from-[#050505] via-[#0a0a0a] to-[#050505]">
-      <div className="container mx-auto">
-        <motion.div
-          initial={{ opacity: 0, y: 50 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          className="text-center mb-16"
-        >
-          <h2 className="font-serif text-5xl md:text-8xl font-black text-white mb-6 tracking-tighter">
-            The <span className="text-white">Forge</span>
-          </h2>
-          <p className="font-mono text-[#E5E5E5]/60 text-lg max-w-2xl mx-auto">
-            Hard assets turned into liquid opportunities
-          </p>
-        </motion.div>
+    <div className="container mx-auto px-4 md:px-6 py-20">
+      <motion.div
+        initial={{ opacity: 0, y: 50 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8 }}
+        className="text-center mb-16"
+      >
+        <h2 className="font-serif text-5xl md:text-8xl font-black text-white mb-6 tracking-tighter">
+          The <span className="text-white">Forge</span>
+        </h2>
+        <p className="font-mono text-[#E5E5E5]/60 text-lg max-w-2xl mx-auto">
+          Hard assets turned into liquid opportunities
+        </p>
+      </motion.div>
 
-        <div className="grid md:grid-cols-3 gap-6 max-w-6xl mx-auto">
-          {assets.map((asset, index) => (
-            <motion.div
-              key={asset.id}
-              initial={{ opacity: 0, y: 50 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: index * 0.15 }}
-              className="relative group forge-card"
-              data-cursor="orange"
-            >
-              <div className="glass-card rounded-2xl overflow-visible relative min-h-[400px] flex flex-col">
-                <div className="blueprint-overlay absolute inset-0 rounded-2xl" />
+      <div className="grid md:grid-cols-3 gap-6 max-w-6xl mx-auto">
+        {assets.map((asset, index) => (
+          <motion.div
+            key={asset.id}
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: index * 0.1 }}
+            className="glass-card rounded-2xl p-8 relative overflow-visible group min-h-[400px] flex flex-col"
+            data-cursor="orange"
+          >
+            <div className="blueprint-overlay absolute inset-0 pointer-events-none rounded-2xl" />
 
-                <div className="relative z-10 p-8 flex flex-col flex-1">
-                  <div className="flex items-center justify-between mb-6">
-                    <div
-                      className="forge-icon w-20 h-20 rounded-2xl flex items-center justify-center border border-white/10 shadow-lg transition-all duration-500 overflow-hidden"
-                      style={{
-                        backgroundColor: `${asset.color}15`,
-                      }}
-                    >
-                      <SafeIcon
-                        name={asset.icon}
-                        size={40}
-                        color={asset.color}
-                      />
-                    </div>
-                    <div className="text-right">
-                      <div className="font-mono text-xs text-[#E5E5E5]/40 tracking-widest uppercase">Symbol</div>
-                      <div className="font-mono text-lg text-white font-bold">{asset.symbol}</div>
-                    </div>
-                  </div>
-
-                  <h3 className="font-serif text-2xl font-bold text-white mb-3 group-hover:text-[#FF4D00] transition-colors">
-                    {asset.name}
-                  </h3>
-
-                  <p className="font-mono text-sm text-[#E5E5E5]/50 mb-6 leading-relaxed flex-1">
-                    {asset.desc}
-                  </p>
-
-                  <div className="flex items-center justify-between pt-4 border-t border-[#E5E5E5]/10">
-                    <div className="flex items-center gap-2">
-                      <SafeIcon name="zap" size={16} className="text-[#FF4D00]" />
-                      <span className="font-mono text-xs text-[#E5E5E5]/50 uppercase">Yield</span>
-                    </div>
-                    <span className="font-mono text-xl font-bold" style={{ color: asset.color }}>
-                      {asset.apy}
-                    </span>
-                  </div>
-                </div>
-
-                <div className="absolute -bottom-1 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-[#FF4D00] to-transparent opacity-0 group-hover:opacity-100 transition-opacity rounded-b-2xl" />
+            <div className="relative z-10 flex-1">
+              <div className="mb-6">
+                <span className="font-mono text-xs text-[#E5E5E5]/40 tracking-widest block">
+                  {asset.subtitle}
+                </span>
               </div>
-            </motion.div>
-          ))}
-        </div>
+
+              <div className="flex items-start justify-between mb-6">
+                <h3 className="font-serif text-2xl md:text-3xl font-bold text-white group-hover:text-[#FF4D00] transition-colors">
+                  {asset.title}
+                </h3>
+                <div className="w-14 h-14 rounded-xl flex items-center justify-center border border-white/10 bg-[#E5E5E5]/5 ml-4 flex-shrink-0">
+                  <SafeIcon
+                    name={asset.icon}
+                    size={24}
+                    className="text-[#E5E5E5]/60 group-hover:text-[#FF4D00] transition-colors"
+                  />
+                </div>
+              </div>
+
+              <p className="font-mono text-sm text-[#E5E5E5]/70 leading-relaxed mb-6">
+                {asset.description}
+              </p>
+
+              <div className="mt-auto opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                <div className="font-mono text-xs text-[#FF4D00]/60 border border-[#FF4D00]/30 rounded p-3 bg-[#FF4D00]/5">
+                  {asset.blueprint}
+                </div>
+              </div>
+            </div>
+
+            <div className="absolute -bottom-1 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-[#FF4D00] to-transparent opacity-0 group-hover:opacity-100 transition-opacity rounded-b-2xl" />
+          </motion.div>
+        ))}
       </div>
     </div>
   );
