@@ -52,6 +52,204 @@ const CustomCursor = () => {
   );
 };
 
+// Transmute Modal Component
+const TransmuteModal = ({ isOpen, onClose, asset }) => {
+  const [amount, setAmount] = useState('');
+  const [slippage, setSlippage] = useState(0.5);
+
+  if (!isOpen || !asset) return null;
+
+  return (
+    <AnimatePresence>
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        className="fixed inset-0 z-[100] flex items-center justify-center p-4 modal-overlay"
+        onClick={onClose}
+      >
+        <motion.div
+          initial={{ opacity: 0, scale: 0.95, y: 20 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          exit={{ opacity: 0, scale: 0.95, y: 20 }}
+          transition={{ duration: 0.3 }}
+          className="glass-card rounded-2xl p-8 max-w-md w-full relative"
+          onClick={(e) => e.stopPropagation()}
+        >
+          <button
+            onClick={onClose}
+            className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-full bg-white/5 hover:bg-[#FF4D00]/20 transition-colors"
+          >
+            <SafeIcon name="x" size={18} className="text-[#E5E5E5]" />
+          </button>
+
+          <div className="mb-6">
+            <div className="font-mono text-xs text-[#E5E5E5]/40 mb-2 tracking-widest uppercase">
+              Transmute Configuration
+            </div>
+            <h3 className="font-serif text-3xl font-bold text-white tracking-tight">
+              {asset.symbol} <span className="text-[#FF4D00]">→</span> AETH
+            </h3>
+          </div>
+
+          <div className="space-y-6">
+            <div>
+              <label className="font-mono text-xs text-[#E5E5E5]/60 mb-2 block tracking-wider uppercase">
+                Amount to Transmute
+              </label>
+              <div className="relative">
+                <input
+                  type="number"
+                  value={amount}
+                  onChange={(e) => setAmount(e.target.value)}
+                  placeholder="0.00"
+                  className="w-full px-4 py-3 bg-white/5 border border-[#E5E5E5]/20 rounded-lg text-white font-mono placeholder-[#E5E5E5]/30 focus:outline-none focus:border-[#FF4D00]/50 transition-colors"
+                />
+                <span className="absolute right-4 top-1/2 -translate-y-1/2 font-mono text-xs text-[#E5E5E5]/40">
+                  {asset.symbol}
+                </span>
+              </div>
+              <div className="flex justify-between mt-2">
+                <span className="font-mono text-xs text-[#E5E5E5]/30">Balance: 0.00</span>
+                <button className="font-mono text-xs text-[#FF4D00] hover:text-[#ff6a2b] transition-colors">MAX</button>
+              </div>
+            </div>
+
+            <div>
+              <label className="font-mono text-xs text-[#E5E5E5]/60 mb-2 block tracking-wider uppercase">
+                Max Slippage: {slippage}%
+              </label>
+              <input
+                type="range"
+                min="0.1"
+                max="5"
+                step="0.1"
+                value={slippage}
+                onChange={(e) => setSlippage(parseFloat(e.target.value))}
+                className="w-full"
+              />
+              <div className="flex justify-between mt-1">
+                <span className="font-mono text-xs text-[#E5E5E5]/30">0.1%</span>
+                <span className="font-mono text-xs text-[#E5E5E5]/30">5%</span>
+              </div>
+            </div>
+
+            <div className="bg-white/5 rounded-lg p-4 space-y-2">
+              <div className="flex justify-between">
+                <span className="font-mono text-xs text-[#E5E5E5]/50 uppercase">Exchange Rate</span>
+                <span className="font-mono text-xs text-[#E5E5E5]">1 {asset.symbol} = 1,000 AETH</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="font-mono text-xs text-[#E5E5E5]/50 uppercase">Network Fee</span>
+                <span className="font-mono text-xs text-[#E5E5E5]">~$2.45</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="font-mono text-xs text-[#E5E5E5]/50 uppercase">Route</span>
+                <span className="font-mono text-xs text-[#FF4D00]">Quantum Bonding Curve</span>
+              </div>
+            </div>
+
+            <button className="w-full py-4 bg-[#FF4D00] hover:bg-[#ff6a2b] text-[#050505] rounded-lg font-mono font-bold transition-all transform hover:scale-[1.02]">
+              EXECUTE TRANSMUTATION
+            </button>
+          </div>
+        </motion.div>
+      </motion.div>
+    </AnimatePresence>
+  );
+};
+
+// App Coming Soon Modal
+const AppComingSoonModal = ({ isOpen, onClose }) => {
+  const [email, setEmail] = useState('');
+  const [submitted, setSubmitted] = useState(false);
+
+  if (!isOpen) return null;
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setSubmitted(true);
+    setTimeout(() => {
+      onClose();
+      setSubmitted(false);
+      setEmail('');
+    }, 2000);
+  };
+
+  return (
+    <AnimatePresence>
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        className="fixed inset-0 z-[100] flex items-center justify-center p-4 modal-overlay"
+        onClick={onClose}
+      >
+        <motion.div
+          initial={{ opacity: 0, scale: 0.95, y: 20 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          exit={{ opacity: 0, scale: 0.95, y: 20 }}
+          transition={{ duration: 0.3 }}
+          className="glass-card rounded-2xl p-8 max-w-md w-full relative text-center"
+          onClick={(e) => e.stopPropagation()}
+        >
+          <button
+            onClick={onClose}
+            className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-full bg-white/5 hover:bg-[#FF4D00]/20 transition-colors"
+          >
+            <SafeIcon name="x" size={18} className="text-[#E5E5E5]" />
+          </button>
+
+          {!submitted ? (
+            <>
+              <div className="w-16 h-16 rounded-full bg-[#FF4D00]/20 flex items-center justify-center mx-auto mb-6">
+                <SafeIcon name="zap" size={32} className="text-[#FF4D00]" />
+              </div>
+
+              <h3 className="font-serif text-3xl font-bold text-white mb-4 tracking-tight">
+                App in Development
+              </h3>
+
+              <p className="font-mono text-sm text-[#E5E5E5]/60 mb-8 leading-relaxed">
+                The AETHER Protocol app is currently under construction. Join the waitlist to be among the first to access the future of decentralized finance.
+              </p>
+
+              <form onSubmit={handleSubmit} className="space-y-4">
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="Enter your email"
+                  required
+                  className="w-full px-4 py-3 bg-white/5 border border-[#E5E5E5]/20 rounded-lg text-white font-mono placeholder-[#E5E5E5]/30 focus:outline-none focus:border-[#FF4D00]/50 transition-colors"
+                />
+                <button
+                  type="submit"
+                  className="w-full py-4 bg-[#FF4D00] hover:bg-[#ff6a2b] text-[#050505] rounded-lg font-mono font-bold transition-all transform hover:scale-[1.02]"
+                >
+                  JOIN WHITELIST
+                </button>
+              </form>
+            </>
+          ) : (
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              className="py-8"
+            >
+              <div className="w-16 h-16 rounded-full bg-green-500/20 flex items-center justify-center mx-auto mb-6">
+                <SafeIcon name="check" size={32} className="text-green-500" />
+              </div>
+              <h3 className="font-serif text-2xl font-bold text-white mb-2">You're on the list!</h3>
+              <p className="font-mono text-sm text-[#E5E5E5]/60">We'll notify you when the protocol launches.</p>
+            </motion.div>
+          )}
+        </motion.div>
+      </motion.div>
+    </AnimatePresence>
+  );
+};
+
 // SECTION 1: HERO - The Singularity
 const MercurySphere = () => {
   const sphereRef = useRef(null);
@@ -252,8 +450,8 @@ const BentoFeatures = () => {
   );
 };
 
-// SECTION 4: THE ALCHEMICAL VAULT - Updated with glow effect like Bento cards
-const AlchemicalVault = () => {
+// SECTION 4: THE ALCHEMICAL VAULT - Updated without glow effect
+const AlchemicalVault = ({ onTransmuteClick }) => {
   const assets = [
     {
       symbol: 'ETH',
@@ -329,7 +527,7 @@ const AlchemicalVault = () => {
       <div className="relative h-[450px] overflow-visible hidden lg:block py-4">
         <div className="vault-scroll-container absolute flex gap-8 items-center h-full px-4 overflow-visible">
           {duplicatedAssets.map((asset, index) => (
-            <VaultCardOrange key={`${asset.symbol}-${index}`} asset={asset} />
+            <VaultCardNoGlow key={`${asset.symbol}-${index}`} asset={asset} onTransmuteClick={onTransmuteClick} />
           ))}
         </div>
       </div>
@@ -337,7 +535,7 @@ const AlchemicalVault = () => {
       <div className="lg:hidden overflow-x-auto pb-4 overflow-visible">
         <div className="flex gap-4 px-4 overflow-visible" style={{ width: 'max-content' }}>
           {assets.map((asset, index) => (
-            <VaultCardOrange key={`mobile-${asset.symbol}-${index}`} asset={asset} />
+            <VaultCardNoGlow key={`mobile-${asset.symbol}-${index}`} asset={asset} onTransmuteClick={onTransmuteClick} />
           ))}
         </div>
       </div>
@@ -374,21 +572,17 @@ const AlchemicalVault = () => {
   );
 };
 
-// Vault Card - Orange hover effect with glow like Bento cards, no lift
-const VaultCardOrange = ({ asset }) => {
-  const [isHovered, setIsHovered] = useState(false);
-
+// Vault Card - NO GLOW effect on hover
+const VaultCardNoGlow = ({ asset, onTransmuteClick }) => {
   return (
     <motion.div
-      className="relative w-72 h-[400px] flex-shrink-0 group vault-card-orange overflow-visible"
+      className="relative w-72 h-[400px] flex-shrink-0 group vault-card-no-glow overflow-visible"
       transition={{ duration: 0.3 }}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
       style={{ transform: 'none' }}
     >
       <div className="glass-card absolute inset-0 rounded-2xl overflow-visible transition-all duration-500" style={{ transform: 'none' }}>
 
-        {/* Top gradient accent line - always orange on hover */}
+        {/* Top gradient accent line */}
         <div className="vault-top-line absolute -top-px left-4 right-4 h-1 bg-[#E5E5E5]/20 opacity-60 transition-all duration-500 rounded-full" />
 
         {/* Metallic sheen overlay */}
@@ -408,7 +602,7 @@ const VaultCardOrange = ({ asset }) => {
               </div>
             </div>
 
-            {/* Icon container - dark by default, orange on hover */}
+            {/* Icon container */}
             <div className="vault-icon-box w-14 h-14 rounded-xl flex items-center justify-center border border-white/10 shadow-lg transition-all duration-500 bg-[#E5E5E5]/5 overflow-hidden">
               {asset.isSolana ? (
                 <img
@@ -464,7 +658,10 @@ const VaultCardOrange = ({ asset }) => {
             </div>
           </div>
 
-          <button className="mt-6 w-full py-3.5 rounded-lg bg-white/5 hover:bg-[#FF4D00]/20 border border-white/10 hover:border-[#FF4D00]/50 transition-all duration-300 font-mono text-xs tracking-widest text-[#E5E5E5]/60 hover:text-white uppercase">
+          <button
+            onClick={() => onTransmuteClick(asset)}
+            className="mt-6 w-full py-3.5 rounded-lg bg-white/5 hover:bg-[#FF4D00]/20 border border-white/10 hover:border-[#FF4D00]/50 transition-all duration-300 font-mono text-xs tracking-widest text-[#E5E5E5]/60 hover:text-white uppercase"
+          >
             Transmute_{asset.symbol}
           </button>
         </div>
@@ -472,45 +669,43 @@ const VaultCardOrange = ({ asset }) => {
         <div className="absolute -bottom-4 right-0 w-24 h-24 overflow-visible opacity-0 group-hover:opacity-20 transition-opacity duration-500">
           <div className="absolute bottom-0 right-0 w-full h-full bg-gradient-to-tl from-[#FF4D00] to-[#ff6a2b] rounded-tl-full" />
         </div>
-
-        <div className="absolute -inset-4 bg-gradient-to-t from-[#FF4D00]/20 to-transparent pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-3xl -z-10" />
       </div>
     </motion.div>
   );
 };
 
-// SECTION 5: THE FORGE - Interactive Asset Melt with SVG icons for Gold and ETH
+// SECTION 5: THE FORGE - Interactive Asset Melt with Orange Icons
 const Forge = () => {
   const assets = [
     {
-      id: 'gold',
-      name: 'AETHER_GOLD',
-      symbol: 'AU',
-      icon: 'coins',
-      color: '#FFD700',
-      apy: '8.4%',
-      desc: 'Physical gold tokenized and liquified for instant transfers',
-      isGold: true
+      id: 'eth',
+      name: 'ETHEREUM_LIQUID',
+      symbol: 'STETH',
+      icon: 'diamond',
+      color: '#FF4D00', // Orange instead of blue
+      apy: '15.7%',
+      desc: 'Staked ETH that flows like water through DeFi',
+      isEth: true
     },
     {
       id: 'btc',
       name: 'BITCOIN_WRAPPED',
       symbol: 'WBTC',
       icon: 'bitcoin',
-      color: '#F7931A',
+      color: '#F7931A', // Keep BTC orange
       apy: '12.1%',
       desc: 'Bitcoin unleashed from its blockchain constraints',
       isBtc: false
     },
     {
-      id: 'eth',
-      name: 'ETHEREUM_LIQUID',
-      symbol: 'STETH',
-      icon: 'diamond',
-      color: '#627EEA',
-      apy: '15.7%',
-      desc: 'Staked ETH that flows like water through DeFi',
-      isEth: true
+      id: 'gold',
+      name: 'AETHER_GOLD',
+      symbol: 'AU',
+      icon: 'coins',
+      color: '#FF4D00', // Orange instead of gold
+      apy: '8.4%',
+      desc: 'Physical gold tokenized and liquified for instant transfers',
+      isGold: true
     },
   ];
 
@@ -552,25 +747,11 @@ const Forge = () => {
                         backgroundColor: `${asset.color}15`,
                       }}
                     >
-                      {asset.isGold ? (
-                        <img
-                          src="https://oejgkvftpbinliuopipr.supabase.co/storage/v1/object/public/assets/user_347995964/edit-photo-1770465193-8728.svg?"
-                          alt="Gold"
-                          className="w-10 h-10 object-contain"
-                        />
-                      ) : asset.isEth ? (
-                        <img
-                          src="https://oejgkvftpbinliuopipr.supabase.co/storage/v1/object/public/assets/user_347995964/edit-photo-1770465194-5940.svg?"
-                          alt="Ethereum"
-                          className="w-10 h-10 object-contain"
-                        />
-                      ) : (
-                        <SafeIcon
-                          name={asset.icon}
-                          size={40}
-                          color={asset.color}
-                        />
-                      )}
+                      <SafeIcon
+                        name={asset.icon}
+                        size={40}
+                        color={asset.color}
+                      />
                     </div>
                     <div className="text-right">
                       <div className="font-mono text-xs text-[#E5E5E5]/40 tracking-widest uppercase">Symbol</div>
@@ -1089,7 +1270,7 @@ const Footer = () => {
 };
 
 // Navigation - Hide on scroll down, show on scroll up
-const Navigation = () => {
+const Navigation = ({ onLaunchAppClick }) => {
   const [scrolled, setScrolled] = useState(false);
   const [hidden, setHidden] = useState(false);
   const lastScrollY = useRef(0);
@@ -1147,7 +1328,10 @@ const Navigation = () => {
           ))}
         </div>
 
-        <button className="bg-[#FF4D00] hover:bg-[#ff6a2b] text-[#050505] px-6 py-2 rounded-full font-mono font-bold text-sm transition-all">
+        <button
+          onClick={onLaunchAppClick}
+          className="bg-[#FF4D00] hover:bg-[#ff6a2b] text-[#050505] px-6 py-2 rounded-full font-mono font-bold text-sm transition-all"
+        >
           Launch App
         </button>
       </div>
@@ -1157,12 +1341,34 @@ const Navigation = () => {
 
 // Main App Component
 function App() {
+  const [transmuteModalOpen, setTransmuteModalOpen] = useState(false);
+  const [selectedAsset, setSelectedAsset] = useState(null);
+  const [appModalOpen, setAppModalOpen] = useState(false);
+
+  const handleTransmuteClick = (asset) => {
+    setSelectedAsset(asset);
+    setTransmuteModalOpen(true);
+  };
+
+  const handleCloseTransmuteModal = () => {
+    setTransmuteModalOpen(false);
+    setSelectedAsset(null);
+  };
+
+  const handleLaunchAppClick = () => {
+    setAppModalOpen(true);
+  };
+
+  const handleCloseAppModal = () => {
+    setAppModalOpen(false);
+  };
+
   return (
     <div className="min-h-screen bg-[#050505] text-[#E5E5E5] overflow-x-hidden">
       <CustomCursor />
       <div className="grainy-noise" />
 
-      <Navigation />
+      <Navigation onLaunchAppClick={handleLaunchAppClick} />
 
       <section id="hero" className="relative min-h-screen flex flex-col items-center justify-center pt-20 overflow-hidden">
         <MercurySphere />
@@ -1190,7 +1396,7 @@ function App() {
       </section>
 
       <section id="vault">
-        <AlchemicalVault />
+        <AlchemicalVault onTransmuteClick={handleTransmuteClick} />
       </section>
 
       <section id="forge">
@@ -1210,6 +1416,17 @@ function App() {
       </section>
 
       <Footer />
+
+      {/* Modals */}
+      <TransmuteModal
+        isOpen={transmuteModalOpen}
+        onClose={handleCloseTransmuteModal}
+        asset={selectedAsset}
+      />
+      <AppComingSoonModal
+        isOpen={appModalOpen}
+        onClose={handleCloseAppModal}
+      />
     </div>
   );
 }
