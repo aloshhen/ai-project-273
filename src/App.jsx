@@ -44,53 +44,100 @@ const SafeIcon = ({ name, size = 24, className, color }) => {
   return <IconComponent size={size} className={className} color={color} />;
 };
 
-// SECTION 1: HERO - The Singularity
-const MercurySphere = () => {
-  const [velocity, setVelocity] = useState(0);
-  const [isSplatter, setIsSplatter] = useState(false);
-  const lastMousePos = useRef({ x: 0, y: 0 });
-  const lastTime = useRef(Date.now());
-  const sphereRef = useRef(null);
+// Custom Cursor Component (Edit #7)
+const CustomCursor = () => {
+  const [position, setPosition] = useState({ x: 0, y: 0 });
+  const [cursorClass, setCursorClass] = useState('');
 
   useEffect(() => {
     const handleMouseMove = (e) => {
-      const now = Date.now();
-      const dt = now - lastTime.current;
+      setPosition({ x: e.clientX, y: e.clientY });
 
-      if (dt > 50) {
-        const dx = e.clientX - lastMousePos.current.x;
-        const dy = e.clientY - lastMousePos.current.y;
-        const distance = Math.sqrt(dx * dx + dy * dy);
-        const vel = distance / dt;
+      // Check element under cursor for color context
+      const element = document.elementFromPoint(e.clientX, e.clientY);
+      if (element) {
+        const computedStyle = window.getComputedStyle(element);
+        const bgColor = computedStyle.backgroundColor;
+        const color = computedStyle.color;
 
-        setVelocity(vel);
+        // Check for specific hover targets
+        const isOrangeElement = element.closest('[data-cursor="orange"]') ||
+                               element.classList.contains('text-[#FF4D00]') ||
+                               element.classList.contains('bg-[#FF4D00]');
+        const isChromeElement = element.closest('[data-cursor="chrome"]') ||
+                                 element.classList.contains('card-chrome');
+        const isDarkElement = element.closest('[data-cursor="dark"]') ||
+                             element.classList.contains('bg-[#E5E5E5]') ||
+                             element.classList.contains('text-[#050505]');
 
-        if (vel > 1.5 && !isSplatter) {
-          setIsSplatter(true);
-          setTimeout(() => setIsSplatter(false), 300);
+        if (isOrangeElement) {
+          setCursorClass('hover-orange');
+        } else if (isChromeElement) {
+          setCursorClass('hover-chrome');
+        } else if (isDarkElement) {
+          setCursorClass('hover-dark');
+        } else {
+          setCursorClass('');
         }
-
-        lastMousePos.current = { x: e.clientX, y: e.clientY };
-        lastTime.current = now;
-      }
-
-      if (sphereRef.current) {
-        const rect = sphereRef.current.getBoundingClientRect();
-        const centerX = rect.left + rect.width / 2;
-        const centerY = rect.top + rect.height / 2;
-        const offsetX = (e.clientX - centerX) / 50;
-        const offsetY = (e.clientY - centerY) / 50;
-
-        sphereRef.current.style.transform = `
-          translate(${offsetX}px, ${offsetY}px)
-          scale(${1 + velocity * 0.05})
-        `;
       }
     };
 
     window.addEventListener('mousemove', handleMouseMove);
     return () => window.removeEventListener('mousemove', handleMouseMove);
-  }, [isSplatter]);
+  }, []);
+
+  return (
+    <div
+      className={cn("custom-cursor", cursorClass)}
+      style={{ left: position.x, top: position.y }}
+    />
+  );
+};
+
+// SECTION 1: HERO - The Singularity (Edit #2 - smoother, Edit #4 - fluid, Edit #5 - 2 rows)
+const MercurySphere = () => {
+  const sphereRef = useRef(null);
+  const mouseRef = useRef({ x: 0, y: 0 });
+  const targetRef = useRef({ x: 0, y: 0 });
+  const rafRef = useRef(null);
+
+  useEffect(() => {
+    const handleMouseMove = (e) => {
+      // Smooth follow with lerp
+      const rect = sphereRef.current?.getBoundingClientRect();
+      if (!rect) return;
+
+      const centerX = rect.left + rect.width / 2;
+      const centerY = rect.top + rect.height / 2;
+
+      targetRef.current = {
+        x: (e.clientX - centerX) / 30,
+        y: (e.clientY - centerY) / 30
+      };
+    };
+
+    const animate = () => {
+      // Smooth interpolation (lerp) for gentle movement
+      mouseRef.current.x += (targetRef.current.x - mouseRef.current.x) * 0.08;
+      mouseRef.current.y += (targetRef.current.y - mouseRef.current.y) * 0.08;
+
+      if (sphereRef.current) {
+        sphereRef.current.style.transform = `
+          translate(${mouseRef.current.x}px, ${mouseRef.current.y}px)
+        `;
+      }
+
+      rafRef.current = requestAnimationFrame(animate);
+    };
+
+    window.addEventListener('mousemove', handleMouseMove);
+    rafRef.current = requestAnimationFrame(animate);
+
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove);
+      cancelAnimationFrame(rafRef.current);
+    };
+  }, []);
 
   return (
     <div className="relative flex items-center justify-center py-20 w-full overflow-visible">
@@ -99,13 +146,7 @@ const MercurySphere = () => {
         animate={{ scale: 1, opacity: 1 }}
         transition={{ duration: 1.5, ease: "easeOut" }}
         ref={sphereRef}
-        className={cn(
-          "mercury-sphere w-64 h-64 md:w-96 md:h-96 animate-morph",
-          isSplatter && "splatter"
-        )}
-        style={{
-          filter: `blur(${Math.min(velocity * 2, 3)}px) contrast(${1 + velocity * 0.1})`
-        }}
+        className="mercury-sphere w-64 h-64 md:w-96 md:h-96 animate-morph"
       />
       <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
         <motion.div
@@ -119,9 +160,10 @@ const MercurySphere = () => {
   );
 };
 
-// SECTION 2: TICKER - The Velocity Tape (REDESIGNED - Faster on mobile)
+// SECTION 2: TICKER - The Velocity Tape (Edit #6 - pause without reset)
 const Ticker = () => {
   const [isPaused, setIsPaused] = useState(false);
+  const tickerRef = useRef(null);
 
   const tickerItems = [
     { label: "AETHER_STABLE", value: "1.0002", change: "+0.02%" },
@@ -139,14 +181,17 @@ const Ticker = () => {
       className="w-full overflow-hidden border-y border-[#FF4D00]/20 bg-[#0a0a0a] py-3"
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
+      data-cursor="orange"
     >
-      <div className={cn(
-        "flex whitespace-nowrap ticker-content",
-        !isPaused && "animate-ticker md:animate-ticker"
-      )} style={{
-        animationPlayState: isPaused ? 'paused' : 'running',
-        animationDuration: window.innerWidth < 768 ? '8s' : '15s'
-      }}>
+      <div
+        ref={tickerRef}
+        className="flex whitespace-nowrap"
+        style={{
+          animation: 'ticker 30s linear infinite',
+          animationPlayState: isPaused ? 'paused' : 'running'
+        }}
+      >
+        {/* Duplicate content for seamless loop */}
         {[...tickerItems, ...tickerItems, ...tickerItems, ...tickerItems].map((item, index) => (
           <div
             key={index}
@@ -218,7 +263,8 @@ const BentoFeatures = () => {
             initial={{ opacity: 0, y: 50 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: index * 0.1 }}
-            className="glass-card rounded-2xl p-8 relative overflow-hidden group min-h-[400px] flex flex-col"
+            className="glass-card rounded-2xl p-8 relative overflow-hidden group min-h-[400px] flex flex-col card-shine"
+            data-cursor="orange"
           >
             <div className="blueprint-overlay absolute inset-0 pointer-events-none" />
 
@@ -255,7 +301,7 @@ const BentoFeatures = () => {
   );
 };
 
-// SECTION 4: THE FORGE - Interactive Asset Melt (REDESIGNED)
+// SECTION 4: THE FORGE - Interactive Asset Melt
 const Forge = () => {
   const [hoveredAsset, setHoveredAsset] = useState(null);
   const [meltProgress, setMeltProgress] = useState({ gold: 0, btc: 0, eth: 0 });
@@ -329,7 +375,8 @@ const Forge = () => {
                 setMeltProgress(prev => ({ ...prev, [asset.id]: 0 }));
               }}
               onMouseMove={(e) => handleMouseMove(e, asset.id)}
-              className="relative group cursor-pointer"
+              className="relative group cursor-pointer card-shine"
+              data-cursor="orange"
             >
               <div className="relative bg-[#0f0f0f] rounded-2xl overflow-hidden border border-[#E5E5E5]/10 hover:border-[#E5E5E5]/30 transition-all duration-500">
                 {/* Melting liquid effect */}
@@ -535,7 +582,7 @@ const Pulse = () => {
   );
 };
 
-// SECTION 6: THE VAULT TIERS - Membership Evolution (80% opacity + gradient on Flare)
+// SECTION 6: THE VAULT TIERS - Membership Evolution (Edit #3 - shine on all cards)
 const VaultTiers = () => {
   const tiers = [
     {
@@ -544,7 +591,8 @@ const VaultTiers = () => {
       apy: '12%',
       features: ['Basic Yield', 'Standard Swaps', 'Community Access'],
       color: '#525252',
-      bgColor: 'from-gray-800 to-gray-900'
+      bgColor: 'from-gray-800 to-gray-900',
+      isIron: true
     },
     {
       name: 'Chrome',
@@ -588,14 +636,15 @@ const VaultTiers = () => {
             <motion.div
               key={tier.name}
               initial={{ opacity: 0, rotateY: -30 }}
-              whileInView={{ opacity: 0.8, rotateY: 0 }}
+              whileInView={{ opacity: 0.9, rotateY: 0 }}
               transition={{ duration: 0.6, delay: index * 0.2 }}
               whileHover={{ rotateY: 10, rotateX: 5, z: 50 }}
               className={cn(
-                "card-3d relative rounded-2xl p-8 overflow-hidden",
+                "card-3d relative rounded-2xl p-8 overflow-hidden card-shine",
                 tier.isChrome ? "card-chrome" : tier.isFlare ? "bg-gradient-to-b from-orange-500 via-orange-600 to-orange-700" : `bg-gradient-to-b ${tier.bgColor}`
               )}
-              style={{ opacity: 0.8 }}
+              style={{ opacity: 0.9 }}
+              data-cursor={tier.isChrome ? "chrome" : tier.isFlare ? "orange" : "dark"}
             >
               {/* Tier Header */}
               <div className="relative z-10 mb-8">
@@ -912,7 +961,7 @@ const Footer = () => {
   );
 };
 
-// Navigation (NO LOGO ICON - text only)
+// Navigation
 const Navigation = () => {
   const [scrolled, setScrolled] = useState(false);
 
@@ -965,12 +1014,15 @@ const Navigation = () => {
 function App() {
   return (
     <div className="min-h-screen bg-[#050505] text-[#E5E5E5] overflow-x-hidden">
-      {/* Grainy Noise Overlay */}
+      {/* Custom Cursor (Edit #7) */}
+      <CustomCursor />
+
+      {/* Grainy Noise Overlay (Edit #1 - finer) */}
       <div className="grainy-noise" />
 
       <Navigation />
 
-      {/* SECTION 1: HERO */}
+      {/* SECTION 1: HERO (Edit #5 - 2 rows) */}
       <section id="hero" className="min-h-screen flex flex-col items-center justify-center pt-20">
         <motion.div
           initial={{ opacity: 0, y: 50 }}
@@ -979,8 +1031,7 @@ function App() {
           className="text-center px-4"
         >
           <h1 className="font-serif text-5xl md:text-8xl lg:text-9xl font-black tracking-tighter mb-4">
-            WEALTH IN<br />
-            <span className="text-[#FF4D00]">CONSTANT</span><br />
+            WEALTH IN <span className="text-[#FF4D00]">CONSTANT</span><br />
             MOTION
           </h1>
           <p className="font-mono text-[#E5E5E5]/60 text-lg md:text-xl max-w-2xl mx-auto mt-8">
@@ -991,7 +1042,7 @@ function App() {
         <MercurySphere />
       </section>
 
-      {/* SECTION 2: TICKER */}
+      {/* SECTION 2: TICKER (Edit #6 - pause without reset) */}
       <Ticker />
 
       {/* SECTION 3: BENTO */}
