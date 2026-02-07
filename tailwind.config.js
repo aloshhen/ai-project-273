@@ -17,6 +17,7 @@ export default {
         'infinite-scroll': 'infinite-scroll 40s linear infinite',
         'infinite-scroll-reverse': 'infinite-scroll-reverse 35s linear infinite',
         'melt': 'melt 0.6s ease-in-out',
+        'icon-spin': 'icon-spin 0.6s ease-in-out',
       },
       keyframes: {
         ticker: {
@@ -59,6 +60,11 @@ export default {
           '50%': { transform: 'scale(0.95) rotate(-5deg)', borderRadius: '60% 40% 60% 40%' },
           '75%': { transform: 'scale(1.05) rotate(3deg)', borderRadius: '40% 60% 40% 60%' },
           '100%': { transform: 'scale(1) rotate(0deg)', borderRadius: '16px' },
+        },
+        'icon-spin': {
+          '0%': { transform: 'rotate(0deg) scale(1)' },
+          '50%': { transform: 'rotate(180deg) scale(1.1)' },
+          '100%': { transform: 'rotate(360deg) scale(1)' },
         },
       },
     },
