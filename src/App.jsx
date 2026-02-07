@@ -187,7 +187,7 @@ const Ticker = () => {
   );
 };
 
-// NEW SECTION: THE ALCHEMICAL VAULT - Infinite horizontal scroll gallery
+// NEW SECTION: THE ALCHEMICAL VAULT - Redesigned cards with right-to-left scroll on desktop
 const AlchemicalVault = () => {
   const assets = [
     {
@@ -206,7 +206,7 @@ const AlchemicalVault = () => {
       color: 'from-orange-400 to-amber-600',
       price: '$67,432.18',
       change: '+8.2%',
-      icon: 'circle'
+      icon: 'bitcoin'
     },
     {
       symbol: 'AU',
@@ -246,12 +246,12 @@ const AlchemicalVault = () => {
     },
   ];
 
-  // Duplicate assets 4 times for seamless infinite scroll
-  const duplicatedAssets = [...assets, ...assets, ...assets, ...assets];
+  // Duplicate assets many times for seamless infinite scroll
+  const duplicatedAssets = [...assets, ...assets, ...assets, ...assets, ...assets, ...assets, ...assets, ...assets];
 
   return (
     <div className="py-20 overflow-hidden">
-      {/* Section Header - Same style as other headings, white color */}
+      {/* Section Header */}
       <div className="container mx-auto px-4 md:px-6 mb-16">
         <motion.div
           initial={{ opacity: 0, y: 50 }}
@@ -260,7 +260,7 @@ const AlchemicalVault = () => {
           className="text-center"
         >
           <h2 className="font-serif text-5xl md:text-8xl font-black text-white tracking-tighter">
-            The Alchemical <span className="text-white">Vault</span>
+            The Alchemical <span className="text-[#FF4D00]">Vault</span>
           </h2>
           <p className="font-mono text-[#E5E5E5]/60 text-lg mt-6 max-w-2xl mx-auto">
             Assets in perpetual motion
@@ -268,11 +268,20 @@ const AlchemicalVault = () => {
         </motion.div>
       </div>
 
-      {/* Infinite Horizontal Scroll */}
-      <div className="relative h-[420px] overflow-hidden">
-        <div className="infinite-scroll-container absolute flex gap-6 items-center h-full px-4">
+      {/* Desktop: Horizontal scroll right-to-left / Mobile: Horizontal scroll */}
+      <div className="relative h-[450px] overflow-hidden hidden lg:block">
+        <div className="vault-scroll-container absolute flex gap-8 items-center h-full px-4">
           {duplicatedAssets.map((asset, index) => (
-            <VaultCard key={`${asset.symbol}-${index}`} asset={asset} />
+            <VaultCardRedesigned key={`${asset.symbol}-${index}`} asset={asset} />
+          ))}
+        </div>
+      </div>
+
+      {/* Mobile: Horizontal scroll container */}
+      <div className="lg:hidden overflow-x-auto pb-4">
+        <div className="flex gap-4 px-4" style={{ width: 'max-content' }}>
+          {assets.map((asset, index) => (
+            <VaultCardRedesigned key={`mobile-${asset.symbol}-${index}`} asset={asset} />
           ))}
         </div>
       </div>
@@ -310,86 +319,114 @@ const AlchemicalVault = () => {
   );
 };
 
-// Vault Card Component for infinite scroll
-const VaultCard = ({ asset }) => {
+// Redesigned Vault Card - Dark, premium, metallic aesthetic
+const VaultCardRedesigned = ({ asset }) => {
   return (
     <motion.div
-      className="relative w-80 h-[400px] flex-shrink-0 group"
-      whileHover={{ scale: 1.02 }}
+      className="relative w-72 h-[400px] flex-shrink-0 group"
+      whileHover={{ y: -10 }}
       transition={{ duration: 0.3 }}
     >
-      <div className="absolute inset-0 glass-card rounded-2xl overflow-hidden transition-all duration-500 group-hover:border-[#FF4D00]">
+      {/* Dark metallic card */}
+      <div className="absolute inset-0 bg-gradient-to-b from-gray-900 to-black rounded-2xl overflow-hidden border border-gray-800 transition-all duration-500 group-hover:border-[#FF4D00]/50">
+
+        {/* Top gradient accent line */}
         <div className={cn(
-          "absolute inset-0 bg-gradient-to-br opacity-10",
+          "absolute top-0 left-0 right-0 h-1 bg-gradient-to-r opacity-60",
           asset.color
         )} />
 
-        <div className="relative h-full flex flex-col justify-between p-6">
-          <div className="flex items-start justify-between">
+        {/* Metallic sheen overlay */}
+        <div className="absolute inset-0 bg-gradient-to-br from-white/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+
+        {/* Content container */}
+        <div className="relative h-full flex flex-col p-6">
+
+          {/* Header with icon and symbol */}
+          <div className="flex items-start justify-between mb-8">
             <div>
-              <div className="font-mono text-[10px] text-gray-600 mb-1">
-                ASSET
+              <div className="font-mono text-[10px] text-gray-600 mb-1 tracking-widest">
+                ASSET_CLASS
               </div>
-              <div className="font-serif text-4xl font-bold text-white">
+              <div className="font-serif text-3xl font-black text-white tracking-tight">
                 {asset.symbol}
               </div>
-              <div className="font-mono text-[10px] text-gray-500 mt-1">
+              <div className="font-mono text-[11px] text-gray-500 mt-1 uppercase tracking-wide">
                 {asset.fullName}
               </div>
             </div>
 
+            {/* Icon container - dark with subtle glow */}
             <div className={cn(
-              "w-14 h-14 rounded-xl bg-gradient-to-br flex items-center justify-center",
+              "w-14 h-14 rounded-xl bg-gradient-to-br flex items-center justify-center border border-white/10 shadow-lg",
               asset.color
             )}>
-              <SafeIcon name={asset.icon} size={24} className="text-white" />
+              <SafeIcon name={asset.icon} size={24} className="text-white drop-shadow-md" />
             </div>
           </div>
 
-          <div className="space-y-2">
-            <div className="flex items-baseline gap-2">
-              <div className="font-mono text-2xl font-bold text-white">
+          {/* Price section */}
+          <div className="mb-6">
+            <div className="font-mono text-[10px] text-gray-600 mb-2 tracking-widest">
+              CURRENT_PRICE
+            </div>
+            <div className="flex items-baseline gap-3">
+              <span className="font-mono text-3xl font-bold text-white tracking-tight">
                 {asset.price}
-              </div>
-              <div className={cn(
-                "font-mono text-sm font-medium",
-                asset.change.startsWith('+') ? 'text-green-400' : 'text-red-400'
+              </span>
+              <span className={cn(
+                "font-mono text-sm font-bold px-2 py-0.5 rounded bg-opacity-20",
+                asset.change.startsWith('+') ? 'text-green-400 bg-green-500' : 'text-red-400 bg-red-500'
               )}>
                 {asset.change}
-              </div>
-            </div>
-
-            <div className="flex gap-[2px] h-12 items-end">
-              {[...Array(20)].map((_, i) => (
-                <motion.div
-                  key={i}
-                  className={cn(
-                    "flex-1 rounded-t bg-gradient-to-t",
-                    asset.color
-                  )}
-                  style={{
-                    height: `${30 + Math.random() * 70}%`,
-                    opacity: 0.6,
-                  }}
-                  initial={{ scaleY: 0 }}
-                  whileInView={{ scaleY: 1 }}
-                  transition={{ delay: i * 0.05, duration: 0.5 }}
-                />
-              ))}
+              </span>
             </div>
           </div>
 
-          <button className="mt-6 w-full py-3 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 hover:border-white/20 transition-all font-mono text-xs tracking-widest text-gray-300 hover:text-white">
-            TRADE_{asset.symbol}
+          {/* Chart visualization */}
+          <div className="flex-1 flex flex-col justify-end">
+            <div className="font-mono text-[10px] text-gray-600 mb-3 tracking-widest">
+              VOLATILITY_INDEX
+            </div>
+            <div className="flex gap-[3px] h-16 items-end">
+              {[...Array(24)].map((_, i) => {
+                const height = 25 + Math.random() * 75;
+                return (
+                  <motion.div
+                    key={i}
+                    className={cn(
+                      "flex-1 rounded-t-sm bg-gradient-to-t opacity-60",
+                      asset.color
+                    )}
+                    style={{ height: `${height}%` }}
+                    initial={{ scaleY: 0 }}
+                    whileInView={{ scaleY: 1 }}
+                    transition={{ delay: i * 0.03, duration: 0.4 }}
+                  />
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Action button */}
+          <button className="mt-6 w-full py-3.5 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 hover:border-[#FF4D00]/30 transition-all duration-300 font-mono text-xs tracking-widest text-gray-400 hover:text-white uppercase">
+            Transmute_{asset.symbol}
           </button>
         </div>
 
-        <div className="absolute top-0 right-0 w-20 h-20 overflow-hidden">
+        {/* Corner decoration */}
+        <div className="absolute bottom-0 right-0 w-24 h-24 overflow-hidden">
           <div className={cn(
-            "absolute top-0 right-0 w-full h-full bg-gradient-to-bl opacity-20",
+            "absolute bottom-0 right-0 w-full h-full bg-gradient-to-tl opacity-10 rounded-tl-full",
             asset.color
           )} />
         </div>
+
+        {/* Hover glow effect */}
+        <div className={cn(
+          "absolute inset-0 opacity-0 group-hover:opacity-20 transition-opacity duration-500 bg-gradient-to-t pointer-events-none",
+          asset.color
+        )} />
       </div>
     </motion.div>
   );
@@ -429,7 +466,7 @@ const BentoFeatures = () => {
         transition={{ duration: 0.8 }}
         className="font-serif text-5xl md:text-8xl font-black text-white mb-16 text-center tracking-tighter"
       >
-        The Alchemical <span className="text-white">Triad</span>
+        The Alchemical <span className="text-[#FF4D00]">Triad</span>
       </motion.h2>
 
       <div className="grid md:grid-cols-3 gap-6">
@@ -477,10 +514,9 @@ const BentoFeatures = () => {
   );
 };
 
-// SECTION 4: THE FORGE - Interactive Asset Melt with glassmorphism like Bento
+// SECTION 4: THE FORGE - Interactive Asset Melt with quick icon rotation, NO gradient highlight
 const Forge = () => {
   const [hoveredAsset, setHoveredAsset] = useState(null);
-  const [meltProgress, setMeltProgress] = useState({ gold: 0, btc: 0, eth: 0 });
 
   const assets = [
     {
@@ -512,15 +548,6 @@ const Forge = () => {
     },
   ];
 
-  const handleMouseMove = (e, assetId) => {
-    if (hoveredAsset === assetId) {
-      const rect = e.currentTarget.getBoundingClientRect();
-      const y = e.clientY - rect.top;
-      const progress = Math.min((y / rect.height) * 100, 100);
-      setMeltProgress(prev => ({ ...prev, [assetId]: progress }));
-    }
-  };
-
   return (
     <div className="py-20 px-4 md:px-6 bg-gradient-to-b from-[#050505] via-[#0a0a0a] to-[#050505]">
       <div className="container mx-auto">
@@ -531,7 +558,7 @@ const Forge = () => {
           className="text-center mb-16"
         >
           <h2 className="font-serif text-5xl md:text-8xl font-black text-white mb-6 tracking-tighter">
-            The <span className="text-white">Forge</span>
+            The <span className="text-[#FF4D00]">Forge</span>
           </h2>
           <p className="font-mono text-[#E5E5E5]/60 text-lg max-w-2xl mx-auto">
             Hard assets turned into liquid opportunities
@@ -546,50 +573,37 @@ const Forge = () => {
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: index * 0.15 }}
               onMouseEnter={() => setHoveredAsset(asset.id)}
-              onMouseLeave={() => {
-                setHoveredAsset(null);
-                setMeltProgress(prev => ({ ...prev, [asset.id]: 0 }));
-              }}
-              onMouseMove={(e) => handleMouseMove(e, asset.id)}
+              onMouseLeave={() => setHoveredAsset(null)}
               className="relative group"
               data-cursor="orange"
             >
-              {/* Glassmorphism card like Bento with blueprint overlay */}
+              {/* Glassmorphism card - NO gradient highlight */}
               <div className="glass-card rounded-2xl overflow-hidden relative min-h-[400px] flex flex-col">
                 <div className="blueprint-overlay absolute inset-0 pointer-events-none" />
 
-                {/* Melt effect */}
-                <div
-                  className="absolute bottom-0 left-0 right-0 transition-all duration-300 ease-out opacity-60 z-0"
-                  style={{
-                    height: `${meltProgress[asset.id]}%`,
-                    background: `linear-gradient(to top, ${asset.color}40, ${asset.color}20, transparent)`,
-                    filter: 'blur(20px)'
-                  }}
-                />
+                {/* NO melt effect gradient - removed as requested */}
 
                 <div className="relative z-10 p-8 flex flex-col flex-1">
                   <div className="flex items-center justify-between mb-6">
+                    {/* Quick rotation on hover - fast animation */}
                     <motion.div
-                      className="w-20 h-20 rounded-2xl flex items-center justify-center"
+                      className="w-20 h-20 rounded-2xl flex items-center justify-center border border-white/10"
                       style={{
                         backgroundColor: `${asset.color}15`,
-                        border: `1px solid ${asset.color}30`
                       }}
-                      animate={hoveredAsset === asset.id ? {
-                        scale: [1, 1.05, 1],
-                        rotate: [0, 360]
-                      } : {}}
-                      transition={{ duration: 2, repeat: hoveredAsset === asset.id ? Infinity : 0, ease: "linear" }}
+                      whileHover={{
+                        rotate: [0, 15, -15, 0],
+                      }}
+                      transition={{
+                        duration: 0.4,
+                        ease: "easeInOut",
+                        repeat: 0
+                      }}
                     >
                       <SafeIcon
                         name={asset.icon}
                         size={40}
                         color={asset.color}
-                        className={cn(
-                          "transition-all duration-300",
-                          hoveredAsset === asset.id && "drop-shadow-lg"
-                        )}
                       />
                     </motion.div>
                     <div className="text-right">
@@ -711,7 +725,7 @@ const Pulse = () => {
           transition={{ duration: 1 }}
         >
           <h2 className="font-serif text-5xl md:text-8xl font-black text-white mb-6 tracking-tighter">
-            The <span className="text-white">Pulse</span>
+            The <span className="text-[#FF4D00]">Pulse</span>
           </h2>
           <p className="font-mono text-[#E5E5E5]/60 text-lg md:text-xl max-w-2xl mx-auto mb-8">
             Heartbeat of the Protocol
@@ -791,7 +805,7 @@ const VaultTiers = () => {
           className="text-center mb-16"
         >
           <h2 className="font-serif text-5xl md:text-8xl font-black text-white mb-6 tracking-tighter">
-            Vault <span className="text-white">Tiers</span>
+            Vault <span className="text-[#FF4D00]">Tiers</span>
           </h2>
           <p className="font-mono text-[#E5E5E5]/60 text-lg">
             Membership Evolution
@@ -917,7 +931,7 @@ const ContactForm = () => {
           className="text-center mb-12"
         >
           <h2 className="font-serif text-5xl md:text-8xl font-black text-white mb-6 tracking-tighter">
-            Initialize <span className="text-white">Contact</span>
+            Initialize <span className="text-[#FF4D00]">Contact</span>
           </h2>
           <p className="font-mono text-[#E5E5E5]/60 text-lg">
             Establish connection with the protocol
@@ -1062,7 +1076,7 @@ const Footer = () => {
           isFlooded ? "text-[#050505]" : "text-white"
         )}>
           JACK INTO<br />
-          <span className={isFlooded ? "text-white" : "text-white"}>
+          <span className={isFlooded ? "text-white" : "text-[#FF4D00]"}>
             AETHER
           </span>
         </h2>
@@ -1189,7 +1203,7 @@ function App() {
           className="relative z-20 text-center px-4"
         >
           <h1 className="font-serif text-5xl md:text-8xl lg:text-9xl font-black text-white tracking-tighter mb-4 drop-shadow-2xl">
-            WEALTH IN <span className="text-white">CONSTANT</span><br />
+            WEALTH IN <span className="text-[#FF4D00]">CONSTANT</span><br />
             MOTION
           </h1>
           <p className="font-mono text-[#E5E5E5]/80 text-lg md:text-xl max-w-2xl mx-auto mt-8 drop-shadow-lg">
