@@ -123,6 +123,7 @@ import {
   Diamond,
   Activity,
   RefreshCw,
+  Flame,
 } from 'lucide-react';
 
 /**
@@ -249,6 +250,7 @@ export const ICON_REGISTRY = {
   'diamond': Diamond,
   'activity': Activity,
   'refresh-cw': RefreshCw,
+  'flame': Flame,
 };
 
 /**
