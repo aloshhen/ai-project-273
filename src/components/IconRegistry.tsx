@@ -114,14 +114,21 @@ import {
   Gift,
   Coffee,
 
-  type LucideIcon
+  // Currency & Crypto
+  Bitcoin,
+  Coins,
+  Circle,
+  Triangle,
+  Hexagon,
+  Diamond,
+  Activity,
 } from 'lucide-react';
 
 /**
  * Icon Registry Map - Maps string keys to actual icon components
  * Only these keys are valid for use with SafeIcon component
  */
-export const ICON_REGISTRY: Record<string, LucideIcon> = {
+export const ICON_REGISTRY = {
   // Basic UI
   'home': Home,
   'menu': Menu,
@@ -231,23 +238,27 @@ export const ICON_REGISTRY: Record<string, LucideIcon> = {
   'trophy': Trophy,
   'gift': Gift,
   'coffee': Coffee,
+
+  // Currency & Crypto
+  'bitcoin': Bitcoin,
+  'coins': Coins,
+  'circle': Circle,
+  'triangle': Triangle,
+  'hexagon': Hexagon,
+  'diamond': Diamond,
+  'activity': Activity,
 };
 
 /**
  * Type-safe icon keys - only these strings are valid
  */
-export type IconKey = keyof typeof ICON_REGISTRY;
-
-/**
- * Get list of all valid icon keys
- */
-export const getValidIconKeys = (): IconKey[] => {
-  return Object.keys(ICON_REGISTRY) as IconKey[];
+export const getValidIconKeys = () => {
+  return Object.keys(ICON_REGISTRY);
 };
 
 /**
  * Check if a string is a valid icon key
  */
-export const isValidIconKey = (key: string): key is IconKey => {
+export const isValidIconKey = (key) => {
   return key in ICON_REGISTRY;
 };
