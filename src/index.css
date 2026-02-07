@@ -249,15 +249,35 @@ button, a, [role="button"], input, textarea, select, .cursor-pointer {
   justify-content: center;
 }
 
-/* Infinite scroll container */
-.infinite-scroll-container {
-  display: flex;
-  width: fit-content;
-  animation: infinite-scroll 40s linear infinite;
+/* Desktop horizontal scroll - right to left */
+@media (min-width: 1024px) {
+  .vault-scroll-container {
+    display: flex;
+    width: fit-content;
+    animation: infinite-scroll-reverse 35s linear infinite;
+  }
+
+  .vault-scroll-container:hover {
+    animation-play-state: paused;
+  }
 }
 
-.infinite-scroll-container:hover {
-  animation-play-state: paused;
+/* Mobile - normal layout */
+@media (max-width: 1023px) {
+  .vault-scroll-container {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    gap: 1.5rem;
+    padding: 0 1rem;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .vault-scroll-container::-webkit-scrollbar {
+    display: none;
+  }
 }
 
 /* Reduced Motion */
@@ -268,7 +288,8 @@ button, a, [role="button"], input, textarea, select, .cursor-pointer {
     transition-duration: 0.01ms !important;
   }
 
-  .infinite-scroll-container {
+  .infinite-scroll-container,
+  .vault-scroll-container {
     animation: none;
   }
 }
