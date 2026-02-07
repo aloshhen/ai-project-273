@@ -41,6 +41,29 @@ const EthereumIcon = ({ className }) => (
   </svg>
 );
 
+// Gold SVG Icon Component - Metallic coin style matching Ethereum icon aesthetic
+const GoldIcon = ({ className }) => (
+  <svg
+    viewBox="0 0 32 32"
+    className={className}
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <circle cx="16" cy="16" r="15" stroke="currentColor" strokeWidth="2" fill="none" />
+    <text
+      x="16"
+      y="21"
+      textAnchor="middle"
+      fontSize="14"
+      fontWeight="bold"
+      fill="currentColor"
+      fontFamily="JetBrains Mono, monospace"
+    >
+      Au
+    </text>
+  </svg>
+);
+
 // Custom Cursor Component - ALWAYS WHITE, SCALES ON BUTTONS
 const CustomCursor = () => {
   const [position, setPosition] = useState({ x: 0, y: 0 });
@@ -463,7 +486,7 @@ const BentoFeatures = () => {
   );
 };
 
-// SECTION 4: THE ALCHEMICAL VAULT - Fixed semicircle overflow
+// SECTION 4: THE ALCHEMICAL VAULT - Fixed semicircle overflow and button click area
 const AlchemicalVault = ({ onTransmuteClick }) => {
   const assets = [
     {
@@ -489,7 +512,8 @@ const AlchemicalVault = ({ onTransmuteClick }) => {
       fullName: 'Digital Gold',
       price: '$2,145.30',
       change: '+3.1%',
-      icon: 'coins'
+      icon: 'coins',
+      isGold: true
     },
     {
       symbol: 'USD',
@@ -586,7 +610,7 @@ const AlchemicalVault = ({ onTransmuteClick }) => {
   );
 };
 
-// Vault Card - Fixed semicircle overflow (changed -bottom-4 to bottom-0)
+// Vault Card - Fixed semicircle overflow and button click area with pointer-events-none
 const VaultCardNoGlow = ({ asset, onTransmuteClick }) => {
   return (
     <motion.div
@@ -616,10 +640,12 @@ const VaultCardNoGlow = ({ asset, onTransmuteClick }) => {
               </div>
             </div>
 
-            {/* Icon container with Ethereum SVG support */}
+            {/* Icon container with Gold SVG support */}
             <div className="vault-icon-box w-14 h-14 rounded-xl flex items-center justify-center border border-white/10 shadow-lg transition-all duration-500 bg-[#E5E5E5]/5 overflow-hidden">
               {asset.isEthereum ? (
                 <EthereumIcon className="w-8 h-8 text-[#E5E5E5]/60 opacity-60 group-hover:opacity-100 transition-all duration-500 group-hover:text-[#FF4D00]" />
+              ) : asset.isGold ? (
+                <GoldIcon className="w-8 h-8 text-[#E5E5E5]/60 opacity-60 group-hover:opacity-100 transition-all duration-500 group-hover:text-[#FF4D00]" />
               ) : asset.isSolana ? (
                 <img
                   src="https://oejgkvftpbinliuopipr.supabase.co/storage/v1/object/public/assets/user_347995964/edit-photo-1770465203-5802.svg?"
@@ -676,14 +702,14 @@ const VaultCardNoGlow = ({ asset, onTransmuteClick }) => {
 
           <button
             onClick={() => onTransmuteClick(asset)}
-            className="mt-6 w-full py-3.5 rounded-lg bg-white/5 hover:bg-[#FF4D00]/20 border border-white/10 hover:border-[#FF4D00]/50 transition-all duration-300 font-mono text-xs tracking-widest text-[#E5E5E5]/60 hover:text-white uppercase"
+            className="mt-6 w-full py-3.5 rounded-lg bg-white/5 hover:bg-[#FF4D00]/20 border border-white/10 hover:border-[#FF4D00]/50 transition-all duration-300 font-mono text-xs tracking-widest text-[#E5E5E5]/60 hover:text-white uppercase relative z-20"
           >
             Transmute_{asset.symbol}
           </button>
         </div>
 
-        {/* Fixed semicircle - changed from -bottom-4 to bottom-0 to stay inside card */}
-        <div className="absolute bottom-0 right-0 w-24 h-24 overflow-hidden opacity-0 group-hover:opacity-20 transition-opacity duration-500">
+        {/* Fixed semicircle - Added pointer-events-none to allow button clicks through */}
+        <div className="absolute bottom-0 right-0 w-24 h-24 overflow-hidden opacity-0 group-hover:opacity-20 transition-opacity duration-500 pointer-events-none z-0">
           <div className="absolute bottom-0 right-0 w-full h-full bg-gradient-to-tl from-[#FF4D00] to-[#ff6a2b] rounded-tl-full" />
         </div>
       </div>
@@ -716,7 +742,7 @@ const Forge = () => {
       title: 'Digital Gold',
       description: 'Physical gold tokenized and liquified for instant transfers. Dynamic yield optimization across 47 protocols, compounding every block.',
       blueprint: 'PAXG_V1 // GOLD_BACKED // ASSET_TOKENIZATION',
-      icon: 'coins',
+      isGold: true,
     },
   ];
 
@@ -762,6 +788,8 @@ const Forge = () => {
                 <div className="w-14 h-14 rounded-xl flex items-center justify-center border border-white/10 bg-[#E5E5E5]/5 ml-4 flex-shrink-0 overflow-hidden">
                   {asset.isEthereum ? (
                     <EthereumIcon className="w-8 h-8 text-[#E5E5E5]/60 group-hover:text-[#FF4D00] transition-colors duration-500" />
+                  ) : asset.isGold ? (
+                    <GoldIcon className="w-8 h-8 text-[#E5E5E5]/60 group-hover:text-[#FF4D00] transition-colors duration-500" />
                   ) : (
                     <SafeIcon
                       name={asset.icon}
