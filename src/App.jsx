@@ -757,7 +757,7 @@ const BentoFeatures = () => {
             initial={{ opacity: 0, y: 50 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: index * 0.1 }}
-            className="glass-card rounded-2xl p-8 relative overflow-hidden group min-h-[340px] flex flex-col"
+            className="glass-card rounded-2xl p-8 relative overflow-hidden group min-h-[290px] flex flex-col"
             data-cursor="orange"
           >
             <div className="blueprint-overlay absolute inset-0 pointer-events-none rounded-2xl" />
