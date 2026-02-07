@@ -15,6 +15,7 @@ export default {
         'shimmer': 'shimmer 2s linear infinite',
         'wave': 'wave 3s ease-in-out infinite',
         'infinite-scroll': 'infinite-scroll 40s linear infinite',
+        'infinite-scroll-reverse': 'infinite-scroll-reverse 35s linear infinite',
       },
       keyframes: {
         ticker: {
@@ -46,6 +47,10 @@ export default {
         'infinite-scroll': {
           '0%': { transform: 'translateX(0)' },
           '100%': { transform: 'translateX(-50%)' },
+        },
+        'infinite-scroll-reverse': {
+          '0%': { transform: 'translateX(-50%)' },
+          '100%': { transform: 'translateX(0)' },
         },
       },
     },
