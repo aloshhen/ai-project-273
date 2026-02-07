@@ -252,7 +252,7 @@ const BentoFeatures = () => {
   );
 };
 
-// SECTION 4: THE ALCHEMICAL VAULT - Updated with overflow visible for glow
+// SECTION 4: THE ALCHEMICAL VAULT - Updated with glow effect like Bento cards
 const AlchemicalVault = () => {
   const assets = [
     {
@@ -293,7 +293,8 @@ const AlchemicalVault = () => {
       fullName: 'Solana',
       price: '$178.45',
       change: '+24.7%',
-      icon: 'zap'
+      icon: 'zap',
+      isSolana: true
     },
     {
       symbol: 'AVAX',
@@ -373,7 +374,7 @@ const AlchemicalVault = () => {
   );
 };
 
-// Vault Card - Orange hover effect, no lift, real currency icons, overflow visible
+// Vault Card - Orange hover effect with glow like Bento cards, no lift
 const VaultCardOrange = ({ asset }) => {
   const [isHovered, setIsHovered] = useState(false);
 
@@ -385,7 +386,7 @@ const VaultCardOrange = ({ asset }) => {
       onMouseLeave={() => setIsHovered(false)}
       style={{ transform: 'none' }}
     >
-      <div className="glass-card absolute inset-0 rounded-2xl overflow-visible transition-all duration-500 group-hover:border-[#FF4D00]/50" style={{ transform: 'none' }}>
+      <div className="glass-card absolute inset-0 rounded-2xl overflow-visible transition-all duration-500" style={{ transform: 'none' }}>
 
         {/* Top gradient accent line - always orange on hover */}
         <div className="vault-top-line absolute -top-px left-4 right-4 h-1 bg-[#E5E5E5]/20 opacity-60 transition-all duration-500 rounded-full" />
@@ -408,12 +409,20 @@ const VaultCardOrange = ({ asset }) => {
             </div>
 
             {/* Icon container - dark by default, orange on hover */}
-            <div className="vault-icon-box w-14 h-14 rounded-xl flex items-center justify-center border border-white/10 shadow-lg transition-all duration-500 bg-[#E5E5E5]/5">
-              <SafeIcon
-                name={asset.icon}
-                size={24}
-                className="vault-icon text-[#E5E5E5]/60 transition-colors duration-500"
-              />
+            <div className="vault-icon-box w-14 h-14 rounded-xl flex items-center justify-center border border-white/10 shadow-lg transition-all duration-500 bg-[#E5E5E5]/5 overflow-hidden">
+              {asset.isSolana ? (
+                <img
+                  src="https://oejgkvftpbinliuopipr.supabase.co/storage/v1/object/public/assets/user_347995964/edit-photo-1770465203-5802.svg?"
+                  alt="Solana"
+                  className="w-8 h-8 object-contain opacity-60 group-hover:opacity-100 transition-opacity duration-500"
+                />
+              ) : (
+                <SafeIcon
+                  name={asset.icon}
+                  size={24}
+                  className="vault-icon text-[#E5E5E5]/60 transition-colors duration-500"
+                />
+              )}
             </div>
           </div>
 
@@ -470,7 +479,7 @@ const VaultCardOrange = ({ asset }) => {
   );
 };
 
-// SECTION 5: THE FORGE - Interactive Asset Melt with subtle icon rotation
+// SECTION 5: THE FORGE - Interactive Asset Melt with SVG icons for Gold and ETH
 const Forge = () => {
   const assets = [
     {
@@ -480,7 +489,8 @@ const Forge = () => {
       icon: 'coins',
       color: '#FFD700',
       apy: '8.4%',
-      desc: 'Physical gold tokenized and liquified for instant transfers'
+      desc: 'Physical gold tokenized and liquified for instant transfers',
+      isGold: true
     },
     {
       id: 'btc',
@@ -489,7 +499,8 @@ const Forge = () => {
       icon: 'bitcoin',
       color: '#F7931A',
       apy: '12.1%',
-      desc: 'Bitcoin unleashed from its blockchain constraints'
+      desc: 'Bitcoin unleashed from its blockchain constraints',
+      isBtc: false
     },
     {
       id: 'eth',
@@ -498,7 +509,8 @@ const Forge = () => {
       icon: 'diamond',
       color: '#627EEA',
       apy: '15.7%',
-      desc: 'Staked ETH that flows like water through DeFi'
+      desc: 'Staked ETH that flows like water through DeFi',
+      isEth: true
     },
   ];
 
@@ -535,16 +547,30 @@ const Forge = () => {
                 <div className="relative z-10 p-8 flex flex-col flex-1">
                   <div className="flex items-center justify-between mb-6">
                     <div
-                      className="forge-icon w-20 h-20 rounded-2xl flex items-center justify-center border border-white/10 shadow-lg transition-all duration-500"
+                      className="forge-icon w-20 h-20 rounded-2xl flex items-center justify-center border border-white/10 shadow-lg transition-all duration-500 overflow-hidden"
                       style={{
                         backgroundColor: `${asset.color}15`,
                       }}
                     >
-                      <SafeIcon
-                        name={asset.icon}
-                        size={40}
-                        color={asset.color}
-                      />
+                      {asset.isGold ? (
+                        <img
+                          src="https://oejgkvftpbinliuopipr.supabase.co/storage/v1/object/public/assets/user_347995964/edit-photo-1770465193-8728.svg?"
+                          alt="Gold"
+                          className="w-10 h-10 object-contain"
+                        />
+                      ) : asset.isEth ? (
+                        <img
+                          src="https://oejgkvftpbinliuopipr.supabase.co/storage/v1/object/public/assets/user_347995964/edit-photo-1770465194-5940.svg?"
+                          alt="Ethereum"
+                          className="w-10 h-10 object-contain"
+                        />
+                      ) : (
+                        <SafeIcon
+                          name={asset.icon}
+                          size={40}
+                          color={asset.color}
+                        />
+                      )}
                     </div>
                     <div className="text-right">
                       <div className="font-mono text-xs text-[#E5E5E5]/40 tracking-widest uppercase">Symbol</div>
@@ -1062,15 +1088,32 @@ const Footer = () => {
   );
 };
 
-// Navigation
+// Navigation - Hide on scroll down, show on scroll up
 const Navigation = () => {
   const [scrolled, setScrolled] = useState(false);
+  const [hidden, setHidden] = useState(false);
+  const lastScrollY = useRef(0);
 
   useEffect(() => {
     const handleScroll = () => {
-      setScrolled(window.scrollY > 100);
+      const currentScrollY = window.scrollY;
+
+      // Determine if scrolled past threshold for background
+      setScrolled(currentScrollY > 100);
+
+      // Determine scroll direction for hide/show
+      if (currentScrollY > lastScrollY.current && currentScrollY > 150) {
+        // Scrolling down - hide header
+        setHidden(true);
+      } else {
+        // Scrolling up - show header
+        setHidden(false);
+      }
+
+      lastScrollY.current = currentScrollY;
     };
-    window.addEventListener('scroll', handleScroll);
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
@@ -1083,8 +1126,9 @@ const Navigation = () => {
 
   return (
     <nav className={cn(
-      "fixed top-0 left-0 right-0 z-50 transition-all duration-300 border-b border-transparent",
-      scrolled ? "bg-[#050505]/90 backdrop-blur-md border-[#E5E5E5]/10" : "bg-transparent"
+      "fixed top-0 left-0 right-0 z-50 transition-all duration-500 border-b border-transparent",
+      scrolled ? "bg-[#050505]/90 backdrop-blur-md border-[#E5E5E5]/10" : "bg-transparent",
+      hidden ? "-translate-y-full" : "translate-y-0"
     )}>
       <div className="container mx-auto px-4 md:px-6 py-4 flex items-center justify-between">
         <span className="font-serif text-xl font-bold text-white tracking-tight">
