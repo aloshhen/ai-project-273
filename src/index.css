@@ -17,7 +17,7 @@ body {
   cursor: none;
 }
 
-/* Grainy Noise Background - FINER (Edit #1) */
+/* Grainy Noise Background - INCREASED (Edit #7) */
 .grainy-noise {
   position: fixed;
   top: 0;
@@ -26,10 +26,10 @@ body {
   height: 100%;
   pointer-events: none;
   z-index: 9999;
-  opacity: 0.04;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+  opacity: 0.08;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.6' numOctaves='5' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
   background-repeat: repeat;
-  background-size: 200px 200px;
+  background-size: 150px 150px;
 }
 
 /* Custom Scrollbar */
@@ -46,7 +46,7 @@ body {
   border-radius: 4px;
 }
 
-/* Mercury Sphere Styles - FLUID ONLY (Edit #4) */
+/* Mercury Sphere Styles - LARGER */
 .mercury-sphere {
   background: radial-gradient(circle at 30% 30%, #f5f5f5 0%, #d4d4d4 20%, #a3a3a3 40%, #737373 60%, #525252 80%, #404040 100%);
   box-shadow:
@@ -88,7 +88,7 @@ body {
   opacity: 1;
 }
 
-/* 3D Card Effects with Shine - ALL CARDS (Edit #3) */
+/* 3D Card Effects - NO SHINE (Edit #5) */
 .card-3d {
   transform-style: preserve-3d;
   transition: transform 0.6s ease;
@@ -96,36 +96,6 @@ body {
 
 .card-3d:hover {
   transform: rotateY(10deg) rotateX(5deg) translateZ(20px);
-}
-
-.card-shine {
-  position: relative;
-  overflow: hidden;
-}
-
-.card-shine::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: linear-gradient(
-    105deg,
-    transparent 40%,
-    rgba(255,255,255,0.1) 45%,
-    rgba(255,255,255,0.3) 50%,
-    rgba(255,255,255,0.1) 55%,
-    transparent 60%
-  );
-  transform: translateX(-100%) rotate(0deg);
-  transition: transform 0.8s ease;
-  pointer-events: none;
-  z-index: 10;
-}
-
-.card-shine:hover::before {
-  transform: translateX(100%) rotate(0deg);
 }
 
 /* Chrome card specific */
@@ -188,12 +158,12 @@ body {
   50% { transform: scaleY(1.1) skewX(2deg); }
 }
 
-/* Custom Cursor Styles (Edit #7) */
+/* Custom Cursor Styles - WHITE DOT ALWAYS (Edit #1) */
 .custom-cursor {
   position: fixed;
-  width: 12px;
-  height: 12px;
-  background: #E5E5E5;
+  width: 8px;
+  height: 8px;
+  background: #ffffff;
   border-radius: 50%;
   pointer-events: none;
   z-index: 99999;
@@ -202,24 +172,28 @@ body {
   mix-blend-mode: difference;
 }
 
+/* Dynamic states - remain dot shape */
 .custom-cursor.hover-orange {
   background: #FF4D00;
-  width: 16px;
-  height: 16px;
+  width: 12px;
+  height: 12px;
 }
 
 .custom-cursor.hover-chrome {
-  background: #E5E5E5;
-  width: 20px;
-  height: 20px;
-  border: 2px solid #050505;
+  background: #ffffff;
+  width: 16px;
+  height: 16px;
 }
 
 .custom-cursor.hover-dark {
-  background: #050505;
-  border: 2px solid #E5E5E5;
-  width: 16px;
-  height: 16px;
+  background: #ffffff;
+  width: 12px;
+  height: 12px;
+}
+
+/* Force pointer cursor on all interactive elements to be hidden */
+button, a, [role="button"], input, textarea, select, .cursor-pointer {
+  cursor: none !important;
 }
 
 /* Mobile cursor hide */
@@ -230,11 +204,42 @@ body {
   .custom-cursor {
     display: none;
   }
+  button, a, [role="button"], input, textarea, select, .cursor-pointer {
+    cursor: auto !important;
+  }
 }
 
 /* Mobile Safe Areas */
 .telegram-safe-bottom {
   padding-bottom: max(24px, env(safe-area-inset-bottom));
+}
+
+/* Card gradient border for vault cards */
+.card-gradient-border {
+  background: rgba(255, 255, 255, 0.02);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(229, 229, 229, 0.1);
+  transition: all 0.3s ease;
+}
+
+.card-gradient-border:hover {
+  border-color: rgba(255, 77, 0, 0.5);
+}
+
+/* Chrome text effect */
+.chrome-text {
+  background: linear-gradient(135deg, #e5e5e5 0%, #ffffff 25%, #a3a3a3 50%, #ffffff 75%, #e5e5e5 100%);
+  background-size: 200% 200%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: chrome-shimmer 4s ease-in-out infinite;
+}
+
+@keyframes chrome-shimmer {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
 }
 
 /* Safe Icon Fallback */
