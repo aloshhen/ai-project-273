@@ -116,7 +116,7 @@ const MercurySphere = () => {
   );
 };
 
-// SECTION 2: TICKER - The Velocity Tape (UPDATED - transparent boxes, no lines)
+// SECTION 2: TICKER - The Velocity Tape
 const Ticker = () => {
   const [isPaused, setIsPaused] = useState(false);
 
@@ -252,14 +252,13 @@ const BentoFeatures = () => {
   );
 };
 
-// SECTION 4: THE ALCHEMICAL VAULT - Now with black glass cards like Triad
+// SECTION 4: THE ALCHEMICAL VAULT - Updated with orange hover, no lift
 const AlchemicalVault = () => {
   const assets = [
     {
       symbol: 'ETH',
       name: 'ETHEREUM',
       fullName: 'Ethereum 2.0',
-      color: 'from-purple-500 to-blue-600',
       price: '$3,247.82',
       change: '+12.4%',
       icon: 'diamond'
@@ -268,7 +267,6 @@ const AlchemicalVault = () => {
       symbol: 'BTC',
       name: 'BITCOIN',
       fullName: 'Bitcoin',
-      color: 'from-orange-400 to-amber-600',
       price: '$67,432.18',
       change: '+8.2%',
       icon: 'bitcoin'
@@ -277,16 +275,14 @@ const AlchemicalVault = () => {
       symbol: 'AU',
       name: 'GOLD',
       fullName: 'Digital Gold',
-      color: 'from-yellow-300 to-yellow-600',
       price: '$2,145.30',
       change: '+3.1%',
-      icon: 'hexagon'
+      icon: 'circle'
     },
     {
       symbol: 'USD',
       name: 'DOLLAR',
       fullName: 'USDC Stable',
-      color: 'from-green-400 to-emerald-600',
       price: '$1.00',
       change: '+0.01%',
       icon: 'triangle'
@@ -295,7 +291,6 @@ const AlchemicalVault = () => {
       symbol: 'SOL',
       name: 'SOLANA',
       fullName: 'Solana',
-      color: 'from-purple-400 to-pink-600',
       price: '$178.45',
       change: '+24.7%',
       icon: 'zap'
@@ -304,7 +299,6 @@ const AlchemicalVault = () => {
       symbol: 'AVAX',
       name: 'AVALANCHE',
       fullName: 'Avalanche',
-      color: 'from-red-400 to-red-600',
       price: '$42.18',
       change: '+15.3%',
       icon: 'activity'
@@ -322,7 +316,7 @@ const AlchemicalVault = () => {
           transition={{ duration: 0.8 }}
           className="text-center"
         >
-          <h2 className="font-serif text-5xl md:text-8xl font-black text-white tracking-tighter">
+          <h2 className="font-serif text-5xl md:text-8xl font-black text-white mb-6 tracking-tighter">
             The Alchemical <span className="text-white">Vault</span>
           </h2>
           <p className="font-mono text-[#E5E5E5]/60 text-lg mt-6 max-w-2xl mx-auto">
@@ -334,7 +328,7 @@ const AlchemicalVault = () => {
       <div className="relative h-[450px] overflow-hidden hidden lg:block">
         <div className="vault-scroll-container absolute flex gap-8 items-center h-full px-4">
           {duplicatedAssets.map((asset, index) => (
-            <VaultCardBlack key={`${asset.symbol}-${index}`} asset={asset} />
+            <VaultCardOrange key={`${asset.symbol}-${index}`} asset={asset} />
           ))}
         </div>
       </div>
@@ -342,7 +336,7 @@ const AlchemicalVault = () => {
       <div className="lg:hidden overflow-x-auto pb-4">
         <div className="flex gap-4 px-4" style={{ width: 'max-content' }}>
           {assets.map((asset, index) => (
-            <VaultCardBlack key={`mobile-${asset.symbol}-${index}`} asset={asset} />
+            <VaultCardOrange key={`mobile-${asset.symbol}-${index}`} asset={asset} />
           ))}
         </div>
       </div>
@@ -379,25 +373,21 @@ const AlchemicalVault = () => {
   );
 };
 
-// Vault Card - Black glass style like Triad
-const VaultCardBlack = ({ asset }) => {
+// Vault Card - Orange hover effect, no lift
+const VaultCardOrange = ({ asset }) => {
   const [isHovered, setIsHovered] = useState(false);
 
   return (
     <motion.div
-      className="relative w-72 h-[400px] flex-shrink-0 group"
-      whileHover={{ y: -10 }}
+      className="relative w-72 h-[400px] flex-shrink-0 group vault-card-orange"
       transition={{ duration: 0.3 }}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
       <div className="glass-card absolute inset-0 rounded-2xl overflow-hidden transition-all duration-500 group-hover:border-[#FF4D00]/50">
 
-        {/* Top gradient accent line - gray by default, colored on hover */}
-        <div className={cn(
-          "absolute top-0 left-0 right-0 h-1 transition-all duration-500",
-          isHovered ? `bg-gradient-to-r ${asset.color} opacity-100` : "bg-[#E5E5E5]/20 opacity-60"
-        )} />
+        {/* Top gradient accent line - always orange on hover */}
+        <div className="vault-top-line absolute top-0 left-0 right-0 h-1 bg-[#E5E5E5]/20 opacity-60 transition-all duration-500" />
 
         {/* Metallic sheen overlay */}
         <div className="absolute inset-0 bg-gradient-to-br from-white/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
@@ -408,7 +398,7 @@ const VaultCardBlack = ({ asset }) => {
               <div className="font-mono text-[10px] text-[#E5E5E5]/40 mb-1 tracking-widest">
                 ASSET_CLASS
               </div>
-              <div className="font-serif text-3xl font-black text-white tracking-tight">
+              <div className="font-serif text-3xl font-black text-white tracking-tight vault-title transition-colors duration-500">
                 {asset.symbol}
               </div>
               <div className="font-mono text-[11px] text-[#E5E5E5]/50 mt-1 uppercase tracking-wide">
@@ -416,18 +406,12 @@ const VaultCardBlack = ({ asset }) => {
               </div>
             </div>
 
-            {/* Icon container - dark by default, colored on hover */}
-            <div className={cn(
-              "w-14 h-14 rounded-xl flex items-center justify-center border border-white/10 shadow-lg transition-all duration-500",
-              isHovered ? `bg-gradient-to-br ${asset.color}` : "bg-[#E5E5E5]/5"
-            )}>
+            {/* Icon container - dark by default, orange on hover */}
+            <div className="vault-icon-box w-14 h-14 rounded-xl flex items-center justify-center border border-white/10 shadow-lg transition-all duration-500 bg-[#E5E5E5]/5">
               <SafeIcon
                 name={asset.icon}
                 size={24}
-                className={cn(
-                  "transition-colors duration-500",
-                  isHovered ? "text-white" : "text-[#E5E5E5]/60"
-                )}
+                className="vault-icon text-[#E5E5E5]/60 transition-colors duration-500"
               />
             </div>
           </div>
@@ -459,10 +443,7 @@ const VaultCardBlack = ({ asset }) => {
                 return (
                   <motion.div
                     key={i}
-                    className={cn(
-                      "flex-1 rounded-t-sm transition-all duration-500",
-                      isHovered ? `bg-gradient-to-t opacity-60 ${asset.color}` : "bg-[#E5E5E5]/20 opacity-40"
-                    )}
+                    className="flex-1 rounded-t-sm transition-all duration-500 bg-[#E5E5E5]/20 opacity-40 vault-bars"
                     style={{ height: `${height}%` }}
                     initial={{ scaleY: 0 }}
                     whileInView={{ scaleY: 1 }}
@@ -478,34 +459,24 @@ const VaultCardBlack = ({ asset }) => {
           </button>
         </div>
 
-        <div className={cn(
-          "absolute bottom-0 right-0 w-24 h-24 overflow-hidden transition-opacity duration-500",
-          isHovered ? "opacity-10" : "opacity-0"
-        )}>
-          <div className={cn(
-            "absolute bottom-0 right-0 w-full h-full bg-gradient-to-tl rounded-tl-full",
-            asset.color
-          )} />
+        <div className="absolute bottom-0 right-0 w-24 h-24 overflow-hidden opacity-0 group-hover:opacity-10 transition-opacity duration-500">
+          <div className="absolute bottom-0 right-0 w-full h-full bg-gradient-to-tl from-[#FF4D00] to-[#ff6a2b] rounded-tl-full" />
         </div>
 
-        <div className={cn(
-          "absolute inset-0 bg-gradient-to-t pointer-events-none transition-opacity duration-500",
-          asset.color,
-          isHovered ? "opacity-20" : "opacity-0"
-        )} />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#FF4D00]/20 to-transparent pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
       </div>
     </motion.div>
   );
 };
 
-// SECTION 5: THE FORGE - Interactive Asset Melt (UPDATED - icons trigger on card hover)
+// SECTION 4: THE FORGE - Interactive Asset Melt (UPDATED - icons spin on card hover)
 const Forge = () => {
   const assets = [
     {
       id: 'gold',
       name: 'AETHER_GOLD',
       symbol: 'AU',
-      icon: 'circle',
+      icon: 'coins',
       color: '#FFD700',
       apy: '8.4%',
       desc: 'Physical gold tokenized and liquified for instant transfers'
@@ -563,7 +534,7 @@ const Forge = () => {
                 <div className="relative z-10 p-8 flex flex-col flex-1">
                   <div className="flex items-center justify-between mb-6">
                     <div
-                      className="forge-icon w-20 h-20 rounded-2xl flex items-center justify-center border border-white/10 transition-all duration-500"
+                      className="forge-icon w-20 h-20 rounded-2xl flex items-center justify-center border border-white/10 shadow-lg transition-all duration-500"
                       style={{
                         backgroundColor: `${asset.color}15`,
                       }}
@@ -609,7 +580,7 @@ const Forge = () => {
   );
 };
 
-// SECTION 6: THE PULSE - Heartbeat of the Protocol
+// SECTION 5: THE PULSE - Heartbeat of the Protocol
 const Pulse = () => {
   const containerRef = useRef(null);
   const [ripples, setRipples] = useState([]);
@@ -730,7 +701,7 @@ const Pulse = () => {
   );
 };
 
-// SECTION 7: THE VAULT TIERS - Membership Evolution
+// SECTION 6: THE VAULT TIERS - Membership Evolution (70% opacity)
 const VaultTiers = () => {
   const tiers = [
     {
@@ -784,14 +755,14 @@ const VaultTiers = () => {
             <motion.div
               key={tier.name}
               initial={{ opacity: 0, rotateY: -30 }}
-              whileInView={{ opacity: 0.9, rotateY: 0 }}
+              whileInView={{ opacity: 0.7, rotateY: 0 }}
               transition={{ duration: 0.6, delay: index * 0.2 }}
-              whileHover={{ rotateY: 10, rotateX: 5, z: 50 }}
+              whileHover={{ rotateY: 10, rotateX: 5, z: 50, opacity: 1 }}
               className={cn(
                 "card-3d relative rounded-2xl p-8 overflow-hidden",
                 tier.isChrome ? "card-chrome" : tier.isFlare ? "bg-gradient-to-b from-orange-500 via-orange-600 to-orange-700" : `bg-gradient-to-b ${tier.bgColor}`
               )}
-              style={{ opacity: 0.9 }}
+              style={{ opacity: 0.7 }}
               data-cursor={tier.isChrome ? "chrome" : tier.isFlare ? "orange" : "dark"}
             >
               <div className="relative z-10 mb-8">
@@ -973,7 +944,146 @@ const FAQ = () => {
   );
 };
 
-// SECTION 8: FOOTER - The Core Integration
+// SECTION 7: THE VAULT TIERS - Membership Evolution (70% opacity)
+const VaultTiers = () => {
+  const tiers = [
+    {
+      name: 'Iron',
+      stake: '1,000 AETH',
+      apy: '12%',
+      features: ['Basic Yield', 'Standard Swaps', 'Community Access'],
+      color: '#525252',
+      bgColor: 'from-gray-800 to-gray-900',
+      isIron: true
+    },
+    {
+      name: 'Chrome',
+      stake: '10,000 AETH',
+      apy: '18%',
+      features: ['Enhanced Yield', 'Zero Fees', 'Priority Support', 'Governance Vote'],
+      color: '#E5E5E5',
+      bgColor: 'from-gray-300 to-gray-400',
+      isChrome: true
+    },
+    {
+      name: 'Flare',
+      stake: '100,000 AETH',
+      apy: '27%',
+      features: ['Maximum Yield', 'Negative Fees', 'Dedicated Manager', 'Protocol Revenue Share', 'Early Access'],
+      color: '#FF4D00',
+      bgColor: 'from-orange-500 to-orange-700',
+      isFlare: true
+    }
+  ];
+
+  return (
+    <div className="py-20 px-4 md:px-6">
+      <div className="container mx-auto">
+        <motion.div
+          initial={{ opacity: 0, y: 50 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+          className="text-center mb-16"
+        >
+          <h2 className="font-serif text-5xl md:text-8xl font-black text-white mb-6 tracking-tighter">
+            Vault <span className="text-white">Tiers</span>
+          </h2>
+          <p className="font-mono text-[#E5E5E5]/60 text-lg">
+            Membership Evolution
+          </p>
+        </motion.div>
+
+        <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto" style={{ perspective: '1000px' }}>
+          {tiers.map((tier, index) => (
+            <motion.div
+              key={tier.name}
+              initial={{ opacity: 0, rotateY: -30 }}
+              whileInView={{ opacity: 0.7, rotateY: 0 }}
+              transition={{ duration: 0.6, delay: index * 0.2 }}
+              whileHover={{ rotateY: 10, rotateX: 5, z: 50, opacity: 1 }}
+              className={cn(
+                "card-3d relative rounded-2xl p-8 overflow-hidden",
+                tier.isChrome ? "card-chrome" : tier.isFlare ? "bg-gradient-to-b from-orange-500 via-orange-600 to-orange-700" : `bg-gradient-to-b ${tier.bgColor}`
+              )}
+              style={{ opacity: 0.7 }}
+              data-cursor={tier.isChrome ? "chrome" : tier.isFlare ? "orange" : "dark"}
+            >
+              <div className="relative z-10 mb-8">
+                <h3 className={cn(
+                  "font-serif text-3xl font-black mb-2",
+                  tier.isChrome ? "text-gray-900" : "text-white"
+                )}>
+                  {tier.name}
+                </h3>
+                <div className={cn(
+                  "font-mono text-sm",
+                  tier.isChrome ? "text-gray-700" : tier.isFlare ? "text-white/80" : "text-[#E5E5E5]/60"
+                )}>
+                  Stake: {tier.stake}
+                </div>
+              </div>
+
+              <div className={cn(
+                "relative z-10 inline-block px-6 py-3 rounded-full mb-8 border-2",
+                tier.isChrome
+                  ? "border-gray-900 bg-gray-900/10"
+                  : tier.isFlare
+                    ? "border-white bg-white/20"
+                    : "border-[#FF4D00] bg-[#FF4D00]/10"
+              )}>
+                <span className={cn(
+                  "font-mono text-3xl font-bold",
+                  tier.isChrome ? "text-gray-900" : tier.isFlare ? "text-white" : "text-white"
+                )}>
+                  {tier.apy}
+                </span>
+                <span className={cn(
+                  "font-mono text-sm ml-1",
+                  tier.isChrome ? "text-gray-700" : tier.isFlare ? "text-white/80" : "text-[#FF4D00]/70"
+                )}>
+                  APY
+                </span>
+              </div>
+
+              <ul className="relative z-10 space-y-4">
+                {tier.features.map((feature, i) => (
+                  <li key={i} className={cn(
+                    "flex items-center gap-3 font-mono text-sm",
+                    tier.isChrome ? "text-gray-800" : tier.isFlare ? "text-white/90" : "text-[#E5E5E5]/80"
+                  )}>
+                    <SafeIcon
+                      name="check"
+                      size={16}
+                      className={tier.isChrome ? "text-gray-900" : tier.isFlare ? "text-white" : "text-[#FF4D00]"}
+                    />
+                    {feature}
+                  </li>
+                ))}
+              </ul>
+
+              <button className={cn(
+                "relative z-10 w-full mt-8 py-4 rounded-xl font-mono font-bold transition-all transform hover:scale-105",
+                tier.isChrome
+                  ? "bg-gray-900 text-[#E5E5E5] hover:bg-gray-800"
+                  : tier.isFlare
+                    ? "bg-white text-orange-600 hover:bg-gray-100"
+                    : "bg-[#E5E5E5] text-[#050505] hover:bg-white"
+              )}>
+                Select {tier.name}
+              </button>
+
+              {tier.isChrome && (
+                <div className="absolute inset-0 bg-gradient-to-br from-white/40 via-transparent to-transparent pointer-events-none" />
+              )}
+            </motion.div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// SECTION 8: FOOTER - The Core Integration (darker floating dots)
 const Footer = () => {
   const footerRef = useRef(null);
   const [isFlooded, setIsFlooded] = useState(false);
@@ -1064,12 +1174,13 @@ const Footer = () => {
         </div>
       </motion.div>
 
+      {/* Darker, more visible floating dots */}
       {[...Array(20)].map((_, i) => (
         <motion.div
           key={i}
           className={cn(
-            "absolute w-2 h-2 rounded-full",
-            isFlooded ? "bg-[#050505]/20" : "bg-[#FF4D00]/20"
+            "absolute w-3 h-3 rounded-full",
+            isFlooded ? "floating-dot-dark" : "floating-dot-orange"
           )}
           style={{
             left: `${Math.random() * 100}%`,
@@ -1077,7 +1188,7 @@ const Footer = () => {
           }}
           animate={{
             y: [0, -30, 0],
-            opacity: [0.2, 0.5, 0.2],
+            opacity: [0.4, 0.8, 0.4],
           }}
           transition={{
             duration: 3 + Math.random() * 2,
