@@ -116,7 +116,7 @@ const MercurySphere = () => {
   );
 };
 
-// SECTION 2: TICKER - The Velocity Tape
+// SECTION 2: TICKER - The Velocity Tape (UPDATED - transparent boxes, no lines)
 const Ticker = () => {
   const [isPaused, setIsPaused] = useState(false);
 
@@ -147,9 +147,9 @@ const Ticker = () => {
         {[...tickerItems, ...tickerItems, ...tickerItems, ...tickerItems, ...tickerItems, ...tickerItems].map((item, index) => (
           <div
             key={index}
-            className="flex items-center gap-3 px-6 group"
+            className="flex items-center gap-3 px-6"
           >
-            <div className="flex items-center gap-2 bg-[#FF4D00]/10 border border-[#FF4D00]/20 rounded-lg px-4 py-2 group-hover:bg-[#FF4D00]/20 group-hover:border-[#FF4D00]/40 transition-all">
+            <div className="ticker-item flex items-center gap-2 border border-transparent hover:border-[#FF4D00]/40 rounded-lg px-4 py-2 transition-all duration-300">
               <span className="font-mono text-xs text-[#E5E5E5]/50 tracking-wider uppercase">
                 {item.label}
               </span>
@@ -163,257 +163,10 @@ const Ticker = () => {
                 {item.change}
               </span>
             </div>
-            <span className="text-[#FF4D00]/40 text-lg">|</span>
           </div>
         ))}
       </div>
     </div>
-  );
-};
-
-// SECTION: THE ALCHEMICAL VAULT - Gray cards that reveal color on hover
-const AlchemicalVault = () => {
-  const assets = [
-    {
-      symbol: 'ETH',
-      name: 'ETHEREUM',
-      fullName: 'Ethereum 2.0',
-      color: 'from-purple-500 to-blue-600',
-      price: '$3,247.82',
-      change: '+12.4%',
-      icon: 'diamond'
-    },
-    {
-      symbol: 'BTC',
-      name: 'BITCOIN',
-      fullName: 'Bitcoin',
-      color: 'from-orange-400 to-amber-600',
-      price: '$67,432.18',
-      change: '+8.2%',
-      icon: 'bitcoin'
-    },
-    {
-      symbol: 'AU',
-      name: 'GOLD',
-      fullName: 'Digital Gold',
-      color: 'from-yellow-300 to-yellow-600',
-      price: '$2,145.30',
-      change: '+3.1%',
-      icon: 'hexagon'
-    },
-    {
-      symbol: 'USD',
-      name: 'DOLLAR',
-      fullName: 'USDC Stable',
-      color: 'from-green-400 to-emerald-600',
-      price: '$1.00',
-      change: '+0.01%',
-      icon: 'triangle'
-    },
-    {
-      symbol: 'SOL',
-      name: 'SOLANA',
-      fullName: 'Solana',
-      color: 'from-purple-400 to-pink-600',
-      price: '$178.45',
-      change: '+24.7%',
-      icon: 'zap'
-    },
-    {
-      symbol: 'AVAX',
-      name: 'AVALANCHE',
-      fullName: 'Avalanche',
-      color: 'from-red-400 to-red-600',
-      price: '$42.18',
-      change: '+15.3%',
-      icon: 'activity'
-    },
-  ];
-
-  const duplicatedAssets = [...assets, ...assets, ...assets, ...assets, ...assets, ...assets, ...assets, ...assets];
-
-  return (
-    <div className="py-20 overflow-hidden">
-      <div className="container mx-auto px-4 md:px-6 mb-16">
-        <motion.div
-          initial={{ opacity: 0, y: 50 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          className="text-center"
-        >
-          <h2 className="font-serif text-5xl md:text-8xl font-black text-white tracking-tighter">
-            The Alchemical <span className="text-white">Vault</span>
-          </h2>
-          <p className="font-mono text-[#E5E5E5]/60 text-lg mt-6 max-w-2xl mx-auto">
-            Assets in perpetual motion
-          </p>
-        </motion.div>
-      </div>
-
-      <div className="relative h-[450px] overflow-hidden hidden lg:block">
-        <div className="vault-scroll-container absolute flex gap-8 items-center h-full px-4">
-          {duplicatedAssets.map((asset, index) => (
-            <VaultCardGrayToColor key={`${asset.symbol}-${index}`} asset={asset} />
-          ))}
-        </div>
-      </div>
-
-      <div className="lg:hidden overflow-x-auto pb-4">
-        <div className="flex gap-4 px-4" style={{ width: 'max-content' }}>
-          {assets.map((asset, index) => (
-            <VaultCardGrayToColor key={`mobile-${asset.symbol}-${index}`} asset={asset} />
-          ))}
-        </div>
-      </div>
-
-      <div className="container mx-auto px-4 md:px-6 mt-20">
-        <div className="grid md:grid-cols-3 gap-6 max-w-6xl mx-auto">
-          {[
-            { label: 'TOTAL_LOCKED', value: '$2.4B', subtext: 'Across all assets' },
-            { label: 'YIELD_RATE', value: '12.8%', subtext: 'APY average' },
-            { label: 'LIQUIDITY', value: 'INSTANT', subtext: 'Zero slippage' },
-          ].map((stat, index) => (
-            <motion.div
-              key={stat.label}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: index * 0.1 }}
-              className="card-gradient-border p-6 rounded-xl hover:border-[#FF4D00]/30 transition-all duration-500 group"
-            >
-              <div className="font-mono text-[10px] text-gray-500 mb-2 tracking-widest">
-                {stat.label}
-              </div>
-              <div className="font-serif text-4xl font-bold text-white mb-1 group-hover:text-[#FF4D00] transition-colors">
-                {stat.value}
-              </div>
-              <div className="font-mono text-[10px] text-gray-600">
-                {stat.subtext}
-              </div>
-            </motion.div>
-          ))}
-        </div>
-      </div>
-    </div>
-  );
-};
-
-// Vault Card - Starts GRAY, reveals color on hover
-const VaultCardGrayToColor = ({ asset }) => {
-  const [isHovered, setIsHovered] = useState(false);
-
-  return (
-    <motion.div
-      className="relative w-72 h-[400px] flex-shrink-0 group"
-      whileHover={{ y: -10 }}
-      transition={{ duration: 0.3 }}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-    >
-      <div className="absolute inset-0 bg-gradient-to-b from-gray-800 to-gray-900 rounded-2xl overflow-hidden border border-gray-700 transition-all duration-500 group-hover:border-[#FF4D00]/50">
-
-        {/* Top gradient accent line - gray by default, colored on hover */}
-        <div className={cn(
-          "absolute top-0 left-0 right-0 h-1 transition-all duration-500",
-          isHovered ? `bg-gradient-to-r ${asset.color} opacity-100` : "bg-gray-600 opacity-60"
-        )} />
-
-        {/* Metallic sheen overlay */}
-        <div className="absolute inset-0 bg-gradient-to-br from-white/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-
-        <div className="relative h-full flex flex-col p-6">
-          <div className="flex items-start justify-between mb-8">
-            <div>
-              <div className="font-mono text-[10px] text-gray-600 mb-1 tracking-widest">
-                ASSET_CLASS
-              </div>
-              <div className="font-serif text-3xl font-black text-white tracking-tight">
-                {asset.symbol}
-              </div>
-              <div className="font-mono text-[11px] text-gray-500 mt-1 uppercase tracking-wide">
-                {asset.fullName}
-              </div>
-            </div>
-
-            {/* Icon container - GRAY by default, colored on hover */}
-            <div className={cn(
-              "w-14 h-14 rounded-xl flex items-center justify-center border border-white/10 shadow-lg transition-all duration-500",
-              isHovered ? `bg-gradient-to-br ${asset.color}` : "bg-gray-700"
-            )}>
-              <SafeIcon
-                name={asset.icon}
-                size={24}
-                className={cn(
-                  "transition-colors duration-500",
-                  isHovered ? "text-white" : "text-gray-400"
-                )}
-              />
-            </div>
-          </div>
-
-          <div className="mb-6">
-            <div className="font-mono text-[10px] text-gray-600 mb-2 tracking-widest">
-              CURRENT_PRICE
-            </div>
-            <div className="flex items-baseline gap-3">
-              <span className="font-mono text-3xl font-bold text-white tracking-tight">
-                {asset.price}
-              </span>
-              <span className={cn(
-                "font-mono text-sm font-bold px-2 py-0.5 rounded bg-opacity-20",
-                asset.change.startsWith('+') ? 'text-green-400 bg-green-500' : 'text-red-400 bg-red-500'
-              )}>
-                {asset.change}
-              </span>
-            </div>
-          </div>
-
-          <div className="flex-1 flex flex-col justify-end">
-            <div className="font-mono text-[10px] text-gray-600 mb-3 tracking-widest">
-              VOLATILITY_INDEX
-            </div>
-            <div className="flex gap-[3px] h-16 items-end">
-              {[...Array(24)].map((_, i) => {
-                const height = 25 + Math.random() * 75;
-                return (
-                  <motion.div
-                    key={i}
-                    className={cn(
-                      "flex-1 rounded-t-sm transition-all duration-500",
-                      isHovered ? `bg-gradient-to-t opacity-60 ${asset.color}` : "bg-gray-600 opacity-40"
-                    )}
-                    style={{ height: `${height}%` }}
-                    initial={{ scaleY: 0 }}
-                    whileInView={{ scaleY: 1 }}
-                    transition={{ delay: i * 0.03, duration: 0.4 }}
-                  />
-                );
-              })}
-            </div>
-          </div>
-
-          <button className="mt-6 w-full py-3.5 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 hover:border-[#FF4D00]/30 transition-all duration-300 font-mono text-xs tracking-widest text-gray-400 hover:text-white uppercase">
-            Transmute_{asset.symbol}
-          </button>
-        </div>
-
-        <div className={cn(
-          "absolute bottom-0 right-0 w-24 h-24 overflow-hidden transition-opacity duration-500",
-          isHovered ? "opacity-10" : "opacity-0"
-        )}>
-          <div className={cn(
-            "absolute bottom-0 right-0 w-full h-full bg-gradient-to-tl rounded-tl-full",
-            asset.color
-          )} />
-        </div>
-
-        <div className={cn(
-          "absolute inset-0 bg-gradient-to-t pointer-events-none transition-opacity duration-500",
-          asset.color,
-          isHovered ? "opacity-20" : "opacity-0"
-        )} />
-      </div>
-    </motion.div>
   );
 };
 
@@ -499,10 +252,254 @@ const BentoFeatures = () => {
   );
 };
 
-// SECTION 4: THE FORGE - Interactive Asset Melt
-const Forge = () => {
-  const [hoveredAsset, setHoveredAsset] = useState(null);
+// SECTION 4: THE ALCHEMICAL VAULT - Now with black glass cards like Triad
+const AlchemicalVault = () => {
+  const assets = [
+    {
+      symbol: 'ETH',
+      name: 'ETHEREUM',
+      fullName: 'Ethereum 2.0',
+      color: 'from-purple-500 to-blue-600',
+      price: '$3,247.82',
+      change: '+12.4%',
+      icon: 'diamond'
+    },
+    {
+      symbol: 'BTC',
+      name: 'BITCOIN',
+      fullName: 'Bitcoin',
+      color: 'from-orange-400 to-amber-600',
+      price: '$67,432.18',
+      change: '+8.2%',
+      icon: 'bitcoin'
+    },
+    {
+      symbol: 'AU',
+      name: 'GOLD',
+      fullName: 'Digital Gold',
+      color: 'from-yellow-300 to-yellow-600',
+      price: '$2,145.30',
+      change: '+3.1%',
+      icon: 'hexagon'
+    },
+    {
+      symbol: 'USD',
+      name: 'DOLLAR',
+      fullName: 'USDC Stable',
+      color: 'from-green-400 to-emerald-600',
+      price: '$1.00',
+      change: '+0.01%',
+      icon: 'triangle'
+    },
+    {
+      symbol: 'SOL',
+      name: 'SOLANA',
+      fullName: 'Solana',
+      color: 'from-purple-400 to-pink-600',
+      price: '$178.45',
+      change: '+24.7%',
+      icon: 'zap'
+    },
+    {
+      symbol: 'AVAX',
+      name: 'AVALANCHE',
+      fullName: 'Avalanche',
+      color: 'from-red-400 to-red-600',
+      price: '$42.18',
+      change: '+15.3%',
+      icon: 'activity'
+    },
+  ];
 
+  const duplicatedAssets = [...assets, ...assets, ...assets, ...assets, ...assets, ...assets, ...assets, ...assets];
+
+  return (
+    <div className="py-20 overflow-hidden">
+      <div className="container mx-auto px-4 md:px-6 mb-16">
+        <motion.div
+          initial={{ opacity: 0, y: 50 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+          className="text-center"
+        >
+          <h2 className="font-serif text-5xl md:text-8xl font-black text-white tracking-tighter">
+            The Alchemical <span className="text-white">Vault</span>
+          </h2>
+          <p className="font-mono text-[#E5E5E5]/60 text-lg mt-6 max-w-2xl mx-auto">
+            Assets in perpetual motion
+          </p>
+        </motion.div>
+      </div>
+
+      <div className="relative h-[450px] overflow-hidden hidden lg:block">
+        <div className="vault-scroll-container absolute flex gap-8 items-center h-full px-4">
+          {duplicatedAssets.map((asset, index) => (
+            <VaultCardBlack key={`${asset.symbol}-${index}`} asset={asset} />
+          ))}
+        </div>
+      </div>
+
+      <div className="lg:hidden overflow-x-auto pb-4">
+        <div className="flex gap-4 px-4" style={{ width: 'max-content' }}>
+          {assets.map((asset, index) => (
+            <VaultCardBlack key={`mobile-${asset.symbol}-${index}`} asset={asset} />
+          ))}
+        </div>
+      </div>
+
+      <div className="container mx-auto px-4 md:px-6 mt-20">
+        <div className="grid md:grid-cols-3 gap-6 max-w-6xl mx-auto">
+          {[
+            { label: 'TOTAL_LOCKED', value: '$2.4B', subtext: 'Across all assets' },
+            { label: 'YIELD_RATE', value: '12.8%', subtext: 'APY average' },
+            { label: 'LIQUIDITY', value: 'INSTANT', subtext: 'Zero slippage' },
+          ].map((stat, index) => (
+            <motion.div
+              key={stat.label}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: index * 0.1 }}
+              className="card-gradient-border p-6 rounded-xl hover:border-[#FF4D00]/30 transition-all duration-500 group"
+            >
+              <div className="font-mono text-[10px] text-gray-500 mb-2 tracking-widest">
+                {stat.label}
+              </div>
+              <div className="font-serif text-4xl font-bold text-white mb-1 group-hover:text-[#FF4D00] transition-colors">
+                {stat.value}
+              </div>
+              <div className="font-mono text-[10px] text-gray-600">
+                {stat.subtext}
+              </div>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// Vault Card - Black glass style like Triad
+const VaultCardBlack = ({ asset }) => {
+  const [isHovered, setIsHovered] = useState(false);
+
+  return (
+    <motion.div
+      className="relative w-72 h-[400px] flex-shrink-0 group"
+      whileHover={{ y: -10 }}
+      transition={{ duration: 0.3 }}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
+      <div className="glass-card absolute inset-0 rounded-2xl overflow-hidden transition-all duration-500 group-hover:border-[#FF4D00]/50">
+
+        {/* Top gradient accent line - gray by default, colored on hover */}
+        <div className={cn(
+          "absolute top-0 left-0 right-0 h-1 transition-all duration-500",
+          isHovered ? `bg-gradient-to-r ${asset.color} opacity-100` : "bg-[#E5E5E5]/20 opacity-60"
+        )} />
+
+        {/* Metallic sheen overlay */}
+        <div className="absolute inset-0 bg-gradient-to-br from-white/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+
+        <div className="relative h-full flex flex-col p-6">
+          <div className="flex items-start justify-between mb-8">
+            <div>
+              <div className="font-mono text-[10px] text-[#E5E5E5]/40 mb-1 tracking-widest">
+                ASSET_CLASS
+              </div>
+              <div className="font-serif text-3xl font-black text-white tracking-tight">
+                {asset.symbol}
+              </div>
+              <div className="font-mono text-[11px] text-[#E5E5E5]/50 mt-1 uppercase tracking-wide">
+                {asset.fullName}
+              </div>
+            </div>
+
+            {/* Icon container - dark by default, colored on hover */}
+            <div className={cn(
+              "w-14 h-14 rounded-xl flex items-center justify-center border border-white/10 shadow-lg transition-all duration-500",
+              isHovered ? `bg-gradient-to-br ${asset.color}` : "bg-[#E5E5E5]/5"
+            )}>
+              <SafeIcon
+                name={asset.icon}
+                size={24}
+                className={cn(
+                  "transition-colors duration-500",
+                  isHovered ? "text-white" : "text-[#E5E5E5]/60"
+                )}
+              />
+            </div>
+          </div>
+
+          <div className="mb-6">
+            <div className="font-mono text-[10px] text-[#E5E5E5]/40 mb-2 tracking-widest">
+              CURRENT_PRICE
+            </div>
+            <div className="flex items-baseline gap-3">
+              <span className="font-mono text-3xl font-bold text-white tracking-tight">
+                {asset.price}
+              </span>
+              <span className={cn(
+                "font-mono text-sm font-bold px-2 py-0.5 rounded bg-opacity-20",
+                asset.change.startsWith('+') ? 'text-green-400 bg-green-500' : 'text-red-400 bg-red-500'
+              )}>
+                {asset.change}
+              </span>
+            </div>
+          </div>
+
+          <div className="flex-1 flex flex-col justify-end">
+            <div className="font-mono text-[10px] text-[#E5E5E5]/40 mb-3 tracking-widest">
+              VOLATILITY_INDEX
+            </div>
+            <div className="flex gap-[3px] h-16 items-end">
+              {[...Array(24)].map((_, i) => {
+                const height = 25 + Math.random() * 75;
+                return (
+                  <motion.div
+                    key={i}
+                    className={cn(
+                      "flex-1 rounded-t-sm transition-all duration-500",
+                      isHovered ? `bg-gradient-to-t opacity-60 ${asset.color}` : "bg-[#E5E5E5]/20 opacity-40"
+                    )}
+                    style={{ height: `${height}%` }}
+                    initial={{ scaleY: 0 }}
+                    whileInView={{ scaleY: 1 }}
+                    transition={{ delay: i * 0.03, duration: 0.4 }}
+                  />
+                );
+              })}
+            </div>
+          </div>
+
+          <button className="mt-6 w-full py-3.5 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 hover:border-[#FF4D00]/30 transition-all duration-300 font-mono text-xs tracking-widest text-[#E5E5E5]/60 hover:text-white uppercase">
+            Transmute_{asset.symbol}
+          </button>
+        </div>
+
+        <div className={cn(
+          "absolute bottom-0 right-0 w-24 h-24 overflow-hidden transition-opacity duration-500",
+          isHovered ? "opacity-10" : "opacity-0"
+        )}>
+          <div className={cn(
+            "absolute bottom-0 right-0 w-full h-full bg-gradient-to-tl rounded-tl-full",
+            asset.color
+          )} />
+        </div>
+
+        <div className={cn(
+          "absolute inset-0 bg-gradient-to-t pointer-events-none transition-opacity duration-500",
+          asset.color,
+          isHovered ? "opacity-20" : "opacity-0"
+        )} />
+      </div>
+    </motion.div>
+  );
+};
+
+// SECTION 5: THE FORGE - Interactive Asset Melt (UPDATED - icons trigger on card hover)
+const Forge = () => {
   const assets = [
     {
       id: 'gold',
@@ -557,9 +554,7 @@ const Forge = () => {
               initial={{ opacity: 0, y: 50 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: index * 0.15 }}
-              onMouseEnter={() => setHoveredAsset(asset.id)}
-              onMouseLeave={() => setHoveredAsset(null)}
-              className="relative group"
+              className="relative group forge-card"
               data-cursor="orange"
             >
               <div className="glass-card rounded-2xl overflow-hidden relative min-h-[400px] flex flex-col">
@@ -567,18 +562,10 @@ const Forge = () => {
 
                 <div className="relative z-10 p-8 flex flex-col flex-1">
                   <div className="flex items-center justify-between mb-6">
-                    <motion.div
-                      className="w-20 h-20 rounded-2xl flex items-center justify-center border border-white/10"
+                    <div
+                      className="forge-icon w-20 h-20 rounded-2xl flex items-center justify-center border border-white/10 transition-all duration-500"
                       style={{
                         backgroundColor: `${asset.color}15`,
-                      }}
-                      whileHover={{
-                        rotate: [0, 15, -15, 0],
-                      }}
-                      transition={{
-                        duration: 0.4,
-                        ease: "easeInOut",
-                        repeat: 0
                       }}
                     >
                       <SafeIcon
@@ -586,7 +573,7 @@ const Forge = () => {
                         size={40}
                         color={asset.color}
                       />
-                    </motion.div>
+                    </div>
                     <div className="text-right">
                       <div className="font-mono text-xs text-[#E5E5E5]/40 tracking-widest uppercase">Symbol</div>
                       <div className="font-mono text-lg text-white font-bold">{asset.symbol}</div>
@@ -622,7 +609,7 @@ const Forge = () => {
   );
 };
 
-// SECTION 5: THE PULSE - Heartbeat of the Protocol
+// SECTION 6: THE PULSE - Heartbeat of the Protocol
 const Pulse = () => {
   const containerRef = useRef(null);
   const [ripples, setRipples] = useState([]);
@@ -743,7 +730,7 @@ const Pulse = () => {
   );
 };
 
-// SECTION 6: THE VAULT TIERS - Membership Evolution
+// SECTION 7: THE VAULT TIERS - Membership Evolution
 const VaultTiers = () => {
   const tiers = [
     {
@@ -986,7 +973,7 @@ const FAQ = () => {
   );
 };
 
-// SECTION 7: FOOTER - The Core Integration
+// SECTION 8: FOOTER - The Core Integration
 const Footer = () => {
   const footerRef = useRef(null);
   const [isFlooded, setIsFlooded] = useState(false);
@@ -1133,7 +1120,7 @@ const Navigation = () => {
         </span>
 
         <div className="hidden md:flex items-center gap-8">
-          {['Vault', 'Forge', 'Pulse', 'FAQ'].map((item) => (
+          {['Triad', 'Vault', 'Forge', 'Pulse', 'FAQ'].map((item) => (
             <button
               key={item}
               onClick={() => scrollToSection(item.toLowerCase())}
@@ -1182,12 +1169,12 @@ function App() {
 
       <Ticker />
 
-      <section id="vault">
-        <AlchemicalVault />
+      <section id="triad">
+        <BentoFeatures />
       </section>
 
-      <section id="bento">
-        <BentoFeatures />
+      <section id="vault">
+        <AlchemicalVault />
       </section>
 
       <section id="forge">
