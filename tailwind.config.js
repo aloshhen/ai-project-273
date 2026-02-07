@@ -7,10 +7,10 @@ export default {
         mono: ['JetBrains Mono', 'monospace'],
       },
       animation: {
-        'ticker': 'ticker 15s linear infinite',
-        'ticker-mobile': 'ticker 8s linear infinite',
+        'ticker': 'ticker 30s linear infinite',
+        'ticker-mobile': 'ticker 20s linear infinite',
         'pulse-glow': 'pulse-glow 3s ease-in-out infinite',
-        'morph': 'morph 8s ease-in-out infinite',
+        'morph': 'morph 12s ease-in-out infinite',
         'float': 'float 6s ease-in-out infinite',
         'shimmer': 'shimmer 2s linear infinite',
         'wave': 'wave 3s ease-in-out infinite',
