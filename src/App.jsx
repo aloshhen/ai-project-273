@@ -159,7 +159,7 @@ const TransmuteModal = ({ isOpen, onClose, asset }) => {
   );
 };
 
-// App Coming Soon Modal
+// App Coming Soon Modal - ICON REMOVED
 const AppComingSoonModal = ({ isOpen, onClose }) => {
   const [email, setEmail] = useState('');
   const [submitted, setSubmitted] = useState(false);
@@ -202,10 +202,6 @@ const AppComingSoonModal = ({ isOpen, onClose }) => {
 
           {!submitted ? (
             <>
-              <div className="w-16 h-16 rounded-full bg-[#FF4D00]/20 flex items-center justify-center mx-auto mb-6">
-                <SafeIcon name="zap" size={32} className="text-[#FF4D00]" />
-              </div>
-
               <h3 className="font-serif text-3xl font-bold text-white mb-4 tracking-tight">
                 App in Development
               </h3>
@@ -412,7 +408,7 @@ const BentoFeatures = () => {
             initial={{ opacity: 0, y: 50 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: index * 0.1 }}
-            className="glass-card rounded-2xl p-8 relative overflow-visible group min-h-[400px] flex flex-col"
+            className="glass-card rounded-2xl p-8 relative overflow-hidden group min-h-[400px] flex flex-col"
             data-cursor="orange"
           >
             <div className="blueprint-overlay absolute inset-0 pointer-events-none rounded-2xl" />
@@ -439,7 +435,7 @@ const BentoFeatures = () => {
               </div>
             </div>
 
-            <div className="absolute -bottom-1 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-[#FF4D00] to-transparent opacity-0 group-hover:opacity-100 transition-opacity rounded-b-2xl" />
+            <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-[#FF4D00] to-transparent opacity-0 group-hover:opacity-100 transition-opacity rounded-b-2xl" />
           </motion.div>
         ))}
       </div>
@@ -672,7 +668,7 @@ const VaultCardNoGlow = ({ asset, onTransmuteClick }) => {
   );
 };
 
-// SECTION 5: THE FORGE - Redesigned to match The Alchemical Triad style
+// SECTION 5: THE FORGE - Fixed overflow issue by changing overflow-visible to overflow-hidden
 const Forge = () => {
   const assets = [
     {
@@ -724,7 +720,7 @@ const Forge = () => {
             initial={{ opacity: 0, y: 50 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: index * 0.1 }}
-            className="glass-card rounded-2xl p-8 relative overflow-visible group min-h-[400px] flex flex-col"
+            className="glass-card rounded-2xl p-8 relative overflow-hidden group min-h-[400px] flex flex-col"
             data-cursor="orange"
           >
             <div className="blueprint-overlay absolute inset-0 pointer-events-none rounded-2xl" />
@@ -760,7 +756,7 @@ const Forge = () => {
               </div>
             </div>
 
-            <div className="absolute -bottom-1 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-[#FF4D00] to-transparent opacity-0 group-hover:opacity-100 transition-opacity rounded-b-2xl" />
+            <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-[#FF4D00] to-transparent opacity-0 group-hover:opacity-100 transition-opacity rounded-b-2xl" />
           </motion.div>
         ))}
       </div>
