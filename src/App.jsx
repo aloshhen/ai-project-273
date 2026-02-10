@@ -41,27 +41,13 @@ const EthereumIcon = ({ className }) => (
   </svg>
 );
 
-// Gold SVG Icon Component - Kept for potential other uses
+// Gold SVG Icon Component - Using user provided SVG
 const GoldIcon = ({ className }) => (
-  <svg
-    viewBox="0 0 32 32"
+  <img
+    src="https://oejgkvftpbinliuopipr.supabase.co/storage/v1/object/public/assets/user_347995964/edit-svg-1770684373-9122.svg?"
+    alt="Gold"
     className={className}
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-  >
-    <circle cx="16" cy="16" r="15" stroke="currentColor" strokeWidth="2" fill="none" />
-    <text
-      x="16"
-      y="21"
-      textAnchor="middle"
-      fontSize="14"
-      fontWeight="bold"
-      fill="currentColor"
-      fontFamily="JetBrains Mono, monospace"
-    >
-      Au
-    </text>
-  </svg>
+  />
 );
 
 // Custom Cursor Component - ALWAYS WHITE, SCALES ON BUTTONS
@@ -950,11 +936,7 @@ const VaultCardNoGlow = ({ asset, onTransmuteClick }) => {
               {asset.isEthereum ? (
                 <EthereumIcon className="w-8 h-8 text-[#E5E5E5]/60 opacity-60 group-hover:opacity-100 transition-all duration-500 group-hover:text-[#FF4D00]" />
               ) : asset.isGold ? (
-                <img
-                  src="https://oejgkvftpbinliuopipr.supabase.co/storage/v1/object/public/assets/user_347995964/edit-svg-1770681206-4442.svg?"
-                  alt="Gold"
-                  className="w-8 h-8 object-contain opacity-60 group-hover:opacity-100 transition-all duration-500"
-                />
+                <GoldIcon className="w-8 h-8 opacity-60 group-hover:opacity-100 transition-all duration-500 group-hover:brightness-110" />
               ) : asset.isSolana ? (
                 <img
                   src="https://oejgkvftpbinliuopipr.supabase.co/storage/v1/object/public/assets/user_347995964/edit-photo-1770465203-5802.svg?"
@@ -1098,11 +1080,7 @@ const Forge = () => {
                   {asset.isEthereum ? (
                     <EthereumIcon className="w-8 h-8 text-[#E5E5E5]/60 group-hover:text-[#FF4D00] transition-colors duration-500" />
                   ) : asset.isGold ? (
-                    <img
-                      src="https://oejgkvftpbinliuopipr.supabase.co/storage/v1/object/public/assets/user_347995964/edit-svg-1770681206-4442.svg?"
-                      alt="Gold"
-                      className="w-8 h-8 object-contain opacity-60 group-hover:opacity-100 transition-all duration-500"
-                    />
+                    <GoldIcon className="w-8 h-8 opacity-60 group-hover:opacity-100 transition-all duration-500 group-hover:brightness-110" />
                   ) : (
                     <SafeIcon
                       name={asset.icon}
