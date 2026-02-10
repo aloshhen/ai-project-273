@@ -9,26 +9,6 @@ function cn(...inputs) {
   return twMerge(clsx(inputs));
 }
 
-// Ethereum SVG Icon Component
-const EthereumIcon = ({ className }) => (
-  <svg
-    viewBox="0 0 32 32"
-    className={className}
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-  >
-    <path
-      d="M15.925 23.96l-9.819-5.797L16 32l9.832-13.837-9.907 5.797z"
-      fill="currentColor"
-      fillOpacity="0.8"
-    />
-    <path
-      d="M16 0L6.106 17.467l9.894 5.807 9.907-5.807L16 0zm0 25.03L6.114 19.18 16 32l9.886-12.82-9.886 5.85z"
-      fill="currentColor"
-    />
-  </svg>
-);
-
 // Gold SVG Icon Component - Using user provided SVG with updated URL
 const GoldIcon = ({ className }) => (
   <img
