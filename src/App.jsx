@@ -1,3 +1,4 @@
+import { SafeIcon } from './components/SafeIcon';
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { clsx } from 'clsx';
@@ -7,19 +8,6 @@ import { twMerge } from 'tailwind-merge';
 function cn(...inputs) {
   return twMerge(clsx(inputs));
 }
-
-// Safe Icon Component - renders Lucide icons dynamically
-const SafeIcon = ({ name, size = 24, className, color }) => {
-  import * as LucideIcons from 'lucide-react';
-  const pascalName = name
-    .split('-')
-    .map(part => part.charAt(0).toUpperCase() + part.slice(1))
-    .join('');
-
-  const IconComponent = LucideIcons[pascalName] || LucideIcons.HelpCircle;
-
-  return <IconComponent size={size} className={className} color={color} />;
-};
 
 // Ethereum SVG Icon Component
 const EthereumIcon = ({ className }) => (
@@ -41,10 +29,10 @@ const EthereumIcon = ({ className }) => (
   </svg>
 );
 
-// Gold SVG Icon Component - Using user provided SVG
+// Gold SVG Icon Component - Using user provided SVG with updated URL
 const GoldIcon = ({ className }) => (
   <img
-    src="https://oejgkvftpbinliuopipr.supabase.co/storage/v1/object/public/assets/user_347995964/edit-svg-1770684373-9122.svg?"
+    src="https://oejgkvftpbinliuopipr.supabase.co/storage/v1/object/public/assets/user_347995964/edit-svg-1770688593-9935.svg?"
     alt="Gold"
     className={className}
   />
@@ -252,7 +240,7 @@ const TierSelectionModal = ({ isOpen, onClose, tier }) => {
                         placeholder={minStake.toString()}
                         min={minStake}
                         className={cn(
-                          "w-full px-4 py-4 bg-white/5 border-2 rounded-xl text-white font-mono text-lg placeholder-[#E5E5E5]/30 focus:outline-none transition-all",
+                          "w-full px-4 py-4 bg-white/5 border-2 rounded-xl text-white font-mono text-lg placeholder-[#E5E5E5]/30 focus:outline-none focus:border-[#FF4D00]/50 transition-all",
                           tier.name === 'Chrome'
                             ? "border-[#E5E5E5]/20 focus:border-[#E5E5E5]/50"
                             : "border-[#FF4D00]/20 focus:border-[#FF4D00]/50"
