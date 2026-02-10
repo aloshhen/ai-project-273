@@ -38,10 +38,10 @@ const GoldIcon = ({ className }) => (
   />
 );
 
-// Solana SVG Icon Component - Using user provided SVG
+// Solana SVG Icon Component - Using user provided SVG with NEW URL
 const SolanaIcon = ({ className }) => (
   <img
-    src="https://oejgkvftpbinliuopipr.supabase.co/storage/v1/object/public/assets/user_347995964/edit-svg-1770696222-1781.svg?"
+    src="https://oejgkvftpbinliuopipr.supabase.co/storage/v1/object/public/assets/user_347995964/edit-svg-1770697184-7363.svg?"
     alt="Solana"
     className={className}
   />
