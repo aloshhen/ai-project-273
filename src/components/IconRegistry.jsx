@@ -213,7 +213,7 @@ export const ICON_REGISTRY = {
   'music': Music,
   'mic': Mic,
   'headphones': Headphones,
-  'volume': Volume2,
+  'volume-2': Volume2,
   'play': Play,
   'pause': Pause,
 
