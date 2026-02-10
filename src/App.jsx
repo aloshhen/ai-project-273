@@ -11,40 +11,20 @@ function cn(...inputs) {
 
 // Ethereum SVG Icon Component
 const EthereumIcon = ({ className }) => (
-  <svg
-    viewBox="0 0 32 32"
-    className={className}
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-  >
-    <path
-      d="M15.925 23.96l-9.819-5.797L16 32l9.832-13.837-9.907 5.797z"
-      fill="currentColor"
-      fillOpacity="0.8"
-    />
-    <path
-      d="M16 0L6.106 17.467l9.894 5.807 9.907-5.807L16 0zm0 25.03L6.114 19.18 16 32l9.886-12.82-9.886 5.85z"
-      fill="currentColor"
-    />
+  <svg viewBox="0 0 32 32" className={className} fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M15.925 23.96l-9.819-5.797L16 32l9.832-13.837-9.907 5.797z" fill="currentColor" fillOpacity="0.8" />
+    <path d="M16 0L6.106 17.467l9.894 5.807 9.907-5.807L16 0zm0 25.03L6.114 19.18 16 32l9.886-12.82-9.886 5.85z" fill="currentColor" />
   </svg>
 );
 
 // Gold SVG Icon Component - Using user provided SVG with updated URL
 const GoldIcon = ({ className }) => (
-  <img
-    src="https://oejgkvftpbinliuopipr.supabase.co/storage/v1/object/public/assets/user_347995964/edit-svg-1770689487-6284.svg?"
-    alt="Gold"
-    className={className}
-  />
+  <img src="https://oejgkvftpbinliuopipr.supabase.co/storage/v1/object/public/assets/user_347995964/edit-svg-1770689487-6284.svg?" alt="Gold" className={className} />
 );
 
 // Solana SVG Icon Component - Using user provided SVG with NEW URL
 const SolanaIcon = ({ className }) => (
-  <img
-    src="https://oejgkvftpbinliuopipr.supabase.co/storage/v1/object/public/assets/user_347995964/edit-svg-1770697184-7363.svg?"
-    alt="Solana"
-    className={className}
-  />
+  <img src="https://oejgkvftpbinliuopipr.supabase.co/storage/v1/object/public/assets/user_347995964/edit-svg-1770697184-7363.svg?" alt="Solana" className={className} />
 );
 
 // Custom Cursor Component - ALWAYS WHITE, SCALES ON BUTTONS
@@ -55,13 +35,9 @@ const CustomCursor = () => {
   useEffect(() => {
     const handleMouseMove = (e) => {
       setPosition({ x: e.clientX, y: e.clientY });
-
       const element = document.elementFromPoint(e.clientX, e.clientY);
       if (element) {
-        const isButton = element.closest('button') ||
-                        element.closest('a') ||
-                        element.closest('[role="button"]') ||
-                        element.closest('.cursor-pointer');
+        const isButton = element.closest('button') || element.closest('a') || element.closest('[role="button"]') || element.closest('.cursor-pointer');
         setIsScaled(!!isButton);
       }
     };
@@ -71,10 +47,7 @@ const CustomCursor = () => {
   }, []);
 
   return (
-    <div
-      className={cn("custom-cursor", isScaled && "scaled")}
-      style={{ left: position.x, top: position.y }}
-    />
+    <div className={cn("custom-cursor", isScaled && "scaled")} style={{ left: position.x, top: position.y }} />
   );
 };
 
@@ -219,11 +192,7 @@ const TierSelectionModal = ({ isOpen, onClose, tier }) => {
                             "w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0",
                             tier.name === 'Chrome' ? "bg-[#E5E5E5]/20" : "bg-[#FF4D00]/20"
                           )}>
-                            <SafeIcon
-                              name="check"
-                              size={14}
-                              className={tier.name === 'Chrome' ? "text-[#E5E5E5]" : "text-[#FF4D00]"}
-                            />
+                            <SafeIcon name="check" size={14} className={tier.name === 'Chrome' ? "text-[#E5E5E5]" : "text-[#FF4D00]"} />
                           </div>
                           <span className="font-mono text-sm text-[#E5E5E5]/80">{feature}</span>
                         </motion.div>
@@ -250,9 +219,7 @@ const TierSelectionModal = ({ isOpen, onClose, tier }) => {
                         min={minStake}
                         className={cn(
                           "w-full px-4 py-4 bg-white/5 border-2 rounded-xl text-white font-mono text-lg placeholder-[#E5E5E5]/30 focus:outline-none focus:border-[#FF4D00]/50 transition-all",
-                          tier.name === 'Chrome'
-                            ? "border-[#E5E5E5]/20 focus:border-[#E5E5E5]/50"
-                            : "border-[#FF4D00]/20 focus:border-[#FF4D00]/50"
+                          tier.name === 'Chrome' ? "border-[#E5E5E5]/20 focus:border-[#E5E5E5]/50" : "border-[#FF4D00]/20 focus:border-[#FF4D00]/50"
                         )}
                       />
                       <span className="absolute right-4 top-1/2 -translate-y-1/2 font-mono text-sm text-[#E5E5E5]/40">
@@ -347,11 +314,7 @@ const TierSelectionModal = ({ isOpen, onClose, tier }) => {
                       tier.name === 'Chrome' ? "border-[#E5E5E5] bg-[#E5E5E5]/10" : "border-[#FF4D00] bg-[#FF4D00]/10"
                     )}
                   >
-                    <SafeIcon
-                      name="check"
-                      size={48}
-                      className={tier.name === 'Chrome' ? "text-[#E5E5E5]" : "text-[#FF4D00]"}
-                    />
+                    <SafeIcon name="check" size={48} className={tier.name === 'Chrome' ? "text-[#E5E5E5]" : "text-[#FF4D00]"} />
                   </motion.div>
 
                   <h3 className="font-serif text-3xl font-bold text-white mb-2">
@@ -537,11 +500,9 @@ const AppComingSoonModal = ({ isOpen, onClose }) => {
               <h3 className="font-serif text-3xl font-bold text-white mb-4 tracking-tight">
                 App in Development
               </h3>
-
               <p className="font-mono text-sm text-[#E5E5E5]/60 mb-8 leading-relaxed">
                 The AETHER Protocol app is currently under construction. Join the waitlist to be among the first to access the future of decentralized finance.
               </p>
-
               <form onSubmit={handleSubmit} className="space-y-4">
                 <input
                   type="email"
@@ -666,15 +627,10 @@ const Ticker = () => {
     >
       <div
         className="flex whitespace-nowrap animate-ticker"
-        style={{
-          animationPlayState: isPaused ? 'paused' : 'running'
-        }}
+        style={{ animationPlayState: isPaused ? 'paused' : 'running' }}
       >
         {[...tickerItems, ...tickerItems, ...tickerItems, ...tickerItems, ...tickerItems, ...tickerItems].map((item, index) => (
-          <div
-            key={index}
-            className="flex items-center gap-3 px-6"
-          >
+          <div key={index} className="flex items-center gap-3 px-6">
             <div className="ticker-item flex items-center gap-2 border border-transparent hover:border-[#FF4D00]/40 rounded-lg px-4 py-2 transition-all duration-300">
               <span className="font-mono text-xs text-[#E5E5E5]/50 tracking-wider uppercase">
                 {item.label}
@@ -778,57 +734,12 @@ const BentoFeatures = () => {
 // SECTION 4: THE ALCHEMICAL VAULT
 const AlchemicalVault = ({ onTransmuteClick }) => {
   const assets = [
-    {
-      symbol: 'ETH',
-      name: 'ETHEREUM',
-      fullName: 'Ethereum 2.0',
-      price: '$3,247.82',
-      change: '+12.4%',
-      icon: 'diamond',
-      isEthereum: true
-    },
-    {
-      symbol: 'BTC',
-      name: 'BITCOIN',
-      fullName: 'Bitcoin',
-      price: '$67,432.18',
-      change: '+8.2%',
-      icon: 'bitcoin'
-    },
-    {
-      symbol: 'AU',
-      name: 'GOLD',
-      fullName: 'Digital Gold',
-      price: '$2,145.30',
-      change: '+3.1%',
-      icon: 'coins',
-      isGold: true
-    },
-    {
-      symbol: 'USD',
-      name: 'DOLLAR',
-      fullName: 'USDC Stable',
-      price: '$1.00',
-      change: '+0.01%',
-      icon: 'dollar-sign'
-    },
-    {
-      symbol: 'SOL',
-      name: 'SOLANA',
-      fullName: 'Solana',
-      price: '$178.45',
-      change: '+24.7%',
-      icon: 'zap',
-      isSolana: true
-    },
-    {
-      symbol: 'AVAX',
-      name: 'AVALANCHE',
-      fullName: 'Avalanche',
-      price: '$42.18',
-      change: '+15.3%',
-      icon: 'triangle'
-    },
+    { symbol: 'ETH', name: 'ETHEREUM', fullName: 'Ethereum 2.0', price: '$3,247.82', change: '+12.4%', icon: 'diamond', isEthereum: true },
+    { symbol: 'BTC', name: 'BITCOIN', fullName: 'Bitcoin', price: '$67,432.18', change: '+8.2%', icon: 'bitcoin' },
+    { symbol: 'AU', name: 'GOLD', fullName: 'Digital Gold', price: '$2,145.30', change: '+3.1%', icon: 'coins', isGold: true },
+    { symbol: 'USD', name: 'DOLLAR', fullName: 'USDC Stable', price: '$1.00', change: '+0.01%', icon: 'dollar-sign' },
+    { symbol: 'SOL', name: 'SOLANA', fullName: 'Solana', price: '$178.45', change: '+24.7%', icon: 'zap', isSolana: true },
+    { symbol: 'AVAX', name: 'AVALANCHE', fullName: 'Avalanche', price: '$42.18', change: '+15.3%', icon: 'triangle' },
   ];
 
   const duplicatedAssets = [...assets, ...assets, ...assets, ...assets, ...assets, ...assets, ...assets, ...assets];
@@ -907,7 +818,10 @@ const VaultCardNoGlow = ({ asset, onTransmuteClick }) => {
       transition={{ duration: 0.3 }}
       style={{ transform: 'none' }}
     >
-      <div className="glass-card absolute inset-0 rounded-2xl overflow-hidden transition-all duration-500" style={{ transform: 'none' }}>
+      <div
+        className="glass-card absolute inset-0 rounded-2xl overflow-hidden transition-all duration-500"
+        style={{ transform: 'none' }}
+      >
         {/* Top gradient accent line */}
         <div className="vault-top-line absolute top-0 left-4 right-4 h-1 bg-[#E5E5E5]/20 opacity-60 transition-all duration-500 rounded-full" />
 
@@ -933,15 +847,11 @@ const VaultCardNoGlow = ({ asset, onTransmuteClick }) => {
               {asset.isEthereum ? (
                 <EthereumIcon className="w-8 h-8 text-[#E5E5E5]/60 opacity-60 group-hover:opacity-100 transition-all duration-500 group-hover:text-[#FF4D00]" />
               ) : asset.isGold ? (
-                <GoldIcon className="w-8 h-8 opacity-60 group-hover:opacity-100 transition-all duration-500 group-hover:brightness-110" />
+                <GoldIcon className="w-8 h-8 gold-icon opacity-60 group-hover:opacity-100 transition-all duration-500" />
               ) : asset.isSolana ? (
                 <SolanaIcon className="w-8 h-8 object-contain opacity-60 group-hover:opacity-100 transition-all duration-500 solana-icon" />
               ) : (
-                <SafeIcon
-                  name={asset.icon}
-                  size={24}
-                  className="vault-icon text-[#E5E5E5]/60 transition-colors duration-500"
-                />
+                <SafeIcon name={asset.icon} size={24} className="vault-icon text-[#E5E5E5]/60 transition-colors duration-500" />
               )}
             </div>
           </div>
@@ -1073,13 +983,9 @@ const Forge = () => {
                   {asset.isEthereum ? (
                     <EthereumIcon className="w-8 h-8 text-[#E5E5E5]/60 group-hover:text-[#FF4D00] transition-colors duration-500" />
                   ) : asset.isGold ? (
-                    <GoldIcon className="w-8 h-8 opacity-60 group-hover:opacity-100 transition-all duration-500 group-hover:brightness-110" />
+                    <GoldIcon className="w-8 h-8 gold-icon opacity-60 group-hover:opacity-100 transition-all duration-500" />
                   ) : (
-                    <SafeIcon
-                      name={asset.icon}
-                      size={24}
-                      className="text-[#E5E5E5]/60 group-hover:text-[#FF4D00] transition-colors"
-                    />
+                    <SafeIcon name={asset.icon} size={24} className="text-[#E5E5E5]/60 group-hover:text-[#FF4D00] transition-colors" />
                   )}
                 </div>
               </div>
@@ -1111,6 +1017,7 @@ const Pulse = () => {
 
   const handleClick = (e) => {
     if (!containerRef.current) return;
+
     const rect = containerRef.current.getBoundingClientRect();
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
@@ -1168,11 +1075,7 @@ const Pulse = () => {
         <div
           key={ripple.id}
           className="ripple"
-          style={{
-            left: ripple.x,
-            top: ripple.y,
-            transform: 'translate(-50%, -50%)'
-          }}
+          style={{ left: ripple.x, top: ripple.y, transform: 'translate(-50%, -50%)' }}
         />
       ))}
 
@@ -1283,7 +1186,9 @@ const VaultTiers = ({ onSelectTier }) => {
               whileHover={{ rotateY: 10, rotateX: 5, z: 50 }}
               className={cn(
                 "card-3d relative rounded-2xl p-8 overflow-hidden",
-                tier.isChrome ? "card-chrome" : tier.isFlare ? "bg-gradient-to-b from-orange-500 via-orange-600 to-orange-700" : `bg-gradient-to-b ${tier.bgColor}`
+                tier.isChrome ? "card-chrome" :
+                tier.isFlare ? "bg-gradient-to-b from-orange-500 via-orange-600 to-orange-700" :
+                `bg-gradient-to-b ${tier.bgColor}`
               )}
               data-cursor={tier.isChrome ? "chrome" : tier.isFlare ? "orange" : "dark"}
             >
@@ -1304,11 +1209,9 @@ const VaultTiers = ({ onSelectTier }) => {
 
               <div className={cn(
                 "relative z-10 inline-block px-6 py-3 rounded-full mb-8 border-2",
-                tier.isChrome
-                  ? "border-gray-900 bg-gray-900/10"
-                  : tier.isFlare
-                    ? "border-white bg-white/20"
-                    : "border-[#FF4D00] bg-[#FF4D00]/10"
+                tier.isChrome ? "border-gray-900 bg-gray-900/10" :
+                tier.isFlare ? "border-white bg-white/20" :
+                "border-[#FF4D00] bg-[#FF4D00]/10"
               )}>
                 <span className={cn(
                   "font-mono text-3xl font-bold",
@@ -1330,11 +1233,7 @@ const VaultTiers = ({ onSelectTier }) => {
                     "flex items-center gap-3 font-mono text-sm",
                     tier.isChrome ? "text-gray-800" : tier.isFlare ? "text-white/90" : "text-[#E5E5E5]/80"
                   )}>
-                    <SafeIcon
-                      name="check"
-                      size={16}
-                      className={tier.isChrome ? "text-gray-900" : tier.isFlare ? "text-white" : "text-[#FF4D00]"}
-                    />
+                    <SafeIcon name="check" size={16} className={tier.isChrome ? "text-gray-900" : tier.isFlare ? "text-white" : "text-[#FF4D00]"} />
                     {feature}
                   </li>
                 ))}
@@ -1344,11 +1243,9 @@ const VaultTiers = ({ onSelectTier }) => {
                 onClick={() => onSelectTier(tier)}
                 className={cn(
                   "relative z-10 w-full mt-8 py-4 rounded-xl font-mono font-bold transition-all transform hover:scale-105",
-                  tier.isChrome
-                    ? "bg-gray-900 text-[#E5E5E5] hover:bg-gray-800"
-                    : tier.isFlare
-                      ? "bg-white text-orange-600 hover:bg-gray-100"
-                      : "bg-[#E5E5E5] text-[#050505] hover:bg-white"
+                  tier.isChrome ? "bg-gray-900 text-[#E5E5E5] hover:bg-gray-800" :
+                  tier.isFlare ? "bg-white text-orange-600 hover:bg-gray-100" :
+                  "bg-[#E5E5E5] text-[#050505] hover:bg-white"
                 )}
               >
                 Select {tier.name}
@@ -1424,13 +1321,10 @@ const FAQ = () => {
           className="glass-card rounded-2xl overflow-hidden"
         >
           {faqItems.map((item, index) => (
-            <div
-              key={index}
-              className={cn(
-                "faq-item",
-                openIndex === index && "open"
-              )}
-            >
+            <div key={index} className={cn(
+              "faq-item",
+              openIndex === index && "open"
+            )}>
               <button
                 onClick={() => toggleItem(index)}
                 className="w-full flex items-center justify-between p-6 text-left hover:bg-white/5 transition-colors group"
@@ -1503,16 +1397,8 @@ const Footer = () => {
         "absolute inset-0 pointer-events-none transition-all duration-1000 ease-out",
         isFlooded ? "opacity-100" : "opacity-0"
       )}>
-        <svg
-          className="absolute bottom-0 left-0 right-0 w-full"
-          viewBox="0 0 1440 320"
-          preserveAspectRatio="none"
-        >
-          <path
-            fill="#FF4D00"
-            fillOpacity="1"
-            d="M0,160L48,176C96,192,192,224,288,213.3C384,203,480,149,576,138.7C672,128,768,160,864,181.3C960,203,1056,213,1152,192C1248,171,1344,117,1392,90.7L1440,64L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"
-          />
+        <svg className="absolute bottom-0 left-0 right-0 w-full" viewBox="0 0 1440 320" preserveAspectRatio="none">
+          <path fill="#FF4D00" fillOpacity="1" d="M0,160L48,176C96,192,192,224,288,213.3C384,203,480,149,576,138.7C672,128,768,160,864,181.3C960,203,1056,213,1152,192C1248,171,1344,117,1392,90.7L1440,64L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path>
         </svg>
       </div>
 
@@ -1537,9 +1423,7 @@ const Footer = () => {
           whileTap={{ scale: 0.95 }}
           className={cn(
             "px-12 py-6 rounded-full font-mono text-xl font-bold transition-all duration-300",
-            isFlooded
-              ? "bg-[#050505] text-[#FF4D00] hover:bg-[#1a1a1a]"
-              : "bg-[#FF4D00] text-[#050505] hover:bg-[#ff6a2b]"
+            isFlooded ? "bg-[#050505] text-[#FF4D00] hover:bg-[#1a1a1a]" : "bg-[#FF4D00] text-[#050505] hover:bg-[#ff6a2b]"
           )}
         >
           Initialize Connection
@@ -1710,8 +1594,7 @@ function App() {
           className="relative z-20 text-center px-4"
         >
           <h1 className="font-serif text-5xl md:text-8xl lg:text-9xl font-black text-white tracking-tighter mb-4 drop-shadow-2xl">
-            WEALTH IN <span className="text-white">CONSTANT</span><br />
-            MOTION
+            WEALTH IN <span className="text-white">CONSTANT</span><br /> MOTION
           </h1>
           <p className="font-mono text-[#E5E5E5]/80 text-base md:text-lg lg:text-xl max-w-2xl mx-auto mt-8 drop-shadow-lg px-4">
             The Singularity. A protocol manifesting liquid chrome alchemy into decentralized finance.
