@@ -477,3 +477,21 @@ input[type="range"]::-moz-range-thumb {
   filter: sepia(100%) saturate(500%) hue-rotate(-30deg) brightness(1.1);
   transform: scale(1.05);
 }
+
+/* Mobile modal scroll improvements */
+@media (max-width: 768px) {
+  .glass-card {
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  }
+
+  /* Ensure modals don't overflow on small screens */
+  .max-h-\\[95vh\\] {
+    max-height: 95vh;
+  }
+
+  /* Smaller padding for mobile modals */
+  .glass-card > div {
+    padding: 1rem;
+  }
+}
