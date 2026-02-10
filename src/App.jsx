@@ -51,7 +51,7 @@ const CustomCursor = () => {
   );
 };
 
-// ENHANCED Tier Selection Modal Component with Chrome Alchemy Design
+// ENHANCED Tier Selection Modal Component with Chrome Alchemy Design - MOBILE OPTIMIZED
 const TierSelectionModal = ({ isOpen, onClose, tier }) => {
   const [amount, setAmount] = useState('');
   const [agreed, setAgreed] = useState(false);
@@ -99,7 +99,7 @@ const TierSelectionModal = ({ isOpen, onClose, tier }) => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          className="fixed inset-0 z-[100] flex items-center justify-center p-4 modal-overlay"
+          className="fixed inset-0 z-[100] flex items-center justify-center p-3 md:p-4 modal-overlay overflow-hidden"
           onClick={handleClose}
         >
           <motion.div
@@ -107,14 +107,14 @@ const TierSelectionModal = ({ isOpen, onClose, tier }) => {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.9, y: 40 }}
             transition={{ duration: 0.4, type: "spring", bounce: 0.3 }}
-            className="relative w-full max-w-lg rounded-2xl overflow-hidden"
+            className="relative w-full max-w-lg max-h-[95vh] md:max-h-none overflow-hidden rounded-2xl"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Chrome border glow effect */}
             <div className="absolute inset-0 bg-gradient-to-br from-[#FF4D00] via-transparent to-[#E5E5E5] opacity-20 blur-xl" />
 
             <div className={cn(
-              "relative glass-card rounded-2xl p-8 border-2 overflow-hidden",
+              "relative glass-card rounded-2xl p-4 md:p-8 border-2 overflow-y-auto max-h-[95vh] md:max-h-none",
               tier.name === 'Chrome' ? "border-[#E5E5E5]/30" : "border-[#FF4D00]/30"
             )}>
               {/* Animated background gradient */}
@@ -126,33 +126,33 @@ const TierSelectionModal = ({ isOpen, onClose, tier }) => {
               {/* Close button */}
               <button
                 onClick={handleClose}
-                className="absolute top-4 right-4 w-10 h-10 flex items-center justify-center rounded-full bg-white/5 hover:bg-[#FF4D00]/20 border border-white/10 transition-all z-20 group"
+                className="absolute top-3 right-3 md:top-4 md:right-4 w-8 h-8 md:w-10 md:h-10 flex items-center justify-center rounded-full bg-white/5 hover:bg-[#FF4D00]/20 border border-white/10 transition-all z-20 group"
               >
-                <SafeIcon name="x" size={20} className="text-[#E5E5E5] group-hover:text-[#FF4D00] transition-colors" />
+                <SafeIcon name="x" size={18} className="text-[#E5E5E5] group-hover:text-[#FF4D00] transition-colors md:w-5 md:h-5" />
               </button>
 
               {!isSuccess ? (
                 <div className="relative z-10">
                   {/* Tier Badge */}
-                  <div className="flex items-center gap-3 mb-6">
+                  <div className="flex items-center gap-2 md:gap-3 mb-4 md:mb-6">
                     <div className={cn(
-                      "w-12 h-12 rounded-xl flex items-center justify-center border-2",
+                      "w-10 h-10 md:w-12 md:h-12 rounded-xl flex items-center justify-center border-2 flex-shrink-0",
                       tier.name === 'Chrome' ? "border-[#E5E5E5] bg-gradient-to-br from-gray-200 to-gray-400" :
                       tier.name === 'Flare' ? "border-[#FF4D00] bg-gradient-to-br from-orange-500 to-orange-700" :
                       "border-[#525252] bg-gradient-to-br from-gray-700 to-gray-900"
                     )}>
                       <SafeIcon
                         name={tier.name === 'Flare' ? "flame" : tier.name === 'Chrome' ? "hexagon" : "shield"}
-                        size={24}
-                        className={tier.name === 'Chrome' ? "text-gray-900" : "text-white"}
+                        size={20}
+                        className={cn("md:w-6 md:h-6", tier.name === 'Chrome' ? "text-gray-900" : "text-white")}
                       />
                     </div>
                     <div>
-                      <div className="font-mono text-xs text-[#E5E5E5]/40 tracking-widest uppercase">
+                      <div className="font-mono text-[10px] md:text-xs text-[#E5E5E5]/40 tracking-widest uppercase">
                         Membership Tier
                       </div>
                       <h3 className={cn(
-                        "font-serif text-3xl font-black tracking-tight",
+                        "font-serif text-2xl md:text-3xl font-black tracking-tight",
                         tier.name === 'Chrome' ? "text-[#E5E5E5]" : "text-white"
                       )}>
                         {tier.name}
@@ -161,52 +161,52 @@ const TierSelectionModal = ({ isOpen, onClose, tier }) => {
                   </div>
 
                   {/* APY Display */}
-                  <div className="flex items-center gap-4 mb-8 p-4 rounded-xl bg-white/5 border border-white/10">
+                  <div className="flex items-center gap-3 md:gap-4 mb-4 md:mb-8 p-3 md:p-4 rounded-xl bg-white/5 border border-white/10">
                     <div className={cn(
-                      "text-4xl font-black font-mono",
+                      "text-3xl md:text-4xl font-black font-mono",
                       tier.name === 'Chrome' ? "text-[#E5E5E5]" : "text-[#FF4D00]"
                     )}>
                       {tier.apy}
                     </div>
                     <div className="flex-1">
-                      <div className="font-mono text-sm text-[#E5E5E5]/60">Annual Percentage Yield</div>
-                      <div className="font-mono text-xs text-[#E5E5E5]/40">Auto-compounding every block</div>
+                      <div className="font-mono text-xs md:text-sm text-[#E5E5E5]/60">Annual Percentage Yield</div>
+                      <div className="font-mono text-[10px] md:text-xs text-[#E5E5E5]/40 hidden md:block">Auto-compounding every block</div>
                     </div>
                   </div>
 
                   {/* Benefits List */}
-                  <div className="mb-8">
-                    <div className="font-mono text-xs text-[#E5E5E5]/40 mb-3 tracking-widest uppercase">
+                  <div className="mb-4 md:mb-8">
+                    <div className="font-mono text-[10px] md:text-xs text-[#E5E5E5]/40 mb-2 md:mb-3 tracking-widest uppercase">
                       Tier Privileges
                     </div>
-                    <div className="space-y-3">
+                    <div className="space-y-2 md:space-y-3">
                       {tier.features.map((feature, i) => (
                         <motion.div
                           key={i}
                           initial={{ opacity: 0, x: -20 }}
                           animate={{ opacity: 1, x: 0 }}
                           transition={{ delay: i * 0.1 }}
-                          className="flex items-center gap-3 p-3 rounded-lg bg-white/5 border border-white/5"
+                          className="flex items-center gap-2 md:gap-3 p-2 md:p-3 rounded-lg bg-white/5 border border-white/5"
                         >
                           <div className={cn(
-                            "w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0",
+                            "w-5 h-5 md:w-6 md:h-6 rounded-full flex items-center justify-center flex-shrink-0",
                             tier.name === 'Chrome' ? "bg-[#E5E5E5]/20" : "bg-[#FF4D00]/20"
                           )}>
-                            <SafeIcon name="check" size={14} className={tier.name === 'Chrome' ? "text-[#E5E5E5]" : "text-[#FF4D00]"} />
+                            <SafeIcon name="check" size={12} className={cn("md:w-[14px] md:h-[14px]", tier.name === 'Chrome' ? "text-[#E5E5E5]" : "text-[#FF4D00]")} />
                           </div>
-                          <span className="font-mono text-sm text-[#E5E5E5]/80">{feature}</span>
+                          <span className="font-mono text-xs md:text-sm text-[#E5E5E5]/80">{feature}</span>
                         </motion.div>
                       ))}
                     </div>
                   </div>
 
                   {/* Stake Input */}
-                  <div className="mb-6">
+                  <div className="mb-4 md:mb-6">
                     <div className="flex justify-between mb-2">
-                      <label className="font-mono text-xs text-[#E5E5E5]/60 tracking-wider uppercase">
+                      <label className="font-mono text-[10px] md:text-xs text-[#E5E5E5]/60 tracking-wider uppercase">
                         Stake Amount
                       </label>
-                      <span className="font-mono text-xs text-[#E5E5E5]/40">
+                      <span className="font-mono text-[10px] md:text-xs text-[#E5E5E5]/40">
                         Min: {minStake.toLocaleString()} AETH
                       </span>
                     </div>
@@ -218,26 +218,26 @@ const TierSelectionModal = ({ isOpen, onClose, tier }) => {
                         placeholder={minStake.toString()}
                         min={minStake}
                         className={cn(
-                          "w-full px-4 py-4 bg-white/5 border-2 rounded-xl text-white font-mono text-lg placeholder-[#E5E5E5]/30 focus:outline-none focus:border-[#FF4D00]/50 transition-all",
+                          "w-full px-3 md:px-4 py-3 md:py-4 bg-white/5 border-2 rounded-xl text-white font-mono text-base md:text-lg placeholder-[#E5E5E5]/30 focus:outline-none focus:border-[#FF4D00]/50 transition-all",
                           tier.name === 'Chrome' ? "border-[#E5E5E5]/20 focus:border-[#E5E5E5]/50" : "border-[#FF4D00]/20 focus:border-[#FF4D00]/50"
                         )}
                       />
-                      <span className="absolute right-4 top-1/2 -translate-y-1/2 font-mono text-sm text-[#E5E5E5]/40">
+                      <span className="absolute right-3 md:right-4 top-1/2 -translate-y-1/2 font-mono text-xs md:text-sm text-[#E5E5E5]/40">
                         AETH
                       </span>
                     </div>
                     <div className="flex justify-between mt-2">
-                      <span className="font-mono text-xs text-[#E5E5E5]/30">Balance: 0.00 AETH</span>
+                      <span className="font-mono text-[10px] md:text-xs text-[#E5E5E5]/30">Balance: 0.00 AETH</span>
                       <div className="flex gap-2">
                         <button
                           onClick={() => setAmount(minStake.toString())}
-                          className="font-mono text-xs text-[#FF4D00] hover:text-[#ff6a2b] transition-colors px-2 py-1 rounded bg-white/5"
+                          className="font-mono text-[10px] md:text-xs text-[#FF4D00] hover:text-[#ff6a2b] transition-colors px-2 py-1 rounded bg-white/5"
                         >
                           MIN
                         </button>
                         <button
                           onClick={() => setAmount(maxStake.toString())}
-                          className="font-mono text-xs text-[#FF4D00] hover:text-[#ff6a2b] transition-colors px-2 py-1 rounded bg-white/5"
+                          className="font-mono text-[10px] md:text-xs text-[#FF4D00] hover:text-[#ff6a2b] transition-colors px-2 py-1 rounded bg-white/5"
                         >
                           MAX
                         </button>
@@ -246,16 +246,16 @@ const TierSelectionModal = ({ isOpen, onClose, tier }) => {
                   </div>
 
                   {/* Terms Checkbox */}
-                  <div className="flex items-start gap-3 mb-6 p-3 rounded-lg bg-white/5 border border-white/5">
+                  <div className="flex items-start gap-2 md:gap-3 mb-4 md:mb-6 p-2 md:p-3 rounded-lg bg-white/5 border border-white/5">
                     <input
                       type="checkbox"
                       id="terms"
                       checked={agreed}
                       onChange={(e) => setAgreed(e.target.checked)}
-                      className="mt-1 w-4 h-4 rounded border-[#E5E5E5]/30 bg-transparent text-[#FF4D00] focus:ring-[#FF4D00] focus:ring-offset-0 cursor-pointer"
+                      className="mt-0.5 w-4 h-4 rounded border-[#E5E5E5]/30 bg-transparent text-[#FF4D00] focus:ring-[#FF4D00] focus:ring-offset-0 cursor-pointer flex-shrink-0"
                     />
-                    <label htmlFor="terms" className="font-mono text-xs text-[#E5E5E5]/60 leading-relaxed cursor-pointer">
-                      I understand that staking requires a 30-day lockup period and early withdrawal carries a 5% penalty fee. Smart contract risks apply.
+                    <label htmlFor="terms" className="font-mono text-[10px] md:text-xs text-[#E5E5E5]/60 leading-relaxed cursor-pointer">
+                      I understand that staking requires a 30-day lockup period and early withdrawal carries a 5% penalty fee.
                     </label>
                   </div>
 
@@ -264,7 +264,7 @@ const TierSelectionModal = ({ isOpen, onClose, tier }) => {
                     onClick={handleStake}
                     disabled={!agreed || !amount || parseFloat(amount) < minStake || isLoading}
                     className={cn(
-                      "w-full py-4 rounded-xl font-mono font-bold text-lg transition-all transform relative overflow-hidden group",
+                      "w-full py-3 md:py-4 rounded-xl font-mono font-bold text-base md:text-lg transition-all transform relative overflow-hidden group",
                       agreed && amount && parseFloat(amount) >= minStake && !isLoading
                         ? tier.name === 'Chrome'
                           ? "bg-[#E5E5E5] text-[#050505] hover:bg-white hover:scale-[1.02]"
@@ -275,14 +275,14 @@ const TierSelectionModal = ({ isOpen, onClose, tier }) => {
                     {isLoading ? (
                       <div className="flex items-center justify-center gap-3">
                         <div className={cn(
-                          "w-5 h-5 border-2 border-t-transparent rounded-full animate-spin",
+                          "w-4 h-4 md:w-5 md:h-5 border-2 border-t-transparent rounded-full animate-spin",
                           tier.name === 'Chrome' ? "border-gray-900" : "border-[#050505]"
                         )} />
-                        <span>Processing Transaction...</span>
+                        <span className="text-sm md:text-base">Processing...</span>
                       </div>
                     ) : (
                       <span className="relative z-10 flex items-center justify-center gap-2">
-                        <SafeIcon name="lock" size={18} />
+                        <SafeIcon name="lock" size={16} className="md:w-[18px] md:h-[18px]" />
                         CONFIRM STAKE
                       </span>
                     )}
@@ -294,8 +294,8 @@ const TierSelectionModal = ({ isOpen, onClose, tier }) => {
                   </button>
 
                   {/* Gas Info */}
-                  <p className="text-center font-mono text-[10px] text-[#E5E5E5]/30 mt-4">
-                    Gas fees will be deducted from your wallet • Network: Aether Mainnet
+                  <p className="text-center font-mono text-[9px] md:text-[10px] text-[#E5E5E5]/30 mt-3 md:mt-4">
+                    Gas fees will be deducted • Network: Aether Mainnet
                   </p>
                 </div>
               ) : (
@@ -303,37 +303,37 @@ const TierSelectionModal = ({ isOpen, onClose, tier }) => {
                 <motion.div
                   initial={{ opacity: 0, scale: 0.9 }}
                   animate={{ opacity: 1, scale: 1 }}
-                  className="relative z-10 text-center py-8"
+                  className="relative z-10 text-center py-6 md:py-8"
                 >
                   <motion.div
                     initial={{ scale: 0 }}
                     animate={{ scale: 1 }}
                     transition={{ type: "spring", bounce: 0.5 }}
                     className={cn(
-                      "w-24 h-24 rounded-full flex items-center justify-center mx-auto mb-6 border-4",
+                      "w-16 h-16 md:w-24 md:h-24 rounded-full flex items-center justify-center mx-auto mb-4 md:mb-6 border-4",
                       tier.name === 'Chrome' ? "border-[#E5E5E5] bg-[#E5E5E5]/10" : "border-[#FF4D00] bg-[#FF4D00]/10"
                     )}
                   >
-                    <SafeIcon name="check" size={48} className={tier.name === 'Chrome' ? "text-[#E5E5E5]" : "text-[#FF4D00]"} />
+                    <SafeIcon name="check" size={32} className={cn("md:w-12 md:h-12", tier.name === 'Chrome' ? "text-[#E5E5E5]" : "text-[#FF4D00]")} />
                   </motion.div>
 
-                  <h3 className="font-serif text-3xl font-bold text-white mb-2">
+                  <h3 className="font-serif text-2xl md:text-3xl font-bold text-white mb-2">
                     Stake Confirmed
                   </h3>
-                  <p className="font-mono text-sm text-[#E5E5E5]/60 mb-6 max-w-xs mx-auto">
+                  <p className="font-mono text-xs md:text-sm text-[#E5E5E5]/60 mb-4 md:mb-6 max-w-xs mx-auto">
                     You have successfully joined the {tier.name} tier. Your assets are now generating yield.
                   </p>
 
-                  <div className="bg-white/5 rounded-xl p-4 mb-6 border border-white/10">
-                    <div className="font-mono text-xs text-[#E5E5E5]/40 mb-1">TRANSACTION HASH</div>
-                    <div className="font-mono text-xs text-[#FF4D00] truncate">
+                  <div className="bg-white/5 rounded-xl p-3 md:p-4 mb-4 md:mb-6 border border-white/10">
+                    <div className="font-mono text-[10px] md:text-xs text-[#E5E5E5]/40 mb-1">TRANSACTION HASH</div>
+                    <div className="font-mono text-xs md:text-sm text-[#FF4D00] truncate">
                       0x7f8a9b2c...3d4e5f6a
                     </div>
                   </div>
 
                   <button
                     onClick={handleClose}
-                    className="bg-white/10 hover:bg-white/20 text-white px-8 py-3 rounded-lg font-mono font-bold transition-all"
+                    className="bg-white/10 hover:bg-white/20 text-white px-6 md:px-8 py-2.5 md:py-3 rounded-lg font-mono font-bold transition-all text-sm md:text-base"
                   >
                     CLOSE
                   </button>
@@ -347,7 +347,7 @@ const TierSelectionModal = ({ isOpen, onClose, tier }) => {
   );
 };
 
-// Transmute Modal Component
+// Transmute Modal Component - MOBILE OPTIMIZED
 const TransmuteModal = ({ isOpen, onClose, asset }) => {
   const [amount, setAmount] = useState('');
   const [slippage, setSlippage] = useState(0.5);
@@ -360,7 +360,7 @@ const TransmuteModal = ({ isOpen, onClose, asset }) => {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
-        className="fixed inset-0 z-[100] flex items-center justify-center p-4 modal-overlay"
+        className="fixed inset-0 z-[100] flex items-center justify-center p-3 md:p-4 modal-overlay"
         onClick={onClose}
       >
         <motion.div
@@ -368,28 +368,28 @@ const TransmuteModal = ({ isOpen, onClose, asset }) => {
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.95, y: 20 }}
           transition={{ duration: 0.3 }}
-          className="glass-card rounded-2xl p-8 max-w-md w-full relative"
+          className="glass-card rounded-2xl p-5 md:p-8 max-w-md w-full max-h-[90vh] overflow-y-auto relative"
           onClick={(e) => e.stopPropagation()}
         >
           <button
             onClick={onClose}
-            className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-full bg-white/5 hover:bg-[#FF4D00]/20 transition-colors"
+            className="absolute top-3 right-3 md:top-4 md:right-4 w-8 h-8 flex items-center justify-center rounded-full bg-white/5 hover:bg-[#FF4D00]/20 transition-colors"
           >
             <SafeIcon name="x" size={18} className="text-[#E5E5E5]" />
           </button>
 
-          <div className="mb-6">
-            <div className="font-mono text-xs text-[#E5E5E5]/40 mb-2 tracking-widest uppercase">
+          <div className="mb-4 md:mb-6">
+            <div className="font-mono text-[10px] md:text-xs text-[#E5E5E5]/40 mb-2 tracking-widest uppercase">
               Transmute Configuration
             </div>
-            <h3 className="font-serif text-3xl font-bold text-white tracking-tight">
+            <h3 className="font-serif text-2xl md:text-3xl font-bold text-white tracking-tight">
               {asset.symbol} <span className="text-[#FF4D00]">→</span> AETH
             </h3>
           </div>
 
-          <div className="space-y-6">
+          <div className="space-y-4 md:space-y-6">
             <div>
-              <label className="font-mono text-xs text-[#E5E5E5]/60 mb-2 block tracking-wider uppercase">
+              <label className="font-mono text-[10px] md:text-xs text-[#E5E5E5]/60 mb-2 block tracking-wider uppercase">
                 Amount to Transmute
               </label>
               <div className="relative">
@@ -398,20 +398,20 @@ const TransmuteModal = ({ isOpen, onClose, asset }) => {
                   value={amount}
                   onChange={(e) => setAmount(e.target.value)}
                   placeholder="0.00"
-                  className="w-full px-4 py-3 bg-white/5 border border-[#E5E5E5]/20 rounded-lg text-white font-mono placeholder-[#E5E5E5]/30 focus:outline-none focus:border-[#FF4D00]/50 transition-colors"
+                  className="w-full px-3 md:px-4 py-3 bg-white/5 border border-[#E5E5E5]/20 rounded-lg text-white font-mono placeholder-[#E5E5E5]/30 focus:outline-none focus:border-[#FF4D00]/50 transition-colors"
                 />
-                <span className="absolute right-4 top-1/2 -translate-y-1/2 font-mono text-xs text-[#E5E5E5]/40">
+                <span className="absolute right-3 md:right-4 top-1/2 -translate-y-1/2 font-mono text-xs text-[#E5E5E5]/40">
                   {asset.symbol}
                 </span>
               </div>
               <div className="flex justify-between mt-2">
-                <span className="font-mono text-xs text-[#E5E5E5]/30">Balance: 0.00</span>
-                <button className="font-mono text-xs text-[#FF4D00] hover:text-[#ff6a2b] transition-colors">MAX</button>
+                <span className="font-mono text-[10px] md:text-xs text-[#E5E5E5]/30">Balance: 0.00</span>
+                <button className="font-mono text-[10px] md:text-xs text-[#FF4D00] hover:text-[#ff6a2b] transition-colors">MAX</button>
               </div>
             </div>
 
             <div>
-              <label className="font-mono text-xs text-[#E5E5E5]/60 mb-2 block tracking-wider uppercase">
+              <label className="font-mono text-[10px] md:text-xs text-[#E5E5E5]/60 mb-2 block tracking-wider uppercase">
                 Max Slippage: {slippage}%
               </label>
               <input
@@ -424,27 +424,27 @@ const TransmuteModal = ({ isOpen, onClose, asset }) => {
                 className="w-full"
               />
               <div className="flex justify-between mt-1">
-                <span className="font-mono text-xs text-[#E5E5E5]/30">0.1%</span>
-                <span className="font-mono text-xs text-[#E5E5E5]/30">5%</span>
+                <span className="font-mono text-[10px] md:text-xs text-[#E5E5E5]/30">0.1%</span>
+                <span className="font-mono text-[10px] md:text-xs text-[#E5E5E5]/30">5%</span>
               </div>
             </div>
 
-            <div className="bg-white/5 rounded-lg p-4 space-y-2">
+            <div className="bg-white/5 rounded-lg p-3 md:p-4 space-y-2">
               <div className="flex justify-between">
-                <span className="font-mono text-xs text-[#E5E5E5]/50 uppercase">Exchange Rate</span>
-                <span className="font-mono text-xs text-[#E5E5E5]">1 {asset.symbol} = 1,000 AETH</span>
+                <span className="font-mono text-[10px] md:text-xs text-[#E5E5E5]/50 uppercase">Exchange Rate</span>
+                <span className="font-mono text-xs md:text-sm text-[#E5E5E5]">1 {asset.symbol} = 1,000 AETH</span>
               </div>
               <div className="flex justify-between">
-                <span className="font-mono text-xs text-[#E5E5E5]/50 uppercase">Network Fee</span>
-                <span className="font-mono text-xs text-[#E5E5E5]">~$2.45</span>
+                <span className="font-mono text-[10px] md:text-xs text-[#E5E5E5]/50 uppercase">Network Fee</span>
+                <span className="font-mono text-xs md:text-sm text-[#E5E5E5]">~$2.45</span>
               </div>
               <div className="flex justify-between">
-                <span className="font-mono text-xs text-[#E5E5E5]/50 uppercase">Route</span>
-                <span className="font-mono text-xs text-[#FF4D00]">Quantum Bonding Curve</span>
+                <span className="font-mono text-[10px] md:text-xs text-[#E5E5E5]/50 uppercase">Route</span>
+                <span className="font-mono text-[10px] md:text-xs text-[#FF4D00]">Quantum Bonding Curve</span>
               </div>
             </div>
 
-            <button className="w-full py-4 bg-[#FF4D00] hover:bg-[#ff6a2b] text-[#050505] rounded-lg font-mono font-bold transition-all transform hover:scale-[1.02]">
+            <button className="w-full py-3.5 md:py-4 bg-[#FF4D00] hover:bg-[#ff6a2b] text-[#050505] rounded-lg font-mono font-bold transition-all transform hover:scale-[1.02] text-sm md:text-base">
               EXECUTE TRANSMUTATION
             </button>
           </div>
@@ -454,7 +454,7 @@ const TransmuteModal = ({ isOpen, onClose, asset }) => {
   );
 };
 
-// App Coming Soon Modal
+// App Coming Soon Modal - MOBILE OPTIMIZED
 const AppComingSoonModal = ({ isOpen, onClose }) => {
   const [email, setEmail] = useState('');
   const [submitted, setSubmitted] = useState(false);
@@ -477,7 +477,7 @@ const AppComingSoonModal = ({ isOpen, onClose }) => {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
-        className="fixed inset-0 z-[100] flex items-center justify-center p-4 modal-overlay"
+        className="fixed inset-0 z-[100] flex items-center justify-center p-3 md:p-4 modal-overlay"
         onClick={onClose}
       >
         <motion.div
@@ -485,22 +485,22 @@ const AppComingSoonModal = ({ isOpen, onClose }) => {
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.95, y: 20 }}
           transition={{ duration: 0.3 }}
-          className="glass-card rounded-2xl p-8 max-w-md w-full relative text-center"
+          className="glass-card rounded-2xl p-6 md:p-8 max-w-md w-full relative text-center"
           onClick={(e) => e.stopPropagation()}
         >
           <button
             onClick={onClose}
-            className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-full bg-white/5 hover:bg-[#FF4D00]/20 transition-colors"
+            className="absolute top-3 right-3 md:top-4 md:right-4 w-8 h-8 flex items-center justify-center rounded-full bg-white/5 hover:bg-[#FF4D00]/20 transition-colors"
           >
             <SafeIcon name="x" size={18} className="text-[#E5E5E5]" />
           </button>
 
           {!submitted ? (
             <>
-              <h3 className="font-serif text-3xl font-bold text-white mb-4 tracking-tight">
+              <h3 className="font-serif text-2xl md:text-3xl font-bold text-white mb-4 tracking-tight">
                 App in Development
               </h3>
-              <p className="font-mono text-sm text-[#E5E5E5]/60 mb-8 leading-relaxed">
+              <p className="font-mono text-xs md:text-sm text-[#E5E5E5]/60 mb-6 md:mb-8 leading-relaxed">
                 The AETHER Protocol app is currently under construction. Join the waitlist to be among the first to access the future of decentralized finance.
               </p>
               <form onSubmit={handleSubmit} className="space-y-4">
@@ -510,11 +510,11 @@ const AppComingSoonModal = ({ isOpen, onClose }) => {
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="Enter your email"
                   required
-                  className="w-full px-4 py-3 bg-white/5 border border-[#E5E5E5]/20 rounded-lg text-white font-mono placeholder-[#E5E5E5]/30 focus:outline-none focus:border-[#FF4D00]/50 transition-colors"
+                  className="w-full px-3 md:px-4 py-3 bg-white/5 border border-[#E5E5E5]/20 rounded-lg text-white font-mono placeholder-[#E5E5E5]/30 focus:outline-none focus:border-[#FF4D00]/50 transition-colors text-sm md:text-base"
                 />
                 <button
                   type="submit"
-                  className="w-full py-4 bg-[#FF4D00] hover:bg-[#ff6a2b] text-[#050505] rounded-lg font-mono font-bold transition-all transform hover:scale-[1.02]"
+                  className="w-full py-3.5 md:py-4 bg-[#FF4D00] hover:bg-[#ff6a2b] text-[#050505] rounded-lg font-mono font-bold transition-all transform hover:scale-[1.02] text-sm md:text-base"
                 >
                   JOIN WHITELIST
                 </button>
@@ -524,13 +524,13 @@ const AppComingSoonModal = ({ isOpen, onClose }) => {
             <motion.div
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
-              className="py-8"
+              className="py-6 md:py-8"
             >
-              <div className="w-16 h-16 rounded-full bg-green-500/20 flex items-center justify-center mx-auto mb-6">
-                <SafeIcon name="check" size={32} className="text-green-500" />
+              <div className="w-14 h-14 md:w-16 md:h-16 rounded-full bg-green-500/20 flex items-center justify-center mx-auto mb-4 md:mb-6">
+                <SafeIcon name="check" size={28} className="text-green-500 md:w-8 md:h-8" />
               </div>
-              <h3 className="font-serif text-2xl font-bold text-white mb-2">You're on the list!</h3>
-              <p className="font-mono text-sm text-[#E5E5E5]/60">We'll notify you when the protocol launches.</p>
+              <h3 className="font-serif text-xl md:text-2xl font-bold text-white mb-2">You're on the list!</h3>
+              <p className="font-mono text-xs md:text-sm text-[#E5E5E5]/60">We'll notify you when the protocol launches.</p>
             </motion.div>
           )}
         </motion.div>
@@ -589,14 +589,14 @@ const MercurySphere = () => {
         animate={{ scale: 1, opacity: 1 }}
         transition={{ duration: 1.5, ease: "easeOut" }}
         ref={sphereRef}
-        className="mercury-sphere w-80 h-80 md:w-[28rem] md:h-[28rem] lg:w-[36rem] lg:h-[36rem] animate-morph"
+        className="mercury-sphere w-64 h-64 md:w-[28rem] md:h-[28rem] lg:w-[36rem] lg:h-[36rem] animate-morph"
       />
       <div className="absolute inset-0 flex items-center justify-center">
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: [0.3, 0.6, 0.3] }}
           transition={{ duration: 3, repeat: Infinity }}
-          className="w-96 h-96 md:w-[32rem] md:h-[32rem] lg:w-[40rem] lg:h-[40rem] rounded-full bg-[#E5E5E5]/10 blur-3xl"
+          className="w-72 h-72 md:w-[32rem] md:h-[32rem] lg:w-[40rem] lg:h-[40rem] rounded-full bg-[#E5E5E5]/10 blur-3xl"
         />
       </div>
     </div>
