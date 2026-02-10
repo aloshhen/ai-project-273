@@ -9,15 +9,6 @@ function cn(...inputs) {
   return twMerge(clsx(inputs));
 }
 
-// Gold SVG Icon Component - Using user provided SVG with updated URL
-const GoldIcon = ({ className }) => (
-  <img
-    src="https://oejgkvftpbinliuopipr.supabase.co/storage/v1/object/public/assets/user_347995964/edit-svg-1770689487-6284.svg?"
-    alt="Gold"
-    className={className}
-  />
-);
-
 // Ethereum SVG Icon Component
 const EthereumIcon = ({ className }) => (
   <svg
@@ -38,6 +29,23 @@ const EthereumIcon = ({ className }) => (
   </svg>
 );
 
+// Gold SVG Icon Component - Using user provided SVG with updated URL
+const GoldIcon = ({ className }) => (
+  <img
+    src="https://oejgkvftpbinliuopipr.supabase.co/storage/v1/object/public/assets/user_347995964/edit-svg-1770689487-6284.svg?"
+    alt="Gold"
+    className={className}
+  />
+);
+
+// Solana SVG Icon Component - Using user provided SVG
+const SolanaIcon = ({ className }) => (
+  <img
+    src="https://oejgkvftpbinliuopipr.supabase.co/storage/v1/object/public/assets/user_347995964/edit-svg-1770696222-1781.svg?"
+    alt="Solana"
+    className={className}
+  />
+);
 
 // Custom Cursor Component - ALWAYS WHITE, SCALES ON BUTTONS
 const CustomCursor = () => {
@@ -927,11 +935,7 @@ const VaultCardNoGlow = ({ asset, onTransmuteClick }) => {
               ) : asset.isGold ? (
                 <GoldIcon className="w-8 h-8 opacity-60 group-hover:opacity-100 transition-all duration-500 group-hover:brightness-110" />
               ) : asset.isSolana ? (
-                <img
-                  src="https://oejgkvftpbinliuopipr.supabase.co/storage/v1/object/public/assets/user_347995964/edit-photo-1770465203-5802.svg?"
-                  alt="Solana"
-                  className="w-8 h-8 object-contain opacity-60 group-hover:opacity-100 transition-opacity duration-500"
-                />
+                <SolanaIcon className="w-8 h-8 object-contain opacity-60 group-hover:opacity-100 transition-all duration-500 solana-icon" />
               ) : (
                 <SafeIcon
                   name={asset.icon}
