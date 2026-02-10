@@ -32,7 +32,7 @@ const EthereumIcon = ({ className }) => (
 // Gold SVG Icon Component - Using user provided SVG with updated URL
 const GoldIcon = ({ className }) => (
   <img
-    src="https://oejgkvftpbinliuopipr.supabase.co/storage/v1/object/public/assets/user_347995964/edit-svg-1770688593-9935.svg?"
+    src="https://oejgkvftpbinliuopipr.supabase.co/storage/v1/object/public/assets/user_347995964/edit-svg-1770689487-6284.svg?"
     alt="Gold"
     className={className}
   />
