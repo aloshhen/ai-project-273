@@ -4,6 +4,7 @@
  * Prevents runtime errors with automatic fallback to HelpCircle
  */
 
+import { SafeIcon } from './components/SafeIcon';
 import React from 'react';
 import * as LucideIcons from 'lucide-react';
 
@@ -31,41 +32,6 @@ const kebabToPascal = (str) => {
  * <SafeIcon name="bitcoin" size={32} />
  * <SafeIcon name="invalid-icon" /> // Falls back to HelpCircle
  */
-export const SafeIcon = ({
-  name,
-  size = 24,
-  color = 'currentColor',
-  className = '',
-  strokeWidth = 2,
-}) => {
-  // Convert kebab-case to PascalCase
-  const pascalName = kebabToPascal(name);
-
-  // Dynamically get icon component from lucide-react
-  const IconComponent = LucideIcons[pascalName];
-
-  // Fallback: use HelpCircle if icon not found
-  if (!IconComponent) {
-    const FallbackIcon = LucideIcons.HelpCircle;
-    return (
-      <FallbackIcon
-        size={size}
-        color={color}
-        className={className}
-        strokeWidth={strokeWidth}
-      />
-    );
-  }
-
-  // Render valid icon
-  return (
-    <IconComponent
-      size={size}
-      color={color}
-      className={className}
-      strokeWidth={strokeWidth}
-    />
-  );
-};
+export
 
 export default SafeIcon;
