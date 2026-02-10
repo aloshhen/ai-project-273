@@ -69,9 +69,7 @@ body {
 
 .glass-card:hover {
   border-color: #FF4D00;
-  box-shadow:
-    0 0 30px rgba(255, 77, 0, 0.3),
-    inset 0 0 30px rgba(255, 77, 0, 0.05);
+  box-shadow: 0 0 30px rgba(255, 77, 0, 0.3), inset 0 0 30px rgba(255, 77, 0, 0.05);
 }
 
 /* Blueprint Overlay - Updated with pointer-events and z-index */
@@ -156,8 +154,12 @@ body {
 }
 
 @keyframes distort {
-  0%, 100% { transform: scaleY(1); }
-  50% { transform: scaleY(1.1) skewX(2deg); }
+  0%, 100% {
+    transform: scaleY(1);
+  }
+  50% {
+    transform: scaleY(1.1) skewX(2deg);
+  }
 }
 
 /* Custom Cursor Styles - ALWAYS WHITE, SCALES ON BUTTONS */
@@ -190,9 +192,11 @@ button, a, [role="button"], input, textarea, select, .cursor-pointer {
   body {
     cursor: auto;
   }
+
   .custom-cursor {
     display: none;
   }
+
   button, a, [role="button"], input, textarea, select, .cursor-pointer {
     cursor: auto !important;
   }
@@ -227,8 +231,12 @@ button, a, [role="button"], input, textarea, select, .cursor-pointer {
 }
 
 @keyframes chrome-shimmer {
-  0%, 100% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
 }
 
 /* Safe Icon Fallback */
@@ -277,8 +285,7 @@ button, a, [role="button"], input, textarea, select, .cursor-pointer {
     transition-duration: 0.01ms !important;
   }
 
-  .infinite-scroll-container,
-  .vault-scroll-container {
+  .infinite-scroll-container, .vault-scroll-container {
     animation: none;
   }
 }
@@ -458,13 +465,15 @@ input[type="range"]::-moz-range-thumb {
   opacity: 0.5;
 }
 
-/* Solana SVG Icon Styling - New styles for user provided SVG */
+/* Gold and Solana SVG Icon Styling - Orange hover effect like Ethereum */
+.gold-icon,
 .solana-icon {
-  filter: grayscale(100%) brightness(1.2);
+  filter: grayscale(100%) brightness(1.5);
   transition: all 0.5s ease;
 }
 
+.group:hover .gold-icon,
 .group:hover .solana-icon {
-  filter: grayscale(0%) brightness(1.1);
+  filter: sepia(100%) saturate(500%) hue-rotate(-30deg) brightness(1.1);
   transform: scale(1.05);
 }
