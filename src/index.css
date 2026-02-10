@@ -457,3 +457,14 @@ input[type="range"]::-moz-range-thumb {
 .modal-chrome-border:hover::before {
   opacity: 0.5;
 }
+
+/* Solana SVG Icon Styling - New styles for user provided SVG */
+.solana-icon {
+  filter: grayscale(100%) brightness(1.2);
+  transition: all 0.5s ease;
+}
+
+.group:hover .solana-icon {
+  filter: grayscale(0%) brightness(1.1);
+  transform: scale(1.05);
+}
