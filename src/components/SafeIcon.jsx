@@ -4,7 +4,6 @@
  * Prevents runtime errors with automatic fallback to HelpCircle
  */
 
-import { SafeIcon } from './components/SafeIcon';
 import React from 'react';
 import * as LucideIcons from 'lucide-react';
 
