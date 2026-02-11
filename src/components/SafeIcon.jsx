@@ -1,7 +1,7 @@
 /**
  * SafeIcon Component - Dynamic icon component with full Lucide React support
  */
-
+import SafeIcon from './components/SafeIcon';
 import React from 'react';
 import * as LucideIcons from 'lucide-react';
 
