@@ -1,4 +1,4 @@
-import { SafeIcon } from './components/SafeIcon';
+import SafeIcon from './components/SafeIcon';
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { clsx } from 'clsx';
